@@ -1,0 +1,620 @@
+<div class="" *ngIf="carregandoFormulario">
+  <app-loading [message]="messageStatus"></app-loading>
+</div>
+
+<div class="" *ngIf="!carregandoFormulario && messages">
+  <div *ngFor="let msg of messages">
+    <app-alert id="MessageDadosLocatarioFiador" [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}
+    </app-alert>
+  </div>
+</div>
+
+<form class=" salvar-dadosLocatario" #cadastroForm="ngForm" (ngSubmit)="salvarLocatarioFiadorGarantia(cadastroForm)"
+  [hidden]="carregandoFormulario || !exibirFormulario">
+
+  <!-- <app-carta-fianca [(cartaFianca)]="locatarioFiadorGarantia.CartaFianca"> </app-carta-fianca> -->
+  <div id="accordion-aba-contrato-locacao-locatario" role="tablist" aria-multiselectable="true">
+    <div id="panelDadosPessoais" class="panel panel-form-group">
+      <div class="panel-heading" role="tab" id="headingPanelDadosPessoais">
+        <h4 class="panel-title">
+          <button type="button" class="accordion-toggle"
+            [class.collapsed]="!locatarioFiadorGarantia.panelDadosPessoaisIsOpen"
+            [attr.aria-expanded]="locatarioFiadorGarantia.panelDadosPessoaisIsOpen"
+            (click)="locatarioFiadorGarantia.toggleCollapse('panelDadosPessoaisIsOpen')"
+            aria-controls="collapsePanelDadosPessoais">
+            Dados pessoais
+          </button>
+        </h4>
+      </div>
+      <div id="panelDadosPessoaisIsOpen" class="panel-collapse collapse"
+        [class.in]="locatarioFiadorGarantia.panelDadosPessoaisIsOpen" role="tabpanel"
+        aria-labelledby="headingPanelDadosPessoais">
+        <div class="panel-body">
+          <fieldset>
+            <div class="row">
+              <div class="col-md-2">
+                <div>
+                  <div class="radio-inline">
+                    <label>
+                      <input type="radio" id="cpf1" name="TipoPessoa" [value]="1"
+                        [(ngModel)]="locatarioFiadorGarantia.Locatario.TipoPessoa" (change)="alterarTipoPessoa()"
+                        [disabled]="!habilitarTrocaDeLocatario()" />CPF
+                    </label>
+                  </div>
+                  <div class="radio-inline">
+                    <label>
+                      <input type="radio" id="cnpj1" name="TipoPessoa" [value]="2"
+                        [(ngModel)]="locatarioFiadorGarantia.Locatario.TipoPessoa" (change)="alterarTipoPessoa()"
+                        [disabled]="!habilitarTrocaDeLocatario()" />CNPJ
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" [hidden]="!locatarioFiadorGarantia.Locatario.TipoPessoa">
+              <div class="col-md-4">
+
+                <div class="custom-autocomplete">
+
+                  <div class="autocomplete__container" *ngIf="locatarioPessoaFisica()">
+                    <div class="custom-autocomplete__input form-group button-included">
+                      <input type="text" [textMask]="{mask: maskCPF, guide: false}" name="CPFLocatario"
+                        class="form-control input-cpf" id="textCPFLocatario" placeholder="000.000.000-00"
+                        [(ngModel)]="locatarioFiadorGarantia.Locatario.CPFCNPJ" #cpfLocatario="ngModel" #inputCpfCnpj
+                        required (focusout)="buscarLocatarioPeloCPFCNPJ()"
+                        (keydown.enter)="buscarLocatarioPeloCPFCNPJ($event)"
+                        [disabled]="!habilitarTrocaDeLocatario()" />
+
+                      <button class="search-icon" type="button" (click)="buscarLocatarioPeloCPFCNPJ()"
+                        [disabled]="!habilitarTrocaDeLocatario()">
+                        <i class="search-default-icon"></i>
+                      </button>
+                    </div>
+                    <div *ngIf="cpfLocatario.invalid && cpfLocatario.dirty">
+                      <div *ngIf="cpfLocatario?.errors?.required" class="alert alert-danger">
+                        Campo obrigatório.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="autocomplete__container" *ngIf="!locatarioPessoaFisica()">
+                    <div class="custom-autocomplete__input form-group button-included">
+                      <input type="text" [textMask]="{mask: maskCNPJ, guide: false}" name="CNPJLocatario"
+                        class="form-control input-cnpj" id="textCNPJLocatario" placeholder="00.000.000/0000-00"
+                        [(ngModel)]="locatarioFiadorGarantia.Locatario.CPFCNPJ" #cnpjLocatario="ngModel" #inputCpfCnpj
+                        required (change)="buscarLocatarioPeloCPFCNPJ()" (focusout)="buscarLocatarioPeloCPFCNPJ()"
+                        [disabled]="!habilitarTrocaDeLocatario()" />
+
+                      <button class="search-icon" type="button" (click)="buscarLocatarioPeloCPFCNPJ()"
+                        [disabled]="!habilitarTrocaDeLocatario()">
+                        <i class="search-default-icon"></i>
+                      </button>
+                    </div>
+                    <div *ngIf="cnpjLocatario.invalid && cnpjLocatario.dirty">
+                      <div *ngIf="cnpjLocatario?.errors?.required" class="alert alert-danger">
+                        Campo obrigatório.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="buscandoLocatarioPeloCPFCNPJ">
+              <app-loading [message]="messageStatusBuscaLocatario"></app-loading>
+            </div>
+
+            <div *ngIf="!buscandoLocatarioPeloCPFCNPJ && messagesBuscaLocatario">
+              <div *ngFor="let msg of messagesBuscaLocatario">
+                <app-alert [close]="true" color="warning">{{msg}}</app-alert>
+              </div>
+            </div>
+
+            <!-- *ngIf="exibirCamposDoFormularioLocatario && !buscandoLocatarioPeloCPFCNPJ" -->
+            <div *ngIf="exibirCamposDoFormularioLocatario && !buscandoLocatarioPeloCPFCNPJ">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="txtNomelocatario">Nome</label>
+                    <input type="text" class="form-control" id="txtNomelocatario" name="txtNomelocatario"
+                      [(ngModel)]="locatarioFiadorGarantia.Locatario.Nome" #nomelocatario="ngModel" required />
+                    <div *ngIf="nomelocatario.errors && nomelocatario.dirty" class="alert alert-danger">
+                      <div *ngIf="nomelocatario.errors.required">Campo obrigatório.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="txtEmail">E-mail</label>
+                    <input type="email" class="form-control" id="txtEmail" name="txtEmail"
+                      [(ngModel)]="locatarioFiadorGarantia.Locatario.Email" #emaillocatario="ngModel" required
+                      pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" />
+                    <div *ngIf="emaillocatario.errors && emaillocatario.dirty" class="alert alert-danger">
+                      <div *ngIf="emaillocatario.errors.required">
+                        Campo obrigatório.
+                      </div>
+                      <div *ngIf="emaillocatario.errors.pattern && !emaillocatario.errors.required">
+                        Formato de e-mail inválido.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="locatarioPessoaFisica()">
+
+                <div class="col-md-4" *ngIf="locatarioPessoaFisica()">
+                  <div class="form-group">
+                    <label for="txtNacionalidade">Nacionalidade</label>
+                    <input type="text" class="form-control" id="txtNacionalidade" name="txtNacionalidade"
+                      [(ngModel)]="locatarioFiadorGarantia.Locatario.Nacionalidade" #nacionalidadeLocatario />
+                    <div *ngIf="nacionalidadeLocatario.errors && nacionalidadeLocatario.dirty"
+                      class="alert alert-danger">
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4" *ngIf="locatarioPessoaFisica()">
+                  <div class="form-group">
+                    <label for="EstadoCivil">Estado Civil</label>
+                    <select class="form-control" id="EstadoCivilLocatario" name="EstadoCivilLocatario"
+                      #estadoCivilLocatario="ngModel" [(ngModel)]="locatarioFiadorGarantia.Locatario.EstadoCivil">
+                      <option [value]="null" disabled>Escolha uma opção</option>
+                      <option *ngFor="let estado of opcoesEstadoCivil" [ngValue]="estado.Id">{{estado.Descricao}}
+                      </option>
+                    </select>
+                    <div
+                      *ngIf="estadoCivilLocatario.invalid && estadoCivilLocatario.dirty && estadoCivilLocatario?.errors.required"
+                      class="alert alert-danger">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4" *ngIf="locatarioPessoaFisica()">
+                  <div class="form-group">
+                    <label for="txtprofissao">Profissão</label>
+                    <input type="text" class="form-control" id="txtprofissao" name="txtprofissao"
+                      [(ngModel)]="locatarioFiadorGarantia.Locatario.Profissao" #profissaoLocatario />
+                    <div *ngIf="profissaoLocatario.errors && profissaoLocatario.dirty" class="alert alert-danger">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="locatarioPessoaFisica()">
+
+                <div class="col-md-4" *ngIf="locatarioPessoaFisica()">
+                  <div class="form-group">
+                    <label for="txtDataNascimento">Data de Nascimento</label>
+                    <input type="text" placeholder="dd/mm/aaaa" [textMask]="{mask: maskDate, guide: false}"
+                      class="form-control" id="DataNascimento" name="DataNascimento"
+                      [(ngModel)]="locatarioFiadorGarantia.Locatario.DataNascimento" required
+                      #dataNascimentolocatario="ngModel">
+                    <div *ngIf="dataNascimentolocatario.errors && dataNascimentolocatario.dirty"
+                      class="alert alert-danger">
+                      <div *ngIf="dataNascimentolocatario.errors.required">Campo obrigatório.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4" *ngIf="locatarioPessoaFisica()">
+                  <div class="form-group">
+                    <label for="Sexo">Sexo
+                      <span class="obrigatorio">(obrigatório)</span>
+                    </label>
+                    <div class="form-group">
+                      <div class="radio-inline" *ngFor="let sexo of opcoesGenero; let i = index">
+                        <label>
+                          <input type="radio" class="form-group" id="{{'sexo.Descricao' + sexo.Id}}" name="Sexo"
+                            #sexoTemplate="ngModel" [value]="sexo.Id"
+                            [(ngModel)]="locatarioFiadorGarantia.Locatario.Sexo" required>{{sexo.Descricao}}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset class="field-contatos" *ngIf="exibirCamposDoFormularioLocatario && !buscandoLocatarioPeloCPFCNPJ">
+            <legend>Contatos</legend>
+            <div class="row">
+              <div class="col-md-6">
+                <h6>Telefone Fixo</h6>
+                <div class="bloco-telefone"
+                  *ngFor="let telFixo of locatarioFiadorGarantia.Locatario.ContatosTelFixo; let i=index">
+                  <div class="form-group">
+                    <input [textMask]="{mask: masktel, guide: false}"
+                      [(ngModel)]="locatarioFiadorGarantia.Locatario.ContatosTelFixo[i].telefone"
+                      #fixoLocatario="ngModel" [ngModelOptions]="{standalone: true}" type="text" class="form-control"
+                      placeholder="(00) 0000-0000"
+                      [pattern]="locatarioFiadorGarantia.Locatario.ContatoDefault.regexPadraoTelefoneFixo" />
+                    <div
+                      *ngIf="fixoLocatario.invalid && fixoLocatario.dirty && fixoLocatario.touched && (fixoLocatario.errors.pattern )"
+                      class="alert alert-danger">
+                      Telefone inválido.
+                    </div>
+                  </div>
+                  <div *ngIf="locatarioFiadorGarantia.Locatario.ContatosTelFixo.length > 1"
+                    class="form-group wrap-deletar">
+                    <button class='btn btn-danger' (click)="deleteTelefoneFixo(i)">
+                      <i class="glyphicons glyphicons-bin"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="form-group wrap-adicionar">
+                  <button type="button" class='btn-link' (click)="addTelefoneFixo()" value="Adicionar Telefone Fixo">
+                    <i class="glyphicons glyphicons-plus"></i>Adicionar Telefone Fixo</button>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <h6>Telefone Celular</h6>
+                <div class="bloco-telefone"
+                  *ngFor="let telCelular of locatarioFiadorGarantia.Locatario.ContatosTelCel; let i=index">
+                  <div class="form-group">
+                    <input [textMask]="{mask: maskcel, guide: false}"
+                      [(ngModel)]="locatarioFiadorGarantia.Locatario.ContatosTelCel[i].telefone"
+                      [pattern]="locatarioFiadorGarantia.Locatario.ContatoDefault.regexPadraoCelular"
+                      #celularLocatario="ngModel" [ngModelOptions]="{standalone: true}" type="text" class="form-control"
+                      placeholder="(00) 00000-0000" />
+                    <div
+                      *ngIf="celularLocatario.invalid && celularLocatario.dirty && celularLocatario.touched && (celularLocatario.errors.pattern )"
+                      class="alert alert-danger">
+                      Telefone inválido.
+                    </div>
+                  </div>
+                  <div *ngIf="locatarioFiadorGarantia.Locatario.ContatosTelCel.length > 1"
+                    class="form-group wrap-deletar">
+                    <button class='btn btn-danger' (click)="deleteTelefoneCelular(i)">
+                      <i class="glyphicons glyphicons-bin"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="form-group wrap-adicionar">
+                  <button type="button" class='btn btn-link' (click)="addTelefoneCelular()" value="Adicionar Celular">
+                    <i class="glyphicons glyphicons-plus"></i>Adicionar Celular</button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div id="panelEnderecoCobranca" *ngIf="exibirCamposDoFormularioLocatario && !buscandoLocatarioPeloCPFCNPJ"
+      class="panel panel-form-group">
+      <div class="panel-heading" role="tab" id="headingPanelEnderecoCobranca">
+        <h4 class="panel-title">
+          <button type="button" class="accordion-toggle"
+            [class.collapsed]="!locatarioFiadorGarantia.panelEnderecoCobrancaIsOpen"
+            [attr.aria-expanded]="locatarioFiadorGarantia.panelEnderecoCobrancaIsOpen"
+            (click)="locatarioFiadorGarantia.toggleCollapse('panelEnderecoCobrancaIsOpen')"
+            aria-controls="collapsePanelEnderecoCobranca">
+            Endereço para cobrança
+          </button>
+        </h4>
+      </div>
+      <div id="panelEnderecoCobrancaIsOpen" class="panel-collapse collapse"
+        [class.in]="locatarioFiadorGarantia.panelEnderecoCobrancaIsOpen" role="tabpanel"
+        aria-labelledby="headingPanelEnderecoCobranca">
+        <div class="panel-body">
+          <fieldset>
+            <!-- <legend>Endereço de cobrança</legend> -->
+
+
+            <div id="row-preencher-com-info-cadastrais" class="row">
+              <div class="col-md-12">
+                <label>
+                  <input type="checkbox" name="checkUtilizarEnderecoImovel" id="checkUtilizarEnderecoImovel"
+                    [(ngModel)]="locatarioFiadorGarantia.flagUtilizarEnderecoImovel"
+                    (change)="utilizarEnderecoImovel($event)" />
+                  <!-- Preencher o endereço de cobrança com o endereço do imóvel -->
+                  Utilizar endereço do imóvel para cobrança
+                </label>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <app-input-busca-cep [(endereco)]="locatarioFiadorGarantia.Locatario.EnderecoCobranca"
+                    [(enderecoValido)]="enderecoValido" (enderecoChange)="enderecoChange($event)"
+                    [disableEdit]="bloquearEdicaoDeEndereco"></app-input-busca-cep>
+
+                  <!-- <div class="row">
+                            <div class="col-md-2">
+                              <label for="txtDescricao">Bloco</label>
+                              <input type="text" class="form-control" id="Bloco" name="Bloco" #Bloco="ngModel" [(ngModel)]="imovel.Bloco"
+                                (imovelChange)="imovelChange($event)" [disabled]="bloquearEdicaoDeEndereco">
+                            </div>
+                          </div> -->
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div id="panelGarantia" *ngIf="exibirCamposDoFormularioLocatario && !buscandoLocatarioPeloCPFCNPJ"
+      class="panel panel-form-group">
+      <div class="panel-heading" role="tab" id="headingPanelGarantia">
+        <h4 class="panel-title">
+          <button type="button" class="accordion-toggle"
+            [class.collapsed]="!locatarioFiadorGarantia.panelGarantiaIsOpen"
+            [attr.aria-expanded]="locatarioFiadorGarantia.panelGarantiaIsOpen"
+            (click)="locatarioFiadorGarantia.toggleCollapse('panelGarantiaIsOpen')"
+            aria-controls="collapsePanelGarantia">
+            Garantia
+          </button>
+        </h4>
+      </div>
+      <div id="panelGarantiaIsOpen" class="panel-collapse collapse"
+        [class.in]="locatarioFiadorGarantia.panelGarantiaIsOpen" role="tabpanel" aria-labelledby="headingPanelGarantia">
+        <div class="panel-body">
+          <fieldset>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <!-- <label for="GarantiaImovel">Garantias
+                                </label> -->
+                  <select class="form-control" id="GarantiaImovel" [disabled]="isEdicaoLocarioFiadorGarantia"
+                    name="GarantiaImovel" #FormaPagamento="ngModel" [(ngModel)]="locatarioFiadorGarantia.GarantiaImovel"
+                    required>
+                    <option [ngValue]="null">Escolha uma opção</option>
+                    <option *ngFor="let garantia of opcoesGarantia" [ngValue]="garantia.Id">{{ garantia.Descricao }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <app-seguro-fianca *ngIf="garantiaSeguroFianca()" [(seguroFianca)]="locatarioFiadorGarantia.SeguroFianca">
+          </app-seguro-fianca>
+          <app-titulo-capitalizacao *ngIf="garantiaTituloCapitalizacao()"
+            [(tituloCapitalizacao)]="locatarioFiadorGarantia.TituloCapitalizacao">
+          </app-titulo-capitalizacao>
+          <app-carta-fianca *ngIf="garantiaCartaFianca()" [(cartaFianca)]="locatarioFiadorGarantia.CartaFianca">
+          </app-carta-fianca>
+          <app-caucao *ngIf="garantiaCaucao()" [(caucao)]="locatarioFiadorGarantia.Caucao"> </app-caucao>
+          <app-garantia-outros *ngIf="garantiaOutros()" [(garantiaOutros)]="locatarioFiadorGarantia.GarantiaOutros">
+          </app-garantia-outros>
+
+          <fieldset class="field-fiador" *ngIf="garantiaFiador()">
+            <legend>Fiador</legend>
+
+            <div class="row">
+              <div class="col-md-2">
+                <div>
+                  <div class="radio-inline">
+                    <label>
+                      <input type="radio" id="cpf1Fiador" name="TipoPessoaFiador" [value]="1"
+                        [(ngModel)]="locatarioFiadorGarantia.Fiador.TipoPessoa" (change)="alterarTipoPessoaFiador()"
+                        [disabled]="isEdicaoLocarioFiadorGarantia" />CPF
+                    </label>
+                  </div>
+                  <div class="radio-inline">
+                    <label>
+                      <input type="radio" id="cnpj1Fiador" name="TipoPessoaFiador" [value]="2"
+                        [(ngModel)]="locatarioFiadorGarantia.Fiador.TipoPessoa" (change)="alterarTipoPessoaFiador()"
+                        [disabled]="isEdicaoLocarioFiadorGarantia" />CNPJ
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" [hidden]="!locatarioFiadorGarantia.Fiador.TipoPessoa">
+              <div class="col-md-4">
+                <div class="custom-autocomplete">
+
+                  <div class="autocomplete__container" [hidden]="!fiadorPessoaFisica()">
+                    <div class="custom-autocomplete__input form-group button-included">
+                      <input type="text" [textMask]="{mask: maskCPF, guide: false}" name="CPFFiador"
+                        class="form-control input-cpf" id="textCPFFiador" placeholder="000.000.000-00"
+                        [(ngModel)]="locatarioFiadorGarantia.Fiador.CPFCNPJ" #cpfcnpjFiador="ngModel"
+                        #inputCpfCnpjFiador required (focusout)="buscarFiadorPeloCPFCNPJ()"
+                        (keydown.enter)="buscarFiadorPeloCPFCNPJ($event)" [disabled]="!habilitarTrocaDeFiador()" />
+
+                      <button class="search-icon" type="button" (click)="buscarFiadorPeloCPFCNPJ()"
+                        [disabled]="!habilitarTrocaDeFiador()">
+                        <i class="search-default-icon"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="autocomplete__container" [hidden]="fiadorPessoaFisica()">
+                    <div class="custom-autocomplete__input form-group button-included">
+                      <input type="text" [textMask]="{mask: maskCNPJ, guide: false}" name="CNPJFiador"
+                        class="form-control input-cnpj" id="textCNPJFiador" placeholder="00.000.000/0000-00"
+                        [(ngModel)]="locatarioFiadorGarantia.Fiador.CPFCNPJ" #cpfcnpjFiador="ngModel"
+                        #inputCinputCpfCnpjFiadorpfCnpj required (focusout)="buscarFiadorPeloCPFCNPJ()"
+                        (keydown.enter)="buscarFiadorPeloCPFCNPJ($event)" [disabled]="!habilitarTrocaDeFiador()" />
+
+                      <button class="search-icon" type="button" (click)="buscarFiadorPeloCPFCNPJ()"
+                        [disabled]="!habilitarTrocaDeFiador()">
+                        <i class="search-default-icon"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="cpfcnpjFiador.invalid && cpfcnpjFiador.dirty">
+                    <div *ngIf="cpfcnpjFiador?.errors?.required" class="alert alert-danger">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="buscandoFiadorPeloCPFCNPJ">
+              <app-loading [message]="messageStatusBuscaFiador"></app-loading>
+            </div>
+
+            <div *ngIf="!buscandoFiadorPeloCPFCNPJ && messagesBuscaFiador">
+              <div *ngFor="let msg of messagesBuscaFiador">
+                <app-alert [close]="true" color="warning">{{msg}}</app-alert>
+              </div>
+            </div>
+
+            <div *ngIf="exibirCamposDoFormularioFiador && !buscandoFiadorPeloCPFCNPJ">
+              <div class="row ">
+                <div class="col-md-4 ">
+                  <div class="form-group ">
+                    <label for="txtNomeFiador ">Nome</label>
+                    <input type="text " class="form-control " id="txtNomeFiador " name="txtNomeFiador "
+                      [(ngModel)]="locatarioFiadorGarantia.Fiador.Nome " #nomeFiador="ngModel" required />
+                    <div *ngIf="nomeFiador.errors && nomeFiador.dirty " class="alert alert-danger ">
+                      <div *ngIf="nomeFiador.errors.required ">Campo obrigatório.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4 ">
+                  <div class="form-group ">
+                    <label for="txtEmailFiador ">E-mail</label>
+                    <input type="email " class="form-control " id="txtEmailFiador " name="txtEmailFiador "
+                      [(ngModel)]="locatarioFiadorGarantia.Fiador.Email" #emailFiador="ngModel" required
+                      pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" />
+                    <div *ngIf="emailFiador.errors && emailFiador.dirty" class="alert alert-danger ">
+                      <div *ngIf="emailFiador.errors.required">
+                        Campo obrigatório.
+                      </div>
+                      <div *ngIf="emailFiador.errors.pattern && !emailFiador.errors.required">
+                        Formato de e-mail inválido.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row ">
+                <div class="col-md-12 ">
+                  <div class="form-group ">
+                    <label for="txtEnderecoFiador ">Endereço</label>
+                    <input type="text" class="form-control " id="txtEnderecoFiador " name="txtEnderecoFiador "
+                      [(ngModel)]="locatarioFiadorGarantia.Fiador.Endereco " #enderecoFiador="ngModel" required />
+                    <div *ngIf="enderecoFiador.errors && enderecoFiador.dirty " class="alert alert-danger ">
+                      <div *ngIf="enderecoFiador.errors.required ">Campo obrigatório.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <fieldset class="field-contatos ">
+                <legend>Contatos</legend>
+                <div class="row ">
+                  <div class="col-md-6 ">
+                    <h6>Telefone Fixo</h6>
+                    <div class="bloco-telefone "
+                      *ngFor="let telFixo of locatarioFiadorGarantia.Fiador.ContatosTelFixo; let i=index ">
+                      <div class="form-group ">
+                        <input [textMask]="{mask: masktel, guide: false} "
+                          [(ngModel)]="locatarioFiadorGarantia.Fiador.ContatosTelFixo[i].telefone "
+                          #fixoFiador="ngModel" [ngModelOptions]="{standalone: true} " type="text " class="form-control"
+                          [pattern]="locatarioFiadorGarantia.Fiador.ContatoDefault.regexPadraoTelefoneFixo"
+                          placeholder="(00) 0000-0000 " />
+                        <div
+                          *ngIf="fixoFiador.invalid && fixoFiador.dirty && fixoFiador.touched && (fixoFiador.errors.pattern )"
+                          class="alert alert-danger">
+                          Telefone inválido.
+                        </div>
+                      </div>
+                      <div *ngIf="locatarioFiadorGarantia.Fiador.ContatosTelFixo.length> 1"
+                        class="form-group wrap-deletar">
+                        <button class='btn btn-danger' (click)="deleteTelefoneFixoFiador(i)">
+                          <i class="glyphicons glyphicons-bin"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="form-group wrap-adicionar">
+                      <button type="button" class='btn btn-link' (click)="addTelefoneFixoFiador()"
+                        value="Adicionar Telefone Fixo">
+                        <i class="glyphicons glyphicons-plus"></i>Adicionar Telefone Fixo</button>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <h6>Telefone Celular</h6>
+                    <div class="bloco-telefone"
+                      *ngFor="let telCelular of locatarioFiadorGarantia.Fiador.ContatosTelCel; let i=index">
+                      <div class="form-group">
+                        <input [textMask]="{mask: maskcel, guide: false}"
+                          [(ngModel)]="locatarioFiadorGarantia.Fiador.ContatosTelCel[i].telefone"
+                          #celularFiador="ngModel" [ngModelOptions]="{standalone: true}" type="text"
+                          class="form-control"
+                          [pattern]="locatarioFiadorGarantia.Fiador.ContatoDefault.regexPadraoCelular"
+                          placeholder="(00) 00000-0000" />
+                        <div
+                          *ngIf="celularFiador.invalid && celularFiador.dirty && celularFiador.touched && (celularFiador.errors.pattern )"
+                          class="alert alert-danger">
+                          Telefone inválido.
+                        </div>
+                      </div>
+                      <div *ngIf="locatarioFiadorGarantia.Fiador.ContatosTelCel.length > 1"
+                        class="form-group wrap-deletar">
+                        <button class='btn btn-danger' (click)="deleteTelefoneCelularFiador(i)">
+                          <i class="glyphicons glyphicons-bin"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="form-group wrap-adicionar">
+                      <button type="button" class='btn btn-link' (click)="addTelefoneCelularFiador()"
+                        value="Adicionar Celular">
+                        <i class="glyphicons glyphicons-plus"></i>Adicionar Celular</button>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <legend>Imóveis</legend>
+                <div class="row" *ngFor="let imovel of locatarioFiadorGarantia.Fiador.ImoveisFiador; let i=index">
+                  <div class="col-md-10">
+                    <div class="form-group">
+                      <label for="txtEnderecoImovelFiador">Endereço</label>
+                      <input type="text" class="form-control" id="txtEnderecoImovelFiador_{{i}}"
+                        name="txtEnderecoImovelFiador_{{i}}" [(ngModel)]="imovel.Endereco"
+                        #enderecoImovelFiador="ngModel" required />
+                      <div *ngIf="enderecoImovelFiador.errors && enderecoImovelFiador.dirty" class="alert alert-danger">
+                        <div *ngIf="enderecoImovelFiador.errors.required">Campo obrigatório.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="locatarioFiadorGarantia.Fiador.ImoveisFiador.length > 1"
+                    class="col-md-2 form-group wrap-deletar">
+                    <button class='btn btn-danger' (click)="deleteImovelFiador(i)">
+                      <i class="glyphicons glyphicons-bin"></i>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <div class="form-group wrap-adicionar">
+                    <button type="button" class='btn btn-link' (click)="addImovelFiador()" value="Adicionar Imóvel">
+                      <i class="glyphicons glyphicons-plus"></i>Adicionar Imóvel</button>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+          </fieldset>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div role="group" class="form-btn-group">
+        <button type="button" class="btn btn-link pull-left" (click)="_voltar($event)">Voltar</button>
+        <button type="submit" class="btn btn-primary pull-right" id="Salvar"
+          [disabled]="cadastroForm.invalid || formularioInvalido()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</form>

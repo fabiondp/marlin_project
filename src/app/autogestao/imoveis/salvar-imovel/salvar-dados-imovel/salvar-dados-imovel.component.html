@@ -1,0 +1,461 @@
+<div class="" *ngIf="carregandoFormulario">
+  <app-loading [message]="messageStatus"></app-loading>
+</div>
+
+<div class="" *ngIf="!carregandoFormulario && messages">
+  <div *ngFor="let msg of messages">
+    <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+  </div>
+</div>
+
+<form class="salvar-dadosImovel" #cadastroImovelForm="ngForm" (ngSubmit)="salvarDadosImovel(cadastroImovelForm)">
+  <div *ngIf="!carregandoFormulario && exibirFormulario">
+
+    <div id="accordion-aba-imovel" role="tablist" aria-multiselectable="true">
+      <div id="panelInfoBasicas" class="panel panel-form-group">
+        <div class="panel-heading" role="tab" id="headingPanelInfoBasicas">
+          <h4 class="panel-title">
+            <button type="button" class="accordion-toggle" [class.collapsed]="!imovel.panelIndoBasicasIsOpen"
+              [attr.aria-expanded]="imovel.panelIndoBasicasIsOpen" (click)="imovel.toggleCollapse('panelIndoBasicasIsOpen')"
+              aria-controls="collapsePanelInfoBasicas">
+              Informações básicas
+            </button>
+          </h4>
+        </div>
+        <div id="collapsePanelInfoBasicas" class="panel-collapse collapse" [class.in]="imovel.panelIndoBasicasIsOpen"
+          role="tabpanel" aria-labelledby="headingPanelInfoBasicas">
+          <div class="panel-body">
+
+            <div class="row" *ngIf="!imovel.enderecoAgrupado">
+              <div class="col-lg-12">
+                <div class="form-group">
+
+                  <app-input-busca-cep [(endereco)]="imovel.Endereco" (enderecoChange)="imovel.enderecoChange($event)"
+                    [(carregandoEndereco)]="carregandoEndereco" [disableEdit]="bloquearEdicaoDeEndereco">
+                  </app-input-busca-cep>
+
+                  <div class="row" *ngIf="!carregandoEndereco">
+                    <div class="col-lg-2">
+                      <label for="Bloco">Bloco</label>
+                      <input type="text" class="form-control" id="Bloco" name="Bloco" #Bloco="ngModel" [(ngModel)]="imovel.Bloco"
+                        (imovelChange)="imovelChange($event)" [disabled]="bloquearEdicaoDeEndereco">
+                    </div>
+                    <div class="col-lg-4">
+                      <label for="VagasGaragem">Quantidade de vagas de garagem</label>
+                      <input type="number" class="form-control" id="VagasGaragem" name="VagasGaragem" #VagasGaragem="ngModel"
+                        [(ngModel)]="imovel.VagasGaragem">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <fieldset *ngIf="imovel.enderecoAgrupado">
+              <legend>Endereço</legend>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="form-group">
+
+                    <app-input-busca-cep [(endereco)]="imovel.Endereco" (enderecoChange)="imovel.enderecoChange($event)"
+                      [(carregandoEndereco)]="carregandoEndereco" [disableEdit]="bloquearEdicaoDeEndereco">
+                    </app-input-busca-cep>
+
+                    <div class="row" *ngIf="!carregandoEndereco">
+                      <div class="col-lg-2">
+                        <label for="Bloco">Bloco</label>
+                        <input type="text" class="form-control" id="Bloco" name="Bloco" #Bloco="ngModel" [(ngModel)]="imovel.Bloco"
+                          (imovelChange)="imovelChange($event)" [disabled]="bloquearEdicaoDeEndereco">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset *ngIf="imovel.enderecoAgrupado">
+              <legend>Características</legend>
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label for="VagasGaragem">Quantidade de vagas de garagem</label>
+                    <input type="number" class="form-control" id="VagasGaragem" name="VagasGaragem" #VagasGaragem="ngModel"
+                      [(ngModel)]="imovel.VagasGaragem">
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+          <div class="alert alert-warning alert-small" role="alert">
+
+            <i class="glyphicons glyphicons-alert icon"></i> Atenção: Os valores cadastrados nas
+            áreas abaixo são apenas informativos para consultas futuras.
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+      <div id="panelInfoTaxas" class="panel panel-form-group">
+        <div class="panel-heading" role="tab" id="headingPanelInfoTaxas">
+          <h4 class="panel-title">
+            <button type="button" class="accordion-toggle" [class.collapsed]="!imovel.panelInfoTaxasIsOpen"
+              [attr.aria-expanded]="imovel.panelInfoTaxasIsOpen" (click)="imovel.toggleCollapse('panelInfoTaxasIsOpen')"
+              aria-controls="collapsePanelInfoTaxas">
+              Taxas
+            </button>
+          </h4>
+        </div>
+        <div id="collapsePanelInfoTaxas" class="panel-collapse collapse" [class.in]="imovel.panelInfoTaxasIsOpen" role="tabpanel"
+          aria-labelledby="headingPanelInfoTaxas">
+          <div class="panel-body">
+            <div *ngFor="let taxa of imovel.Taxas; let indexTaxa = index">
+              <fieldset class="fieldset-taxas">
+                <legend>{{ taxa.Descricao }}
+                  <button type="button" *ngIf="taxa.obterTextoAjuda() !== null" class="btn btn-icon btn-tooltip"
+                    placement="right" [tooltip]="tooltipAjudaGrupoTaxa">
+                    <i class="glyphicons glyphicons-question-sign"></i>
+                  </button>
+                </legend>
+                <ng-template #tooltipAjudaGrupoTaxa>
+                  <div [innerHtml]="taxa.obterTextoAjuda()"></div>
+                </ng-template>
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label [for]="'Taxa_'+indexTaxa+'_ValorBase'">Valor base</label>
+                      <div class="input-group">
+                        <div class="input-group-addon">R$</div>
+                        <input type="text" class="form-control" [name]="'Taxa_'+indexTaxa+'_ValorBase'" [id]="'Taxa_'+indexTaxa+'_ValorBase'"
+                          currencyMask placeholder="0,00" autocomplete="off" [options]="{prefix: '', thousands: '.', decimal: ',' }"
+                          [(ngModel)]="taxa.ValorBase" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group form-group-radios-inline">
+                      <label class="radio-inline" *ngFor="let opcao of imovel.OpcoesTipoPagamentoTaxas;">
+                        <input type="radio" [name]="'opcoesTipoPagamento_'+ indexTaxa + opcao.Id" [id]="'opcoesTipoPagamento_' + indexTaxa + opcao.Id"
+                          [value]="opcao.Id" [(ngModel)]="taxa.TipoPagamento" (change)="taxa.alterarTipoPagamento()">
+                        {{ opcao.Descricao }}
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3" *ngIf="taxa.TipoPagamento === 2">
+                    <div class="form-group">
+                      <label [for]="'Taxa_'+indexTaxa+'_Parcelas'">Parcelas</label>
+                      <input type="number" [min]="1" [max]="12" class="form-control" [name]="'Taxa_'+indexTaxa+'_Parcelas'"
+                        [id]="'Taxa_'+indexTaxa+'_Parcelas'" [(ngModel)]="taxa.Parcelas" (change)="taxa.alterarValorParcela()" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label *ngIf="taxa.TipoPagamento !== 2" [for]="'Taxa_'+indexTaxa+'_MesVencimento'">Mês de
+                        vencimento</label>
+                      <label *ngIf="taxa.TipoPagamento === 2" [for]="'Taxa_'+indexTaxa+'_MesVencimento'">Início das
+                        Parcelas</label>
+                      <select class="form-control" [id]="'Taxa_'+indexTaxa+'_MesVencimento'" [name]="'Taxa_'+indexTaxa+'_MesVencimento'"
+                        [(ngModel)]="taxa.MesVencimento">
+                        <option *ngFor="let opcao of taxa.OpcoesMes" [value]="opcao.value">{{ opcao.mes }}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label [for]="'Taxa_'+indexTaxa+'_NumeroInscricao'">Número de inscrição</label>
+                      <input type="text" class="form-control" [name]="'Taxa_'+indexTaxa+'_NumeroInscricao'" [id]="'Taxa_'+indexTaxa+'_NumeroInscricao'"
+                        [(ngModel)]="taxa.NumeroInscricao" />
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="panelInfoCondominio" class="panel panel-form-group">
+        <div class="panel-heading" role="tab" id="headingPanelInfoCondominio">
+          <h4 class="panel-title">
+            <!-- collapsed  -->
+            <button class="accordion-toggle" [class.collapsed]="!imovel.panelInfoCondominioIsOpen" type="button"
+              [attr.aria-expanded]="imovel.panelInfoCondominioIsOpen" (click)="imovel.toggleCollapse('panelInfoCondominioIsOpen')"
+              aria-controls="collapsePanelInfoCondominio">
+              Condomínio
+            </button>
+          </h4>
+        </div>
+        <!-- collapse -->
+        <div id="collapsePanelInfoCondominio" class="panel-collapse collapse" [class.in]="imovel.panelInfoCondominioIsOpen"
+          role="tabpanel" aria-labelledby="headingPanelInfoCondominio">
+          <div class="panel-body">
+            <fieldset>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label class="form-label" for="ValorCondominio">Valor</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">R$</div>
+                      <input type="text" class="form-control" id="ValorCondominio" name="ValorCondominio" currencyMask
+                        placeholder="0,00" autocomplete="off" [options]="{prefix: '', thousands: '.', decimal: ',' }"
+                        [(ngModel)]="imovel.ValorCondominio">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group form-group-radios-inline">
+                    <label class="radio-inline" *ngFor="let opcao of imovel.opcoesTipoCobrancaCondominio">
+                      <input type="radio" [name]="'opcaoTipoCobrancaCondominio_'+ opcao.Id" [id]="'opcaoTipoCobrancaCondominio_' + opcao.Id"
+                        [value]="opcao.Id" [(ngModel)]="imovel.TipoCobrancaCondominio">
+                      {{ opcao.Descricao }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset id="fieldset-administradora-condominio">
+              <legend>Administradora do condomínio</legend>
+              <div class="row">
+                <div id="col-nome-administradora" class="col-md-3">
+                  <div class="form-group">
+                    <label class="form-label" for="AdministradoraCondominioNome">Nome da Administradora</label>
+                    <input type="text" class="form-control" id="NomeAdministradora" name="NomeAdministradora"
+                      autocomplete="new-password" [(ngModel)]="imovel.AdministradoraCondominio.Nome" *ngIf="imovel.AdministradoraCondominio.isEdicao()"
+                      [readonly]="imovel.AdministradoraCondominio.isEdicao() && !imovel.AdministradoraCondominio.HabilitarEdicao" />
+
+                    <input *ngIf="!imovel.AdministradoraCondominio.isEdicao()" type="text" class="form-control" id="AdministradoraCondominioNome"
+                      name="AdministradoraCondominioNome" autocomplete="new-password" [(ngModel)]="imovel.AdministradoraCondominio.Nome"
+                      [typeahead]="opcoesAdmninistradorasCondominio" [typeaheadOptionsLimit]="5" [typeaheadMinLength]="1"
+                      typeaheadOptionField="Nome" (typeaheadOnSelect)="selecionarAdministradoraCondominio($event)"
+                      [readonly]="imovel.AdministradoraCondominio.isEdicao() && !imovel.AdministradoraCondominio.HabilitarEdicao" />
+                    <!--  (typeaheadLoading)="alterarOpcoesAdmninistradorasCondominioLoading($event)"
+                      (typeaheadNoResults)="alterarOpcoesAdmninistradorasCondominioNoResults($event)" -->
+                    <div *ngIf="opcoesAdmninistradorasCondominioLoading===true">Procurando administradora de
+                      condomínio</div>
+                    <div *ngIf="opcoesAdmninistradorasCondominioNoResults===true">&#10060; Nenhuma administradora de
+                      condomínio cadastrada</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="form-label" for="EmailAdministradora">E-mail da Administradora</label>
+                    <input type="email" class="form-control" id="EmailAdministradora" name="EmailAdministradora"
+                      [(ngModel)]="imovel.AdministradoraCondominio.Email" [readonly]="imovel.AdministradoraCondominio.isEdicao() && !imovel.AdministradoraCondominio.HabilitarEdicao"
+                      pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label class="form-label" for="TelefoneAdministradora">Telefone</label>
+                    <input type="text" class="form-control" id="TelefoneAdministradora" name="TelefoneAdministradora"
+                      #telefoneAdministradora="ngModel" [(ngModel)]="imovel.AdministradoraCondominio.Contato.Telefone"
+                      [textMask]="{mask: imovel.AdministradoraCondominio.Contato.maskGenericTel, guide: false}"
+                      placeholder="(00) 0000-00000" [pattern]="imovel.AdministradoraCondominio.Contato.regexPadraoTelefoneGenerico"
+                      [readonly]="imovel.AdministradoraCondominio.isEdicao() && !imovel.AdministradoraCondominio.HabilitarEdicao" />
+
+                    <div *ngIf="telefoneAdministradora.invalid && telefoneAdministradora.dirty && telefoneAdministradora.touched && (telefoneAdministradora.errors.minlength || telefoneAdministradora.errors.pattern )"
+                      class="alert alert-danger">
+                      Telefone inválido.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="box-actions" *ngIf="imovel.AdministradoraCondominio.isEdicao()">
+                    <button *ngIf="!imovel.AdministradoraCondominio.HabilitarEdicao" type="button" class="btn btn-default btn-sm"
+                      (click)="imovel.AdministradoraCondominio.permitirEdicao()">
+                      <span>Editar</span>
+                      <i class="glyphicons glyphicons-edit"></i></button>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="imovel.AdministradoraCondominio.isEdicao()">
+                <div class="col-md-12">
+                  <button type="button" *ngIf="!imovel.AdministradoraCondominio.HabilitarEdicao" class="btn btn-primary btn-sm"
+                    (click)="imovel.trocarAdministradoraCondominio()">
+                    <i class="glyphicons glyphicons-refresh"></i>
+                    <span>Trocar administradora</span>
+                  </button>
+                  <button type="button" *ngIf="imovel.AdministradoraCondominio.HabilitarEdicao" class="btn btn-default btn-sm"
+                    (click)="imovel.trocarAdministradoraCondominio()">
+                    <i class="glyphicons glyphicons-remove"></i>
+                    <span>Limpar dados</span>
+                  </button>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <div id="panelSeguroFogo" class="panel panel-form-group">
+        <div class="panel-heading" role="tab" id="headingPanelInfoSeguro">
+          <h4 class="panel-title">
+            <button type="button" class="accordion-toggle" [class.collapsed]="!imovel.panelInfoSeguroIsOpen"
+              [attr.aria-expanded]="imovel.panelInfoSeguroIsOpen" (click)="imovel.toggleCollapse('panelInfoSeguroIsOpen')"
+              aria-controls="collapsePanelInfoSeguro">
+              Seguro fogo
+            </button>
+          </h4>
+        </div>
+        <div id="collapsePanelInfoSeguro" class="panel-collapse collapse" role="tabpanel" [class.in]="imovel.panelInfoSeguroIsOpen"
+          aria-labelledby="headingPanelInfoSeguro">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label" for="ValorSeguroFogo">Valor</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">R$</div>
+                    <input type="text" class="form-control" id="ValorSeguroFogo" name="ValorSeguroFogo" currencyMask
+                      placeholder="0,00" autocomplete="off" [options]="{prefix: '', thousands: '.', decimal: ',' }"
+                      [(ngModel)]="imovel.ValorSeguroFogo">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group form-group-radios-inline">
+                  <label class="radio-inline" *ngFor="let opcao of imovel.OpcoesTipoPagamentoSeguroFogo;">
+                    <input type="radio" [name]="'opcoesTipoPagamentoSeguroFogo'+ opcao.Id" [id]="'opcoesTipoPagamentoSeguroFogo' + opcao.Id"
+                      [value]="opcao.Id" [(ngModel)]="imovel.TipoPagamentoSeguroFogo" (change)="imovel.alterarTipoPagamentoSeguroFogo()">
+                    {{ opcao.Descricao }}
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-3" *ngIf="imovel.TipoPagamentoSeguroFogo == 2">
+                <div class="form-group">
+                  <label class="form-label" for="ParcelasSeguroFogo">Parcelas</label>
+                  <input type="number" [min]="1" class="form-control" id="ParcelasSeguroFogo" name="ParcelasSeguroFogo"
+                    [(ngModel)]="imovel.ParcelasSeguroFogo" (change)="imovel.alterarValorParcelaSeguroFogo()" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="NomeSeguradoraFogo">Nome da seguradora</label>
+
+                  <input type="text" class="form-control" id="NomeSeguradoraFogo" name="NomeSeguradoraFogo"
+                    autocomplete="new-password" [(ngModel)]="imovel.SeguradoraFogo.Nome" *ngIf="imovel.SeguradoraFogo.isEdicao()"
+                    [readonly]="imovel.SeguradoraFogo.isEdicao() && !imovel.SeguradoraFogo.HabilitarEdicao" />
+
+                  <input *ngIf="!imovel.SeguradoraFogo.isEdicao()" type="text" class="form-control" id="NomeSeguradoraFogo"
+                    name="NomeSeguradoraFogo" autocomplete="new-password" [(ngModel)]="imovel.SeguradoraFogo.Nome"
+                    [typeahead]="opcoesSeguradorasFogo" [typeaheadOptionsLimit]="5" [typeaheadMinLength]="1"
+                    typeaheadOptionField="Nome" (typeaheadOnSelect)="selecionarSeguradoraFogo($event)" [readonly]="imovel.SeguradoraFogo.isEdicao() && !imovel.SeguradoraFogo.HabilitarEdicao" />
+                  <div *ngIf="opcoesSeguradorasFogoLoading===true">Procurando seguradora fogo</div>
+                  <div *ngIf="opcoesSeguradorasFogoNoResults===true">&#10060; Nenhuma seguradora fogo cadastrada</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="EmailSeguradoraFogo">E-mail da seguradora</label>
+                  <input type="email" class="form-control" id="EmailSeguradoraFogo" name="EmailSeguradoraFogo"
+                    [(ngModel)]="imovel.SeguradoraFogo.Email" [readonly]="imovel.SeguradoraFogo.isEdicao() && !imovel.SeguradoraFogo.HabilitarEdicao"
+                    pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" />
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label" for="TelefoneSeguradoraFogo">Telefone</label>
+                  <input type="text" class="form-control" id="TelefoneSeguradoraFogo" name="TelefoneSeguradoraFogo"
+                    [(ngModel)]="imovel.SeguradoraFogo.Contato.Telefone" #telefoneSeguradoraFogo="ngModel" [textMask]="{mask: imovel.SeguradoraFogo.Contato.maskGenericTel, guide: false}"
+                    placeholder="(00) 0000-00000" [pattern]="imovel.SeguradoraFogo.Contato.regexPadraoTelefoneGenerico"
+                    [readonly]="imovel.SeguradoraFogo.isEdicao() && !imovel.SeguradoraFogo.HabilitarEdicao" />
+                  <div *ngIf="telefoneSeguradoraFogo.invalid && telefoneSeguradoraFogo.dirty && telefoneSeguradoraFogo.touched && (telefoneSeguradoraFogo.errors.minlength || telefoneSeguradoraFogo.errors.pattern )"
+                    class="alert alert-danger">
+                    Telefone inválido.
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="box-actions" *ngIf="imovel.SeguradoraFogo.isEdicao()">
+                  <button *ngIf="!imovel.SeguradoraFogo.HabilitarEdicao" type="button" class="btn btn-default btn-sm"
+                    (click)="imovel.SeguradoraFogo.permitirEdicao()">
+                    <span>Editar</span>
+                    <i class="glyphicons glyphicons-edit"></i></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" *ngIf="imovel.SeguradoraFogo.isEdicao()">
+              <div class="col-md-12">
+                <button type="button" *ngIf="!imovel.SeguradoraFogo.HabilitarEdicao" class="btn btn-primary btn-sm"
+                  (click)="imovel.trocarSeguradoraFogo()">
+                  <i class="glyphicons glyphicons-refresh"></i>
+                  <span>Trocar seguradora</span>
+                </button>
+                <button type="button" *ngIf="imovel.SeguradoraFogo.HabilitarEdicao" class="btn btn-default btn-sm"
+                  (click)="imovel.trocarSeguradoraFogo()">
+                  <i class="glyphicons glyphicons-remove"></i>
+                  <span>Limpar dados</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="panelInfoDiversos" class="panel panel-form-group">
+        <div class="panel-heading" role="tab" id="headingPanelInfoDiversos">
+          <h4 class="panel-title">
+            <button type="button" class="accordion-toggle" [class.collapsed]="!imovel.panelInfoDiversosIsOpen"
+              [attr.aria-expanded]="imovel.panelInfoDiversosIsOpen" (click)="imovel.toggleCollapse('panelInfoDiversosIsOpen')"
+              aria-controls="collapsePanelInfoDiversos">
+              Diversos
+            </button>
+          </h4>
+        </div>
+
+        <div id="collapsePanelInfoDiversos" class="panel-collapse collapse" [class.in]="imovel.panelInfoDiversosIsOpen"
+          role="tabpanel" aria-labelledby="headingPanelInfoDiversos">
+          <div class="panel-body">
+            <div *ngFor="let diverso of imovel.Diversos; let indexDiverso = index">
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label [for]="'Diverso_'+ indexDiverso + '_Descricao'">Descrição</label>
+                    <input type="text" class="form-control" [name]="'Diverso_'+ indexDiverso + '_Descricao'" [id]="'Diverso_'+ indexDiverso + '_Descricao'"
+                      [(ngModel)]="diverso.Descricao" />
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label [for]="'Diverso_'+ indexDiverso + '_Valor'">Valor</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">R$</div>
+                      <input type="text" class="form-control" currencyMask placeholder="0,00" autocomplete="off"
+                        [options]="{prefix: '', thousands: '.', decimal: ',' }" [name]="'Diverso_'+ indexDiverso + '_Valor'"
+                        [id]="'Diverso_'+ indexDiverso + '_Valor'" [(ngModel)]="diverso.Valor" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12">
+      <div role="group" class="form-btn-group">
+        <button type="button" class="btn btn-link pull-left" routerLink="/autogestao/imoveis">Voltar</button>
+        <button type="submit" class="btn btn-primary pull-right" id="Continuar" *ngIf="!carregandoFormulario && exibirFormulario"
+          [disabled]="cadastroImovelForm.invalid">Salvar
+          e continuar</button>
+      </div>
+    </div>
+  </div>
+</form>

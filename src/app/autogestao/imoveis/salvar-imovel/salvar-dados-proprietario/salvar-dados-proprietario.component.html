@@ -1,0 +1,936 @@
+<div class="row" *ngIf="isEdicao()">
+  <div class="col-md-12">
+    <div class="btn-group-actions-sub clearfix position-top">
+      <div class="pull-right clearfix">
+        <button *ngIf="imovel.Proprietario && !isNovoProprietario && !isDetail" data-toggle="button"
+          class=" btn-link  pull-left" title="Novo proprietário" (click)="abrirModalNovoProprietario(proprietario)">
+          <span>Novo proprietário</span>
+          <i class="glyphicons glyphicons-plus"></i>
+        </button>
+
+        <a *ngIf="imovel.Proprietario && !isNovoProprietario && isDetail" class=" btn-link pull-left"
+          title="Histórico de proprietário" href="#"
+          [routerLink]="['/autogestao', 'imoveis', imovel.Uid, 'editar', 'novoProprietario']">
+          <span>Novo proprietário</span>
+          <i class="glyphicons glyphicons-plus"></i>
+        </a>
+
+        <a *ngIf="proprietario.PossuiHistorico" href="#" class=" btn-link pull-right btn-link-historico"
+          title="Histórico de proprietário"
+          [routerLink]="['/autogestao', 'imoveis', imovel.Uid, 'proprietario', 'historico']">
+          <span>Histórico de proprietário</span>
+          <i class="glyphicons glyphicons-more-items"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="" *ngIf="carregandoFormulario">
+  <app-loading [message]="messageStatus"></app-loading>
+</div>
+
+<div class="" *ngIf="!carregandoFormulario && messages">
+  <div *ngFor="let msg of messages">
+    <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+  </div>
+</div>
+
+<div *ngIf="!carregandoFormulario && !isDetail">
+  <form class="salvar-dadosProprietario clearfix" #cadastroForm="ngForm"
+    (ngSubmit)="salvarDadosProprietario(cadastroForm)" [hidden]="carregandoFormulario || !exibirFormulario">
+
+    <div id="accordion-aba-proprietario" role="tablist" aria-multiselectable="true">
+      <div id="panelDadosPessoais" class="panel panel-form-group">
+        <div class="panel-heading" role="tab" id="headingPanelDadosPessoais">
+          <h4 class="panel-title">
+            <button type="button" class="accordion-toggle" [class.collapsed]="!proprietario.panelDadosPessoaisIsOpen"
+              [attr.aria-expanded]="proprietario.panelDadosPessoaisIsOpen"
+              (click)="proprietario.toggleCollapse('panelDadosPessoaisIsOpen')"
+              aria-controls="collapsePanelInfoBasicas">
+              Dados pessoais
+            </button>
+          </h4>
+        </div>
+        <div id="panelDadosPessoaisIsOpen" class="panel-collapse collapse"
+          [class.in]="proprietario.panelDadosPessoaisIsOpen" role="tabpanel"
+          aria-labelledby="headingPanelDadosPessoais">
+          <div class="panel-body">
+            <fieldset>
+
+              <div id="row-proprietario-tipo-pessoa" class="row">
+                <div class="col-lg-2">
+                  <div>
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" id="cpf1" name="TipoPessoaCPF" [value]="1"
+                          [disabled]="!habilitarTrocaDeProprietario()" [(ngModel)]="proprietario.TipoPessoa"
+                          (change)="alterarTipoPessoa()" />CPF
+                      </label>
+                    </div>
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" id="cnpj1" name="TipoPessoaCNPJ" [value]="2"
+                          [disabled]="!habilitarTrocaDeProprietario()" [(ngModel)]="proprietario.TipoPessoa"
+                          (change)="alterarTipoPessoa()" />CNPJ
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="row-proprietario-cpfcnpj" class="row" [hidden]="!proprietario.TipoPessoa">
+                <div class="col-lg-4">
+                  <div class="custom-autocomplete">
+                    <div class="custom-autocomplete__container" *ngIf="proprietarioPessoaFisica()">
+                      <div class="custom-autocomplete__input form-group button-included">
+                        <input type="text" [textMask]="{mask: maskCPF, guide: false}" name="CPF"
+                          class="form-control input-cpf" id="textCPF" placeholder="000.000.000-00"
+                          [(ngModel)]="proprietario.CPFCNPJ" #cpfProprietario="ngModel" #inputCpfCnpj required
+                          (focusout)="buscarProprietarioPeloCPFCNPJ()"
+                          (keydown.enter)="buscarProprietarioPeloCPFCNPJ($event)"
+                          [disabled]="!habilitarTrocaDeProprietario()" />
+                        <button class="search-icon" type="button" (click)="buscarProprietarioPeloCPFCNPJ()"
+                          [disabled]="!habilitarTrocaDeProprietario()">
+                          <i class="search-default-icon"></i>
+                        </button>
+                      </div>
+                      <div *ngIf="cpfProprietario.invalid && cpfProprietario.dirty">
+                        <div *ngIf="cpfProprietario?.errors?.required" class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="autocomplete__container" *ngIf="!proprietarioPessoaFisica()">
+                      <div class="custom-autocomplete__input form-group button-included">
+                        <input type="text" [textMask]="{mask: maskCNPJ, guide: false}" name="CNPJ"
+                          class="form-control input-cnpj" id="textCNPJ" placeholder="00.000.000/0000-00"
+                          [(ngModel)]="proprietario.CPFCNPJ" #cnpjProprietario="ngModel" #inputCpfCnpj required
+                          (focusout)="buscarProprietarioPeloCPFCNPJ()"
+                          (keydown.enter)="buscarProprietarioPeloCPFCNPJ($event)"
+                          [disabled]="!habilitarTrocaDeProprietario()" />
+
+                        <button class="search-icon" type="button" (click)="buscarProprietarioPeloCPFCNPJ()"
+                          [disabled]="!habilitarTrocaDeProprietario()">
+                          <i class="search-default-icon"></i>
+                        </button>
+                      </div>
+                      <div *ngIf="cnpjProprietario.invalid && cnpjProprietario.dirty">
+                        <div *ngIf="cnpjProprietario?.errors?.required" class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="buscandoProprietarioPeloCPFCNPJ">
+                <app-loading [message]="messageStatusBuscaProprietario"></app-loading>
+              </div>
+
+              <div *ngIf="!buscandoProprietarioPeloCPFCNPJ && messagesBuscaProprietario">
+                <div *ngFor="let msg of messagesBuscaProprietario">
+                  <app-alert [close]="true" color="warning">{{msg}}</app-alert>
+                </div>
+              </div>
+
+              <div *ngIf="exibirCamposDoFormulario && !buscandoProprietarioPeloCPFCNPJ">
+                <fieldset>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label for="txtNomeProprietario">Nome</label>
+                        <input type="text" class="form-control" id="txtNomeProprietario" name="txtNomeProprietario"
+                          [(ngModel)]="proprietario.Nome" #nomeProprietario="ngModel"
+                          (change)="atualizarNomeProprietario()" required />
+                        <div *ngIf="nomeProprietario.errors && nomeProprietario.dirty" class="alert alert-danger">
+                          <div *ngIf="nomeProprietario.errors.required">Campo obrigatório.</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label for="txtEmail">E-mail</label>
+                        <input type="email" class="form-control" id="txtEmail" name="txtEmail"
+                          [(ngModel)]="proprietario.Email" #emailProprietario="ngModel" required
+                          pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" />
+
+                        <div *ngIf="emailProprietario.errors && emailProprietario.dirty" class="alert alert-danger">
+                          <div *ngIf="emailProprietario.errors.required">
+                            Campo obrigatório.
+                          </div>
+                          <div *ngIf="emailProprietario.errors.pattern && !emailProprietario.errors.required">
+                            Formato de e-mail inválido.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+
+                    <div class="col-lg-4" *ngIf="proprietarioPessoaFisica()">
+                      <div class="form-group">
+                        <label for="txtDataNascimento">Data de Nascimento</label>
+
+                        <input type="text" placeholder="dd/mm/aaaa" [textMask]="{mask: maskDate, guide: false}"
+                          class="form-control" id="txtDataNascimento" name="txtDataNascimento"
+                          [(ngModel)]="proprietario.DataNascimento" required #dataNascimentoProprietario />
+
+                        <div *ngIf="dataNascimentoProprietario.errors && dataNascimentoProprietario.dirty"
+                          class="alert alert-danger">
+                          <div *ngIf="dataNascimentoProprietario.errors.required">Campo obrigatório.</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4" *ngIf="proprietarioPessoaFisica()">
+                      <div class="form-group">
+                        <label for="txtRG">RG</label>
+                        <input type="text" class="form-control" id="txtRG" name="txtRG" [(ngModel)]="proprietario.RG"
+                          #rgProprietario="ngModel" required />
+                        <div *ngIf="rgProprietario.errors && rgProprietario.dirty" class="alert alert-danger">
+                          <div *ngIf="rgProprietario.errors.required">Campo obrigatório.</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4" *ngIf="proprietarioPessoaFisica()">
+                      <div class="form-group">
+                        <label for="txtOrgaoEmissor">Orgão Emissor</label>
+                        <input type="text" class="form-control" id="txtOrgaoEmissor" name="txtOrgaoEmissor"
+                          [(ngModel)]="proprietario.OrgaoEmissor" #rgOrgaoEmissorProprietario="ngModel" required />
+                        <div *ngIf="rgOrgaoEmissorProprietario.errors && rgOrgaoEmissorProprietario.dirty"
+                          class="alert alert-danger">
+                          <div *ngIf="rgOrgaoEmissorProprietario.errors.required">Campo obrigatório.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" *ngIf="proprietarioPessoaFisica() && !proprietario.esconderCamposFiliacao">
+                    <div class="col-lg-6" *ngIf="proprietarioPessoaFisica()">
+                      <div class="form-group">
+                        <label for="txtFiliacao1">Filiação 1</label>
+                        <input type="text" class="form-control" id="txtFiliacao1" name="txtFiliacao1"
+                          [(ngModel)]="proprietario.Filiacao1" />
+                      </div>
+                    </div>
+                    <div class="col-lg-6" *ngIf="proprietarioPessoaFisica()">
+                      <div class="form-group">
+                        <label for="txtFiliacao2">Filiação 2</label>
+                        <input type="text" class="form-control" id="txtFiliacao2" name="txtFiliacao2"
+                          [(ngModel)]="proprietario.Filiacao2" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" *ngIf="proprietarioPessoaFisica()">
+                    <div class="col-lg-4"
+                      *ngIf="proprietarioPessoaFisica() && !proprietario.esconderCamposNacionalidade">
+                      <div class="form-group">
+                        <label for="txtNacionalidade">Nacionalidade</label>
+                        <input type="text" class="form-control" id="txtNacionalidade" name="txtNacionalidade"
+                          [(ngModel)]="proprietario.Nacionalidade" required #nacionalidadeProprietario />
+                        <div *ngIf="nacionalidadeProprietario.errors && nacionalidadeProprietario.dirty"
+                          class="alert alert-danger">
+                          <div *ngIf="nacionalidadeProprietario.errors.required">Campo obrigatório.</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4" *ngIf="proprietarioPessoaFisica()">
+                      <div class="form-group">
+                        <label for="EstadoCivil">Estado Civil</label>
+                        <select class="form-control" id="EstadoCivil" name="EstadoCivil" #estadoCivil="ngModel"
+                          [(ngModel)]="proprietario.EstadoCivil" required>
+                          <option [value]="null" disabled>Escolha uma opção</option>
+                          <option *ngFor="let estado of opcoesEstadoCivil" [ngValue]="estado.Id">{{estado.Descricao}}
+                          </option>
+                        </select>
+                        <div *ngIf="estadoCivil.invalid && estadoCivil.dirty && estadoCivil?.errors.required"
+                          class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4" *ngIf="proprietarioPessoaFisica()">
+                      <div class="form-group">
+                        <label for="Sexo">Sexo
+                          <span class="obrigatorio">(obrigatório)</span>
+                        </label>
+                        <div class="form-group">
+                          <div class="radio-inline" *ngFor="let sexo of opcoesGenero; let i = index">
+                            <label>
+                              <input type="radio" class="form-group" id="{{'sexo.Descricao' + sexo.Id}}" name="Sexo"
+                                #sexoTemplate="ngModel" [value]="sexo.Id" [(ngModel)]="proprietario.Sexo"
+                                required>{{sexo.Descricao}}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset *ngIf="proprietarioPessoaFisica() && proprietarioCasado()">
+                  <legend>Cônjuge</legend>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="txtConjugueNome">Nome</label>
+                        <input type="text" class="form-control" id="txtConjugueNome" name="txtConjugueNome"
+                          [(ngModel)]="proprietario.DadosConjuge.Nome" #txtConjugueNome="ngModel" required />
+                        <div
+                          *ngIf="txtConjugueNome.invalid && txtConjugueNome.dirty && txtConjugueNome?.errors.required"
+                          class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="dadosConjuguetextCPF">CPF</label>
+                        <input type="text" [textMask]="{mask: maskCPF, guide: false}" name="dadosConjugueCPF"
+                          class="form-control input-cpf" id="dadosConjuguetextCPF" placeholder="000.000.000-00"
+                          [(ngModel)]="proprietario.DadosConjuge.CPFCNPJ" #cpfcnpjConjugue="ngModel" required />
+                        <div *ngIf="cpfcnpjConjugue.invalid && cpfcnpjConjugue.dirty">
+                          <div *ngIf="cpfcnpjConjugue?.errors?.required" class="alert alert-danger">
+                            Campo obrigatório.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" *ngIf="!proprietario.esconderCamposFiliacaoConjugue">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="txtdadosConjugueFiliacao1">Filiação 1</label>
+                        <input type="text" class="form-control" id="txtdadosConjugueFiliacao1"
+                          name="txtdadosConjugueFiliacao1" [(ngModel)]="proprietario.DadosConjuge.Filiacao1" />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="txtdadosConjugueFiliacao2">Filiação 2</label>
+                        <input type="text" class="form-control" id="txtdadosConjugueFiliacao2"
+                          name="txtdadosConjugueFiliacao2" [(ngModel)]="proprietario.DadosConjuge.Filiacao2" />
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset class="field-contatos">
+                  <legend>Contatos</legend>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <h6>Telefone Fixo</h6>
+                      <div class="bloco-telefone"
+                        *ngFor="let telFixo of proprietario.ContatosTelFixo; let indexTelefoneFixo=index">
+                        <!-- [ngModelOptions]="{standalone: true}" -->
+                        <div class="form-group">
+                          <input [textMask]="{mask: masktel, guide: false}"
+                            [(ngModel)]="proprietario.ContatosTelFixo[indexTelefoneFixo].telefone"
+                            [ngModelOptions]="{standalone: true}" type="text" class="form-control"
+                            placeholder="(00) 0000-0000" #fixo="ngModel"
+                            [pattern]="proprietario.ContatoDefault.regexPadraoTelefoneFixo" />
+
+                          <div *ngIf="fixo.invalid && fixo.dirty && fixo.touched && (fixo.errors.pattern )"
+                            class="alert alert-danger">
+                            Telefone inválido.
+                          </div>
+                        </div>
+                        <div *ngIf="proprietario.ContatosTelFixo.length > 1" class="form-group wrap-deletar">
+                          <button class='btn btn-danger' (click)="deleteTelefoneFixo(i)" type="button">
+                            <i class="glyphicons glyphicons-bin"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="form-group wrap-adicionar">
+                        <button type="button" class='btn-link' (click)="addTelefoneFixo()"
+                          value="Adicionar Telefone Fixo">
+                          <i class="glyphicons glyphicons-plus"></i> Adicionar Telefone Fixo</button>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <h6>Telefone Celular</h6>
+                      <div class="bloco-telefone" *ngFor="let telCelular of proprietario.ContatosTelCel; let i=index">
+                        <div class="form-group">
+                          <input [textMask]="{mask: maskcel, guide: false}"
+                            [(ngModel)]="proprietario.ContatosTelCel[i].telefone" #celular="ngModel"
+                            [ngModelOptions]="{standalone: true}" type="text" class="form-control"
+                            placeholder="(00) 00000-0000" [pattern]="proprietario.ContatoDefault.regexPadraoCelular" />
+                          <div *ngIf="celular.invalid && celular.dirty && celular.touched && (celular.errors.pattern )"
+                            class="alert alert-danger">
+                            Telefone inválido.
+                          </div>
+                        </div>
+                        <div *ngIf="proprietario.ContatosTelCel.length > 1" class="form-group wrap-deletar">
+                          <button class='btn btn-danger' (click)="deleteTelefoneCelular(i)">
+                            <i class="glyphicons glyphicons-bin"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="form-group wrap-adicionar">
+                        <button type="button" class='btn-link' (click)="addTelefoneCelular()" value="Adicionar Celular">
+                          <i class="glyphicons glyphicons-plus"></i> Adicionar Celular</button>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset *ngIf="!proprietario.esconderReferencia">
+                  <legend>Referência</legend>
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label for="txtReferencia">Referência</label>
+                        <input type="text" class="form-control" id="txtReferencia" name="txtReferencia"
+                          [(ngModel)]="proprietario.Referencia" />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label for="telefoneCompletoReferencia">Telefone</label>
+                        <!-- <input type="text" [textMask]="{mask: masktel2, guide: false}" class="form-control" id="txtDDDReferencia" name="txtDDDReferencia"
+                      [(ngModel)]="proprietario.TelefoneCompletoReferencia" /> -->
+                        <input [textMask]="{mask: maskcel, guide: false}"
+                          [(ngModel)]="proprietario.TelefoneCompletoReferencia" #telefoneCompletoReferencia="ngModel"
+                          [ngModelOptions]="{standalone: true}" type="text" class="form-control"
+                          name="telefoneCompletoReferencia" />
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <div id="panelInfoBancarias"
+        *ngIf="exibirCamposDoFormulario && !buscandoProprietarioPeloCPFCNPJ && !proprietario.flagPreencherDadosComInformacoesCadastrais"
+        class="panel panel-form-group">
+        <div class="panel-heading" role="tab" id="headingPanelInfoBancarias">
+          <h4 class="panel-title">
+            <div type="button" class="accordion-toggle" [class.collapsed]="!proprietario.panelInfoBancariasIsOpen"
+              [attr.aria-expanded]="proprietario.panelInfoBancariasIsOpen"
+              (click)="proprietario.toggleCollapse('panelInfoBancariasIsOpen')"
+              aria-controls="collapsePanelRepresentacao">
+              Dados bancários
+              <i class="glyphicons glyphicons-question-sign" [tooltip]="tooltipDadosBancarios"></i>
+            </div>
+            <ng-template #tooltipDadosBancarios>
+              <div [innerHtml]="tooltip.collapseDadosBancarios">
+              </div>
+            </ng-template>
+          </h4>
+        </div>
+        <div id="panelInfoBancariasIsOpen" class="panel-collapse collapse"
+          [class.in]="proprietario.panelInfoBancariasIsOpen" role="tabpanel"
+          aria-labelledby="headingPanelInfoBancarias">
+          <div class="panel-body">
+            <fieldset id="fieldset-info-titular-conta" class="">
+              <legend>Informações sobre o titular da conta</legend>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="TitularProprietario">O proprietário informado acima é o titular da conta?</label>
+                    <div>
+                      <div class="radio-inline">
+                        <label>
+                          <input type="radio" name="TitularProprietario" id="TitularProprietarioNaoa" [value]="false"
+                            [(ngModel)]="proprietario.TitularProprietario" (change)="atualizarTitularProprietario()" />
+                          Não
+                        </label>
+
+                        <div class="radio-inline">
+                          <label>
+                            <input type="radio" name="TitularProprietario" id="TitularProprietarioSim" [value]="true"
+                              [(ngModel)]="proprietario.TitularProprietario"
+                              (change)="atualizarTitularProprietario()" />
+                            Sim
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="titular-tipo-pessoa" class="row">
+                <div class="col-lg-2">
+                  <div>
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" id="TipoPessoaTitularCPF" name="TipoPessoaTitularCPF" [value]="1"
+                          [disabled]="proprietario.informacaoBancaria.Titular.alteracaoBloqueada() || proprietario.TitularProprietario"
+                          [(ngModel)]="proprietario.informacaoBancaria.Titular.TipoPessoa"
+                          (change)="proprietario.informacaoBancaria.Titular.alterarTipoPessoa()" />CPF
+                      </label>
+                    </div>
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" id="TipoPessoaTitularCNPJ" name="TipoPessoaTitularCNPJ" [value]="2"
+                          [disabled]="proprietario.informacaoBancaria.Titular.alteracaoBloqueada() || proprietario.TitularProprietario"
+                          [(ngModel)]="proprietario.informacaoBancaria.Titular.TipoPessoa"
+                          (change)="proprietario.informacaoBancaria.Titular.alterarTipoPessoa()" />CNPJ
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="row-titular-cpf-cnpj" class="row">
+                <div class="col-md-4">
+                  <div class="form-group" *ngIf="proprietario.informacaoBancaria.Titular.pessoaFisica()">
+                    <input type="text" class="form-control" [textMask]="{mask: maskCPF, guide: false}" name="CPFTitular"
+                      class="form-control input-cpf" id="CPFTitular" placeholder="000.000.000-00"
+                      [(ngModel)]="proprietario.informacaoBancaria.Titular.CPFCNPJ" #cpfTitular="ngModel"
+                      #inputTitularCpfCnpj required
+                      [disabled]="proprietario.informacaoBancaria.Titular.alteracaoBloqueada() || proprietario.TitularProprietario" />
+
+                    <div *ngIf="cpfTitular.invalid && cpfTitular.dirty && cpfTitular.errors['required']"
+                      class="alert alert-danger">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+
+                  <div class="form-group" *ngIf="proprietario.informacaoBancaria.Titular.pessoaJuridica()">
+                    <input type="text" [textMask]="{mask: maskCNPJ, guide: false}" name="CNPJTitular"
+                      class="form-control input-cnpj" id="CNPJTitular" placeholder="00.000.000/0000-00"
+                      [(ngModel)]="proprietario.informacaoBancaria.Titular.CPFCNPJ" #cnpjTitular="ngModel"
+                      #inputTitularCpfCnpj required
+                      [disabled]="proprietario.informacaoBancaria.Titular.alteracaoBloqueada() || proprietario.TitularProprietario" />
+
+                    <div *ngIf="cnpjTitular.invalid && cnpjTitular.dirty && cnpjTitular.errors['required']"
+                      class="alert alert-danger">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="row-titular-informacoes-gerais" class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="inputNomeTitular" class="control-label">Nome</label>
+                    <input type="text" class="form-control" id="inputNomeTitular" name="inputNomeTitular" required
+                      #nomeTitular="ngModel" [(ngModel)]="proprietario.informacaoBancaria.Titular.Nome"
+                      [readonly]="proprietario.TitularProprietario" />
+                    <div *ngIf="nomeTitular.invalid && nomeTitular.dirty && nomeTitular.errors['required']"
+                      class="alert alert-danger">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Conta bancária</legend>
+
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="selectContaBancariaCodigoBanco" class="control-label">Banco</label>
+                    <select class="form-control" id="selectContaBancariaCodigoBanco"
+                      name="selectContaBancariaCodigoBanco"
+                      [(ngModel)]="proprietario.informacaoBancaria.ContaBancaria.CodigoBancoEnum" required
+                      #codigoBancoEnum="ngModel"
+                      (ngModelChange)="proprietario.informacaoBancaria.ContaBancaria.alterarBanco($event, OpcoesBanco)">
+                      <option [disabled]="true" [ngValue]="null">Selecione um banco</option>
+                      <option *ngFor="let banco of OpcoesBanco" [ngValue]="banco.CodigoBanco" selected="selected">{{
+                            banco.Descricao }}
+                      </option>
+                    </select>
+
+                    <div *ngIf="codigoBancoEnum.invalid && codigoBancoEnum.dirty && codigoBancoEnum.errors['required']"
+                      class="alert alert-danger">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-3"
+                  *ngIf="proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado && proprietario.informacaoBancaria.ContaBancaria.CodigoBancoEnum === 0">
+                  <div class="form-group ">
+                    <label for="nomeBanco" class="control-label">Nome do Banco</label>
+                    <input type="text" class="form-control" id="nomeBanco" name="nomeBanco" required
+                      [(ngModel)]="proprietario.informacaoBancaria.ContaBancaria.Banco" />
+                  </div>
+                </div>
+
+                <div class="col-md-3" *ngIf="proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado">
+                  <div class="form-group ">
+                    <label for="bancoCodigo" class="control-label">Código</label>
+                    <input type="text" class="form-control" id="bancoCodigo" name="bancoCodigo" required
+                      [(ngModel)]="proprietario.informacaoBancaria.ContaBancaria.CodigoBanco" #codigoBanco="ngModel"
+                      [readonly]="proprietario.informacaoBancaria.ContaBancaria.CodigoBancoEnum > 0" />
+                    <div *ngIf="codigoBanco.invalid && codigoBanco.dirty && codigoBanco.errors['required']"
+                      class="alert alert-danger">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="group-campos-conta-bancaria" *ngIf="proprietario.informacaoBancaria.ContaBancaria.ExibirCampos">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="radioTipoConta">Tipo de Conta</label>
+                      <div class="form-group clearfix">
+                        <div class="radio-inline">
+                          <label>
+                            <input type="radio" name="TipoContaCC" [value]="1"
+                              [(ngModel)]="proprietario.informacaoBancaria.ContaBancaria.TipoConta" />Conta
+                            Corrente</label>
+                        </div>
+                        <div class="radio-inline">
+                          <label>
+                            <input type="radio" name="TipoContaCP" [value]="2"
+                              [(ngModel)]="proprietario.informacaoBancaria.ContaBancaria.TipoConta" />Conta
+                            Poupança</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="inputContaBancariaAgencia" class="control-label"> Agência
+                        <button *ngIf="proprietario.informacaoBancaria.ContaBancaria.CodigoBancoEnum > 0" type="button"
+                          class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipAgencia">
+                          <i class="glyphicons glyphicons-question-sign"></i>
+                        </button>
+                      </label>
+
+                      <ng-template #tooltipAgencia>
+                        <div
+                          [innerHtml]="proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoAgencia">
+                        </div>
+                      </ng-template>
+
+                      <div *ngIf="proprietario.informacaoBancaria.ContaBancaria.CodigoBancoEnum > 0">
+                        <input class="form-control" type="text" id="inputContaBancariaAgencia"
+                          name="inputContaBancariaAgencia"
+                          [minlength]="proprietario.informacaoBancaria.ContaBancaria.obterMascara(proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoAgencia)?.length"
+                          [(ngModel)]="proprietario.informacaoBancaria.ContaBancaria.Agencia"
+                          #contaBancariaAgencia="ngModel" required
+                          [textMask]="{mask: proprietario.informacaoBancaria.ContaBancaria.obterMascara(proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoAgencia), guide: false}"
+                          placeholder="{{ proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoAgencia }}" />
+                        <div
+                          *ngIf="contaBancariaAgencia.invalid && contaBancariaAgencia.dirty && contaBancariaAgencia.errors['required']"
+                          class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+
+                      <div *ngIf="proprietario.informacaoBancaria.ContaBancaria.CodigoBancoEnum === 0">
+                        <input class="form-control" type="text" id="inputContaBancariaAgencia"
+                          name="inputContaBancariaAgencia" [minlength]="1"
+                          [(ngModel)]="proprietario.informacaoBancaria.ContaBancaria.Agencia"
+                          #contaBancariaAgencia="ngModel" required />
+                        <div
+                          *ngIf="contaBancariaAgencia.invalid && contaBancariaAgencia.dirty && contaBancariaAgencia.errors['required']"
+                          class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputContaBancariaConta">
+                        Conta
+                        <button type="button" *ngIf="proprietario.informacaoBancaria.ContaBancaria.CodigoBancoEnum > 0"
+                          class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipConta">
+                          <i class="glyphicons glyphicons-question-sign"></i></button>
+                      </label>
+
+                      <ng-template #tooltipConta>
+                        <div
+                          [innerHtml]="proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoConta">
+                        </div>
+                      </ng-template>
+
+                      <div *ngIf="proprietario.informacaoBancaria.ContaBancaria.CodigoBancoEnum > 0">
+                        <input class="form-control" type="text" id="inputContaBancariaConta"
+                          name="inputContaBancariaConta"
+                          [(ngModel)]="proprietario.informacaoBancaria.ContaBancaria.Conta"
+                          #contaBancariaConta="ngModel" required
+                          [minlength]="proprietario.informacaoBancaria.ContaBancaria.obterMascara(proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoConta).length"
+                          [textMask]="{mask: proprietario.informacaoBancaria.ContaBancaria.obterMascara(proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoConta), guide: false}"
+                          placeholder="{{ proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoConta }}" />
+
+                        <div
+                          *ngIf="contaBancariaConta.invalid && contaBancariaConta.dirty && contaBancariaConta.errors['required']"
+                          class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+                      <div *ngIf="proprietario.informacaoBancaria.ContaBancaria.CodigoBancoEnum === 0">
+                        <input class="form-control" type="text" id="inputContaBancariaConta"
+                          name="inputContaBancariaConta"
+                          [(ngModel)]="proprietario.informacaoBancaria.ContaBancaria.Conta"
+                          #contaBancariaConta="ngModel" required [minlength]="1"
+                          placeholder="{{ proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoConta }}" />
+
+                        <div
+                          *ngIf="contaBancariaConta.invalid && contaBancariaConta.dirty && contaBancariaConta.errors['required']"
+                          class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <div id="panelRepresentacao" class="panel panel-form-group"
+        *ngIf="exibirCamposDoFormulario && !buscandoProprietarioPeloCPFCNPJ">
+        <div class="panel-heading" role="tab" id="headingPanelRepresentacao">
+          <h4 class="panel-title">
+            <div class="accordion-toggle" [class.collapsed]="!proprietario.panelRepresentacaoIsOpen"
+              [attr.aria-expanded]="proprietario.panelRepresentacaoIsOpen"
+              (click)="proprietario.toggleCollapse('panelRepresentacaoIsOpen')"
+              aria-controls="collapsePanelRepresentacao">
+              Representação
+              <i class="glyphicons glyphicons-question-sign" [tooltip]="tooltipRepresentacao"></i>
+            </div>
+            <ng-template #tooltipRepresentacao>
+              <div [innerHtml]="tooltip.collapseRepresentacao">
+              </div>
+            </ng-template>
+          </h4>
+        </div>
+
+        <div id="panelRepresentacaoIsOpen" class="panel-collapse collapse"
+          [class.in]="proprietario.panelRepresentacaoIsOpen" role="tabpanel"
+          aria-labelledby="headingPanelRepresentacao">
+          <div class="panel-body">
+            <fieldset>
+              <div id="row-pergunta-possui-representante" class="row">
+                <div class="col-md-12">
+                  <label for="">Possui representante?</label>
+                  <div>
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" id="PossuiRepresentanteN" name="PossuiRepresentanteN" [value]="false"
+                          [(ngModel)]="proprietario.PossuiRepresentante" (change)="alternarRepresentacao()" />Não
+                      </label>
+                    </div>
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" id="PossuiRepresentanteS" name="PossuiRepresentanteS" [value]="true"
+                          [(ngModel)]="proprietario.PossuiRepresentante" (change)="alternarRepresentacao()" />Sim
+                      </label>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset *ngIf="proprietario.PossuiRepresentante">
+              <div id="row-proprietario-representante-tipo-pessoa" class="row">
+                <div class="col-lg-2">
+                  <div>
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" id="TipoPessoaRepresentanteCPF" name="TipoPessoaRepresentanteCPF"
+                          [value]="1" [(ngModel)]="proprietario.Representante.TipoPessoa"
+                          (change)="alterarTipoPessoaRepresentante()" />CPF
+                      </label>
+                    </div>
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" id="TipoPessoaRepresentanteCNPJ" name="TipoPessoaRepresentanteCNPJ"
+                          [value]="2" [(ngModel)]="proprietario.Representante.TipoPessoa"
+                          (change)="alterarTipoPessoaRepresentante()" />CNPJ
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="row-proprietario-representante-cpfcnpj" class="row"
+                [hidden]="!proprietario.Representante.TipoPessoa">
+                <div class="col-lg-4">
+                  <div class="custom-autocomplete">
+                    <div class="custom-autocomplete__container" *ngIf="proprietario.Representante.isPessoaFisica()">
+                      <div class="custom-autocomplete__input form-group button-included">
+                        <input type="text" [textMask]="{mask: maskCPF, guide: false}" name="CPFRepresentante"
+                          class="form-control input-cpf" id="CPFRepresentante" placeholder="000.000.000-00"
+                          [(ngModel)]="proprietario.Representante.CPFCNPJ" #cpfRepresentante="ngModel"
+                          #inputRepresentanteCpfCnpj required (focusout)="buscarRepresentantePeloCPFCNPJ()"
+                          (keydown.enter)="buscarRepresentantePeloCPFCNPJ($event)" />
+                        <button class="search-icon" type="button"
+                          (click)="buscarRepresentantePeloCPFCNPJ($event, true)">
+                          <i class="search-default-icon"></i>
+                        </button>
+                      </div>
+                      <div *ngIf="cpfRepresentante.invalid && cpfRepresentante.dirty">
+                        <div *ngIf="cpfRepresentante?.errors?.required" class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="autocomplete__container" *ngIf="!proprietario.Representante.isPessoaFisica()">
+                      <div class="custom-autocomplete__input form-group button-included">
+                        <input type="text" [textMask]="{mask: maskCNPJ, guide: false}" name="CNPJRepresentante"
+                          class="form-control input-cnpj" id="CNPJRepresentante" placeholder="00.000.000/0000-00"
+                          [(ngModel)]="proprietario.Representante.CPFCNPJ" #cnpjRepresentante="ngModel"
+                          #inputRepresentanteCpfCnpj required (focusout)="buscarRepresentantePeloCPFCNPJ()"
+                          (keydown.enter)="buscarRepresentantePeloCPFCNPJ($event)" />
+
+                        <button class="search-icon" type="button" (click)="buscarRepresentantePeloCPFCNPJ()">
+                          <i class="search-default-icon"></i>
+                        </button>
+                      </div>
+                      <div *ngIf="cnpjRepresentante.invalid && cnpjRepresentante.dirty">
+                        <div *ngIf="cnpjRepresentante?.errors?.required" class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="proprietario.Representante.buscandoPeloCPFCNPJ">
+                <app-loading message="Buscando representantes..."></app-loading>
+              </div>
+
+              <div
+                *ngIf="!proprietario.Representante.buscandoPeloCPFCNPJ && this.proprietario.Representante.messagesBusca">
+                <div *ngFor="let msg of this.proprietario.Representante.messagesBusca">
+                  <app-alert [close]="true" color="warning">{{ msg }}</app-alert>
+                </div>
+              </div>
+
+              <div id="row-tipo-representante" class="row"
+                *ngIf="proprietario.Representante.TipoPessoa && proprietario.Representante.exibirCampos && !proprietario.Representante.buscandoPeloCPFCNPJ">
+                <div class="col-md-12">
+                  <label for="">Tipo de representação</label>
+                  <div>
+                    <div class="radio-inline" *ngFor="let opcao of opcoesTipoRepresentante; let indexOpcao = index">
+                      <label>
+                        <input type="radio" [id]="'TipoRepresentante_' + indexOpcao"
+                          name="'TipoRepresentante_' + indexOpcao" [value]="opcao.Id"
+                          [(ngModel)]="proprietario.Representante.TipoRepresentante" />{{ opcao.Descricao }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row"
+                *ngIf="proprietario.Representante.TipoPessoa && proprietario.Representante.exibirCampos && !proprietario.Representante.buscandoPeloCPFCNPJ">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="">Nome</label>
+                    <input type="text" class="form-control" id="RepresentanteNome" name="RepresentanteNome"
+                      [(ngModel)]="proprietario.Representante.Nome" />
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="">Email</label>
+                    <input type="text" class="form-control" id="RepresentanteEmail" name="RepresentanteEmail"
+                      [(ngModel)]="proprietario.Representante.Email" />
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label class="form-label" for="RepresentanteTelefone">Telefone</label>
+                    <input type="text" class="form-control" id="RepresentanteTelefone" name="RepresentanteTelefone"
+                      [(ngModel)]="proprietario.Representante.Contato.Telefone"
+                      [textMask]="{mask: proprietario.Representante.Contato.maskGenericTel, guide: false}"
+                      placeholder="(00) 0000-00000" #telefoneRepresentante="ngModel"
+                      [pattern]="proprietario.Representante.Contato.regexPadraoTelefoneGenerico" />
+                    <div
+                      *ngIf="telefoneRepresentante.invalid && telefoneRepresentante.dirty && telefoneRepresentante.touched && (telefoneRepresentante.errors.minlength || telefoneRepresentante.errors.pattern )"
+                      class="alert alert-danger">
+                      Telefone inválido.
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div role="group" class="form-btn-group">
+          <button type="button" class="btn btn-link pull-left" (click)="_voltar()">Voltar</button>
+          <button type="submit" class="btn btn-primary pull-right" id="Continuar"
+            [disabled]="cadastroForm.invalid || proprietario.possuiTelefoneFixoInvalido() || proprietario.possuiTelefoneCelularInvalido() ">Salvar
+            e Continuar</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <app-modal #modalArquivarProprietario>
+    <div class="modal-header modal-warning ">
+      <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+        <span aria-hidden="true ">&times;</span>
+      </button>
+      <h4 class="modal-title text-center ">Atenção!</h4>
+    </div>
+    <div class="modal-body ">
+      <p>Deseja cadastrar novo proprietário para esse imóvel ?</p>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button " class="btn btn-link pull-left " data-dismiss="modal">Não</button>
+      <button type="button " class="btn btn-primary " (click)="cadastrarNovoProprietario()">Sim</button>
+    </div>
+  </app-modal>
+</div>
+
+<app-modal #modalConfirmarPerdaDadosContratoDeAdministracao>
+  <div class="modal-header modal-warning ">
+    <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+      <span aria-hidden="true ">&times;</span>
+    </button>
+    <h4 class="modal-title text-center ">Atenção!</h4>
+  </div>
+  <div class="modal-body ">
+    <p>Por você ser o próprio proprietário deste imóvel as informações de contrato de administração serão perdidas!
+    </p>
+    <p>Deseja continuar?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-link pull-left" data-dismiss="modal">Não</button>
+    <button type="button" class="btn btn-primary" (click)="confirmarPerdaContratoAdministracao()">Sim</button>
+  </div>
+</app-modal>
+
+<div *ngIf="!carregandoFormulario && isDetail && !messages">
+  <app-visualizar-dados-proprietario [proprietario]="proprietario" [imovel]="imovel"
+    [opcoesTipoRepresentante]="opcoesTipoRepresentante">
+  </app-visualizar-dados-proprietario>
+</div>

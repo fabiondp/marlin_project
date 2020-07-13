@@ -1,0 +1,65 @@
+<section class="com-submenu">
+
+  <div class="clearfix btn-group-actions btn-group-actions-contrato position-top"
+    *ngIf="imovel && imovel.TipoPlano !== 1 && contrato && this.contrato.isEdicao()">
+
+    <button *ngIf="contrato && !contrato.isNovoContrato" data-toggle="button" class=" btn-link pull-left"
+      title="Novo contrato" (click)="abrirModalNovoContrato(contrato)">
+      <span>Novo contrato</span>
+      <i class="glyphicons glyphicons-plus"></i>
+    </button>
+
+    <a title="Histórico de contrato" [routerLink]="['/autogestao', 'imoveis', imovel.Uid, 'contrato', 'historico']"
+      href="#" class="btn-link pull-right" *ngIf="contrato && contrato.PossuiHistorico">
+      <span>Histórico de contrato</span>
+      <i class="glyphicons glyphicons-more-items"></i>
+    </a>
+  </div>
+
+  <!-- *ngIf="!carregando" -->
+  <div class=" btn-group-actions row clearfix">
+    <div class="col-xs-12 clearfix">
+      <select class="form-control" name="" [(ngModel)]="tabCorrent" id="tabContratoSelect"
+        (change)="selectTab($event.target.value)">
+        <option value="tabDadosContrato">1 - Dados do Contrato</option>
+        <option value="tabDadosLocatario">2 - Dados do locatário</option>
+      </select>
+    </div>
+  </div>
+
+
+
+  <!-- <div class="col-md-12" *ngIf="imovel.messages">
+    <div *ngFor="let msg of imovel.messages">
+      <app-alert [close]="true" [timeout]="imovel.timeMessage" [color]="imovel.typeMessage">{{msg}}</app-alert>
+    </div>
+  </div> -->
+
+  <tabset class="tabStep" #tabContrato id="tabContratoTabset">
+    <tab customClass="tab-1" heading="Contrato" id="tabDadosContrato" (select)="updateTabCurrent($event)">
+      <app-salvar-dados-contrato [(imovel)]="imovel" [(contratoLocacao)]="contrato" #SalvarDadosContrato
+        (continuar)="continuar()" (voltar)="voltar()"></app-salvar-dados-contrato>
+    </tab>
+    <tab customClass="tab-2" [disabled]="!habilitarLocatario()" heading="Locatário" id="tabDadosLocatario"
+      (select)="updateTabCurrent($event)">
+      <app-salvar-locatario-fiador-garantia [(imovel)]="imovel" [(contrato)]="contrato" #SalvarLocatarioFiadorGarantia
+        (voltar)="voltar()"></app-salvar-locatario-fiador-garantia>
+    </tab>
+  </tabset>
+</section>
+
+<app-modal>
+  <div class="modal-header modal-warning ">
+    <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+      <span aria-hidden="true ">&times;</span>
+    </button>
+    <h4 class="modal-title text-center ">Atenção!</h4>
+  </div>
+  <div class="modal-body ">
+    <p>Deseja cadastrar novo contrato para esse imóvel?</p>
+  </div>
+  <div class="modal-footer ">
+    <button type="button " class="btn btn-link pull-left " data-dismiss="modal">Não</button>
+    <button type="button " class="btn btn-primary " (click)="cadastrarNovoContrato()">Sim</button>
+  </div>
+</app-modal>

@@ -1,0 +1,665 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+// @media (min-width: 375px) {
+//   .navbar-brand {
+//     margin: 10px;
+//   }
+// }
+.navbar-nav {
+  margin: 8.5px 0; // float: right;
+
+  >li>a {
+    color: $navbar-default-link-color;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    position: relative;
+    text-align: center;
+    margin-left: 30px;
+
+    &.login {
+      text-indent: -999999px;
+    }
+
+    span.text {
+      display: inline-block;
+      padding: 15px 3px 10px;
+      font-size: 13px;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+
+    .badge {
+      position: absolute;
+      top: -10px;
+      right: -5px;
+      background-color: $color-second;
+      color: #fff;
+      z-index: 1;
+    }
+  }
+}
+
+.navbar-header {
+
+  // margin-right: -15px;
+  .badge {
+    position: absolute;
+    top: -10px;
+    right: -5px;
+    background-color: $color-second;
+    color: #fff;
+    z-index: 1;
+  }
+
+  i.icone {
+    background-image: url("../../../assets/images/navbar-icones.png");
+    background-repeat: no-repeat;
+    display: block;
+    height: 37px; // width: 42px;
+    width: 35px;
+    float: left;
+  }
+
+  .carrinho {
+    .icone {
+      background-position: -299px 0;
+      width: 30px;
+    }
+
+    span.hidden {
+      text-indent: -99999px;
+    }
+  }
+
+  .notificacao {
+    background-color: transparent !important;
+    position: relative;
+    float: right;
+    margin-right: 15px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    display: none;
+    position: relative;
+
+    .glyphicons {
+      font-size: 32px;
+      color: $color-primary;
+    }
+
+    .icone {
+      background-position: -124px -48px; // transform: scale(.8);
+      height: 42px;
+      width: 40px;
+    }
+
+    .notification-ball {
+      position: absolute;
+      top: -1px;
+      right: -2px;
+      width: 16px;
+      height: 16px;
+      background-color: #ff0000;
+      border-radius: 50%;
+      padding: 0 !important;
+
+      i {
+        font-size: 9px;
+        font-weight: bold;
+        color: white;
+        width: 14px;
+        position: absolute;
+        top: -3px;
+        right: 0;
+      }
+
+      @media(max-width: 992px) {
+        right: 115px;
+      }
+
+      @media(max-width: 768px) {
+        right: 0;
+        left: 20px;
+      }
+      
+
+      // div {
+      //   position: relative;
+      //   padding: 0 !important;
+      //   }
+    }
+  }
+}
+
+.nav-logout {
+  .navbar-nav {
+    .li-user {
+      display: none;
+    }
+
+    .dropdown-user {
+      .li-user {
+        display: block;
+      }
+    }
+  }
+
+  // margin-right: -15px;
+  i.icone {
+    background-image: url("../../../assets/images/navbar-icones.png");
+    background-repeat: no-repeat;
+    display: block;
+    height: 37px; // width: 42px;
+    width: 35px;
+    float: left;
+  }
+
+  // .inicio {
+  //   .icone {
+  //     background-position: 4px 0;
+  //   }
+  // }
+  // .anuncios {
+  //   .icone {
+  //     background-position: -55px 0;
+  //   }
+  // }
+  // .autogestao-locacao {
+  //   .icone {
+  //     background-position: -121px 0;
+  //     width: 42px;
+  //   }
+  // }
+  // .analise-credito {
+  //   .icone {
+  //     background-position: -178px 0;
+  //   }
+  // }
+  // .aluguel-temporada {
+  //   .icone {
+  //     background-position: -234px 0;
+  //   }
+  // }
+  .carrinho {
+    .icone {
+      background-position: -299px 0;
+      width: 30px;
+    }
+
+    span.hidden {
+      text-indent: -99999px;
+    }
+  }
+
+  .login {
+    .icone {
+      background-position: -337px 0;
+      width: 30px;
+    }
+
+    span {
+      text-indent: -99999px;
+    }
+  }
+
+  .notificacao {
+    background-color: transparent !important;
+    padding: 5px !important;
+    margin-left: 0px !important;
+
+    .glyphicons {
+      font-size: 32px;
+      color: $color-primary;
+    }
+
+    .icone {
+      background-position: -124px -48px; // transform: scale(.8);
+      height: 42px;
+      width: 40px;
+    }
+
+    .notification-ball {
+      position: absolute;
+      top: -1px;
+      right: -2px;
+      width: 16px;
+      height: 16px;
+      background-color: #ff0000;
+      border-radius: 50%;
+      padding: 0 !important;
+
+      i {
+        font-size: 9px;
+        font-weight: bold;
+        color: white;
+        width: 14px;
+        position: absolute;
+        top: -3px;
+        right: 0;
+      }
+
+      @media(max-width: 992px) {
+        right: 115px;
+      }
+
+      @media(max-width: 768px) {
+        right: 0;
+        left: 20px;
+      }
+
+      div {
+        position: relative;
+        padding: 0 !important;
+      }
+    }
+  }
+
+  a[target="_blank"]:after {
+    font-family: 'Glyphicons Halflings';
+    content: "\E152";
+    margin-left: 4px;
+    font-size: 12px;
+    color: $color-third;
+    font-weight: normal;
+  }
+}
+
+.nav-login {
+  .navbar-nav {
+    margin: 8.5px 0 0;
+
+    >li {
+      padding-left: 20px;
+
+      >a {
+        text-transform: uppercase;
+        font-weight: bold;
+        font-family: 'Ubuntu';
+        font-size: 14px;
+
+        i.glyphicons {
+          font-size: 21px;
+        }
+
+        &:hover,
+        &:focus {
+          text-decoration: none;
+          color: $color-fifth;
+          background-color: transparent;
+        }
+      }
+    }
+  }
+
+  // ul {
+  //     li:nth-last-child(2) {
+  //         margin-top: -5px;
+  //     }
+  //     li:nth-last-child(1) {
+  //         a > span {
+  //             padding-left: 8px;
+  //         }
+  //     }
+  // }
+  #myNavbar {
+    .wrap-navbar-nav {
+      @media(max-width: 992px) {
+        display: flex;
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  i.icone {
+    background-image: url("../../../assets/images/navbar-icones.png");
+    background-repeat: no-repeat;
+    display: block;
+    height: 37px;
+    width: 35px;
+    float: left;
+  }
+
+  .produtos-planos {
+    .icone {
+      background-position: 10px -35px;
+    }
+  }
+
+  .meus-anuncios {
+    .icone {
+      background-position: -32px -42px;
+    }
+
+    &:hover,
+    &:focus {
+      .icone {
+        background-position: -212px -42px;
+      }
+    }
+  }
+
+  .meus-imoveis {
+    .icone {
+      background-position: -78px -42px;
+    }
+  }
+
+  .notificacao {
+    background-color: transparent !important;
+
+    div {
+      position: relative;
+      padding: 0 !important;
+
+      .icone {
+        background-position: -124px -48px; // transform: scale(.8);
+        height: 42px;
+        width: 40px;
+      }
+
+      .notification-ball {
+        position: absolute;
+        top: 5px;
+        right: 3px;
+        width: 16px;
+        height: 16px;
+        background-color: #ff0000;
+        border-radius: 50%;
+        padding: 0 !important;
+
+        i {
+          font-size: 9px;
+          font-weight: bold;
+          color: white;
+          width: 14px;
+          position: absolute;
+          top: -3px;
+          right: 0;
+        }
+
+        @media(max-width: 992px) {
+          right: 115px;
+        }
+
+        @media(max-width: 768px) {
+          right: 0;
+          left: 20px;
+        }
+      }
+    }
+  }
+
+  a[target="_blank"]:after {
+    font-family: 'Glyphicons Halflings';
+    content: "\E152";
+    margin-left: 4px;
+    font-size: 12px;
+    color: $color-third;
+    font-weight: normal;
+  }
+}
+
+@media (min-width: $screen-md-min) {
+  .nav-logout {
+    float: right; // margin-right: -15px;
+  }
+
+  .container {
+
+    // width: 100%;
+    .navbar-header {
+      margin-left: -10px;
+
+      .navbar-brand {
+        margin: 10px 0;
+      }
+    }
+  }
+}
+
+// @media (max-width: $screen-md-max) {
+//     .navbar-nav {
+//         margin-right: -15px;
+//         >li>a {
+//             padding-top: 9px;
+//             padding-bottom: 9px;
+//             font-size: 14px;
+//         }
+//     }
+// }
+@media (max-width: $screen-sm-max) {
+  .nav-logout {
+    margin-right: 0;
+  }
+}
+
+@media(min-width: 1280px) {
+  // .container {
+  //   //  width: 1200px;
+  //   // background-color: lightslategrey;
+  // }
+  // .navbar-collapse.collapse {
+  //   // background-color: #d9534f;
+  // }
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+    float: none;
+  }
+}
+
+@media (max-width: 1280px) {
+
+  // .nav>li>a {
+  //   // padding: 0 3px !important;
+  // }
+  .navbar-nav {
+
+    // margin-right: -15px;
+    >li>a {
+      padding-top: 9px;
+      padding-bottom: 9px;
+      font-size: 14px;
+    }
+  }
+}
+
+@media (max-width: 1104px) {
+  .navbar-nav {
+
+    // margin-right: -15px;
+    >li>a {
+      padding-top: 9px;
+      padding-bottom: 9px;
+      font-size: 12px;
+      text-align: left;
+      margin-left: 15px;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar-nav {
+    >li>a {
+      margin: inherit;
+    }
+  }
+}
+
+// @media (min-width: $screen-sm-min) {
+//   .navbar-collapse {
+//     margin: 0 -23px;
+//     background: #eee;
+//     padding-right: 0;
+//     padding-left: 0;
+//   }
+// }
+//  Tablet 
+@media (max-width: $screen-sm-min) {
+  .navbar {
+
+    //height: 100%;
+    .container {
+
+      //height: 100%;
+      .nav-logout {
+
+        //height: 100%;
+        .navbar-collapse {
+
+          // height: 100%;
+          // max-height: 100% !important;
+          .nav {
+            height: 100%;
+
+            .li-user {
+              display: block;
+            }
+
+            .login {
+              .text {
+
+                text-indent: 0;
+                display: inherit;
+                margin-left: 30px;
+                line-height: 18px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .navbar-nav {
+    >li>a span.text {
+      padding: 10px 9px;
+    }
+
+    .carrinho {
+      display: none !important;
+    }
+
+    .notificacao {
+      display: none !important;
+    }
+
+    .li-user {
+      // border-bottom: 2px solid $color-primary;
+      padding: 0 10px !important;
+
+      .username {
+        font-size: 14px !important;
+        padding: 15px 3px 10px !important;
+        display: block;
+      }
+    }
+  }
+
+  .navbar-collapse {
+    margin: 0 -23px;
+    background: #eee;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .navbar-carrinho {
+    display: block !important;
+
+    i.icone {
+      background-size: 350px 80px !important;
+      background-position: -276px 0 !important;
+    }
+
+    @media (max-width: 360px) {
+      margin-right: 10px !important;
+
+      i.icone {
+        background-size: 293px 74px !important;
+        background-position: -232px 0 !important;
+        width: 21px !important;
+      }
+    }
+
+    .badge {
+      font-size: 14px !important;
+    }
+  }
+
+  .navbar-notificacao {
+    display: block !important;
+
+    @media (max-width: 360px) {
+      margin-right: 10px !important;
+      margin-top: 8px !important;
+
+      .glyphicons {
+        font-size: 28px !important;
+      }
+    }
+
+    .badge {
+      font-size: 14px !important;
+    }
+  }
+}
+
+@media (max-width: $screen-xs-min) {
+  .navbar-header {
+    .navbar-brand {
+      font-size: 18px;
+      line-height: 20px;
+      height: 29px;
+      width: 175px; //background-size: 175px;
+      background-repeat: no-repeat;
+      background-size: contain;
+      margin: 5px 10px;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .navbar-header {
+    .navbar-brand {
+      width: 170px;
+    }
+  }
+}
+
+@media (min-width: 767px) and (max-width: 1040px) {
+
+  // .nav>li>a {
+  //   // padding: 0 3px !important;
+  // }
+  .navbar-nav {
+
+    // margin-right: -15px;
+    >li>a {
+      padding-top: 9px;
+      padding-bottom: 9px;
+      font-size: 12px; // margin-left: 20px;
+    }
+  }
+
+  .navbar>.container .navbar-brand,
+  .navbar>.container-fluid .navbar-brand {
+    //margin-left: -15px;
+    // width: 165px;
+    background-size: contain;
+    background-repeat: no-repeat; // margin-top: 0;
+    // margin-bottom: 0;
+  }
+}
+
+.navbar-default .navbar-nav>.active>a.notificacao {
+  opacity: 1 !important;
+}
+
+.navbar-carrinho {
+  position: relative;
+  float: right;
+  margin-right: 15px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  display: none;
+}

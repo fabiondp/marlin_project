@@ -1,0 +1,30 @@
+<div class="container pagamento-wrapper">
+  <section class="wrap">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="title title-glyph title-pagamento">Forma de pagamento</h1>
+
+
+        <div class="row" *ngIf="message">
+          <div class="col-md-12" *ngFor="let msg of message">
+            <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+          </div>
+        </div>
+
+        <app-loading *ngIf="carregando" message="Aguarde! Estamos verificando seus dados."></app-loading>
+
+        <div class="alert alert-warning" role="alert" *ngIf="!carregando">
+
+          <p>Ocorreu um problema ao verificar seus dados. </p>
+          <p>Por favor, <a href="#" (click)="verificarDados($event)">clique aqui</a> para tentar novamente. Caso o
+            problema
+            persista entre em contato
+            através do <a href="#" (click)="abrirModalFaleConosco($event)">fale conosco</a>.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+<app-faleconosco #faleConosco></app-faleconosco>

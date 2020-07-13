@@ -1,0 +1,159 @@
+/*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
+
+// ==========================================================================
+// Print styles.
+// Inlined to avoid the additional HTTP request: h5bp.com/r
+// ==========================================================================
+
+@mixin style-print(){
+    *,
+    *:before,
+    *:after {
+        background: transparent !important;
+        color: #000 !important; // Black prints faster: h5bp.com/s
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    // Don't show links that are fragment identifiers,
+    // or use the `javascript:` pseudo protocol
+    a[href^="#"]:after,
+    a[href^="javascript:"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; // h5bp.com/t
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+
+    // Bootstrap specific changes start
+
+    // Bootstrap components
+
+    //customizado
+    .navbar {
+        display: none;
+    }
+    .btn,
+    .dropup > .btn {
+        > .caret {
+            border-top-color: #000 !important;
+        }
+    }
+    .label {
+        border: 1px solid #000;
+    }
+
+    .table {
+        border-collapse: collapse !important;
+
+        td,
+        th {
+            background-color: #fff !important;
+        }
+    }
+    .table-bordered {
+        th,
+        td {
+            border: 1px solid #ddd !important;
+        }
+    }
+
+    body{
+        font-size:14px!important;
+    }
+    footer{
+        display: none;
+    }
+    .slide-detalhe,
+    .nav-login,
+    .btn-group-actions,
+    .apsa-box-tools{
+        display: none !important;
+    }
+    section.wrap{
+        padding-top: 0 !important;
+    }
+    h1.title{
+        margin-bottom: 10px !important;
+        &:before{
+            display: none !important;
+        }
+        text-align: left !important;
+    }
+    .has-navbar-fixed-top{
+        padding-top: 0 !important;
+    }
+    h1, .h1, h2, .h2, h3, .h3{
+        font-size: 16px !important;
+    }
+    .apsa-box-detalhe-imovel  .apsa-row-descricao-imovel  .table-info  tr  td  strong ,
+    .apsa-box-detalhe-imovel  .apsa-row-descricao-imovel  .col-box-valor  > div ,
+    .apsa-box-detalhe-imovel  .apsa-row-descricao-imovel  .col-box-valor  .valor-destaque,
+    .apsa-box-descricao  .texto-descricao  {
+        font-size: 14px !important;
+    }
+
+    .apsa-box-detalhe-imovel  .apsa-row-descricao-imovel  .apsa-row-descricao-info {
+        float: none !important;
+    }
+    .apsa-box-detalhe-imovel{
+        border-bottom: 1px solid #000 !important;
+    }
+    .apsa-box-detalhe-imovel .apsa-row-descricao-imovel  .col-box-valor{
+        border: 1px solid #000 !important;
+    }
+    .apsa-box-detalhe-imovel .apsa-row-descricao-imovel  .col-box-valor  .valor-total {
+        border-top: 1px solid #000 !important;
+    }
+    .apsa-box-mapa{
+        page-break-before: always;
+    }
+}
+
+
+@media print {
+    @include style-print();
+}
+
+

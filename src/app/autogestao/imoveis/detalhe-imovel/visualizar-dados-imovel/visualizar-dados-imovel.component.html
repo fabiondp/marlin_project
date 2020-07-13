@@ -1,0 +1,279 @@
+<div class="detalhe-locacao">
+  <div class="panel panel-default panel-custom">
+    <div class="panel-body panel-body-no-padding">
+      <h3 *ngIf="imovel.Endereco.Logradouro" class="title-tab">{{ imovel.Endereco.Logradouro}} {{
+        imovel.Endereco.Numero? ', ' +
+        imovel.Endereco.Numero:''}}</h3>
+      <p *ngIf="imovel.Bloco || imovel.Endereco.Complemento ">
+        {{ imovel.Bloco ? 'Bloco ' + imovel.Bloco + ', ': '' }} {{ imovel.Endereco.Complemento }}
+        {{imovel.Endereco.Bairro ? ' - ' +
+        imovel.Endereco.Bairro : ''}}
+      </p>
+      <p>{{ imovel.Endereco.Cidade}} {{ imovel.Endereco.Estado ? ' - ' + imovel.Endereco.Estado : '' }}
+        <br /> {{ imovel.Endereco.CEP | slice:0:5 }} {{ imovel.Endereco.CEP | slice:5 }} </p>
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label for="">Vagas de garagem: </label>
+            {{ imovel.VagasGaragem }}
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+          <div class="alert alert-warning alert-small" role="alert">
+
+            <i class="glyphicons glyphicons-alert icon"></i> Atenção: Os valores cadastrados nas
+            áreas abaixo são apenas informativos para consultas futuras.
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <div id="accordion-aba-imovel" role="tablist" aria-multiselectable="true">
+        <div id="panelInfoTaxas" class="panel panel-form-group panel-detail">
+          <div class="panel-heading" role="tab" id="headingPanelInfoTaxas">
+            <h4 class="panel-title">
+              <button type="button" class="accordion-toggle" [class.collapsed]="!imovel.panelInfoTaxasIsOpen"
+                [attr.aria-expanded]="imovel.panelInfoTaxasIsOpen" (click)="imovel.toggleCollapse('panelInfoTaxasIsOpen')"
+                aria-controls="collapsePanelInfoTaxas">
+                Taxas
+              </button>
+            </h4>
+          </div>
+          <div id="collapsePanelInfoTaxas" class="panel-collapse collapse" [class.in]="imovel.panelInfoTaxasIsOpen"
+            role="tabpanel" aria-labelledby="headingPanelInfoTaxas">
+            <div class="panel-body">
+              <div *ngFor="let taxa of imovel.Taxas; let indexTaxa = index">
+                <fieldset class="fieldset-taxas">
+                  <legend>{{ taxa.Descricao }}
+                    <button type="button" *ngIf="taxa.obterTextoAjuda() !== null" class="btn btn-icon btn-tooltip"
+                      placement="right" [tooltip]="tooltipAjudaGrupoTaxa">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </legend>
+                  <ng-template #tooltipAjudaGrupoTaxa>
+                    <div [innerHtml]="taxa.obterTextoAjuda()"></div>
+                  </ng-template>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label [for]="'Taxa_'+indexTaxa+'_ValorBase'">Valor base: </label>
+                        {{ taxa.ValorBase | currency : 'BRL' | detailInfo }}
+                      </div>
+                    </div>
+                    <div class="col-md-3" *ngIf="taxa.Parcelas > 0">
+                      <div class="form-group form-group-radios-inline">
+                        <div *ngFor="let opcao of imovel.OpcoesTipoPagamentoTaxas;">
+                          <label *ngIf="taxa.TipoPagamento === opcao.Id">
+                            <span> {{ opcao.Descricao | detailInfo }}</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3" *ngIf="taxa.TipoPagamento == 2">
+                      <div class="form-group">
+                        <label [for]="'Taxa_'+indexTaxa+'_Parcelas'">Parcelas: </label>
+                        {{ taxa.Parcelas | detailInfo }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label *ngIf="taxa.TipoPagamento !== 2" [for]="'Taxa_'+indexTaxa+'_MesVencimento'">Mês de
+                          vencimento: </label>
+                        <label *ngIf="taxa.TipoPagamento === 2" [for]="'Taxa_'+indexTaxa+'_MesVencimento'">Início das
+                          Parcelas: </label>
+                        {{ taxa.MesVencimento | descricaoMes }}
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label [for]="'Taxa_'+indexTaxa+'_NumeroInscricao'">Número de inscrição: </label>
+                        {{ taxa.NumeroInscricao | detailInfo }}
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="panelInfoCondominio" class="panel panel-form-group panel-detail">
+          <div class="panel-heading" role="tab" id="headingPanelInfoCondominio">
+            <h4 class="panel-title">
+              <!-- collapsed  -->
+              <button class="accordion-toggle" [class.collapsed]="!imovel.panelInfoCondominioIsOpen" type="button"
+                [attr.aria-expanded]="imovel.panelInfoCondominioIsOpen" (click)="imovel.toggleCollapse('panelInfoCondominioIsOpen')"
+                aria-controls="collapsePanelInfoCondominio">
+                Condomínio
+              </button>
+            </h4>
+          </div>
+          <!-- collapse -->
+          <div id="collapsePanelInfoCondominio" class="panel-collapse collapse" [class.in]="imovel.panelInfoCondominioIsOpen"
+            role="tabpanel" aria-labelledby="headingPanelInfoCondominio">
+            <div class="panel-body">
+              <fieldset>
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label class="form-label" for="ValorCondominio">Valor: </label>
+                      {{ imovel.ValorCondominio | currency : 'BRL' | detailInfo }}
+                    </div>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="form-group form-group-radios-inline">
+                      <label class="radio-inline" *ngFor="let opcao of imovel.opcoesTipoCobrancaCondominio">
+                        <span *ngIf="opcao.Id === imovel.TipoCobrancaCondominio">
+                          {{ opcao.Descricao }}
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <legend>Administradora do condomínio</legend>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label" for="AdministradoraCondominioNome">Nome da Administradora: </label>
+                      {{ imovel.AdministradoraCondominio.Nome | detailInfo }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label" for="EmailAdministradora">E-mail da Administradora: </label>
+                      {{ imovel.AdministradoraCondominio.Email | detailInfo }}
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label class="form-label" for="TelefoneAdministradora">Telefone: </label>
+                      {{ imovel.AdministradoraCondominio.Contato.Telefone | detailInfo }}
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+        <div id="panelSeguroFogo" class="panel panel-form-group panel-detail">
+          <div class="panel-heading" role="tab" id="headingPanelInfoSeguro">
+            <h4 class="panel-title">
+              <button type="button" class="accordion-toggle" [class.collapsed]="!imovel.panelInfoSeguroIsOpen"
+                [attr.aria-expanded]="imovel.panelInfoSeguroIsOpen" (click)="imovel.toggleCollapse('panelInfoSeguroIsOpen')"
+                aria-controls="collapsePanelInfoSeguro">
+                Seguro fogo
+              </button>
+            </h4>
+          </div>
+          <div id="collapsePanelInfoSeguro" class="panel-collapse collapse" role="tabpanel" [class.in]="imovel.panelInfoSeguroIsOpen"
+            aria-labelledby="headingPanelInfoSeguro">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label class="form-label" for="ValorSeguroFogo">Valor: </label>
+                    {{ imovel.ValorSeguroFogo | currency : 'BRL' | detailInfo }}
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group form-group-radios-inline">
+                    <label class="radio-inline" *ngFor="let opcao of imovel.OpcoesTipoPagamentoSeguroFogo;">
+                      <span *ngIf="opcao.Id === imovel.TipoPagamentoSeguroFogo">
+                        {{ opcao.Descricao }}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col-md-3" *ngIf="imovel.TipoPagamentoSeguroFogo == 2">
+                  <div class="form-group">
+                    <label class="form-label" for="ParcelasSeguroFogo">Parcelas: </label>
+                    {{ imovel.ParcelasSeguroFogo | detailInfo }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="NomeSeguradoraFogo">Nome da seguradora: </label>
+                    {{ imovel.SeguradoraFogo.Nome | detailInfo }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="EmailSeguradoraFogo">E-mail da seguradora: </label>
+                    {{ imovel.SeguradoraFogo.Email | detailInfo }}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="form-label" for="TelefoneSeguradoraFogo">Telefone: </label>
+                    {{ imovel.SeguradoraFogo.Contato.Telefone | detailInfo }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="panelInfoDiversos" class="panel panel-form-group panel-detail">
+          <div class="panel-heading" role="tab" id="headingPanelInfoDiversos">
+            <h4 class="panel-title">
+              <button type="button" class="accordion-toggle" [class.collapsed]="!imovel.panelInfoDiversosIsOpen"
+                [attr.aria-expanded]="imovel.panelInfoDiversosIsOpen" (click)="imovel.toggleCollapse('panelInfoDiversosIsOpen')"
+                aria-controls="collapsePanelInfoDiversos">
+                Diversos
+              </button>
+            </h4>
+          </div>
+
+          <div id="collapsePanelInfoDiversos" class="panel-collapse collapse" [class.in]="imovel.panelInfoDiversosIsOpen"
+            role="tabpanel" aria-labelledby="headingPanelInfoDiversos">
+            <div class="panel-body">
+              <div *ngFor="let diverso of imovel.Diversos; let indexDiverso = index">
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label [for]="'Diverso_'+ indexDiverso + '_Descricao'">Descrição: </label>
+                      {{ diverso.Descricao | detailInfo }}
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label [for]="'Diverso_'+ indexDiverso + '_Valor'">Valor: </label>
+                      {{ diverso.Valor | currency : 'BRL' | detailInfo }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

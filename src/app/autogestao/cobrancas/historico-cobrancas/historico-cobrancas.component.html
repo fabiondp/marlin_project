@@ -1,0 +1,145 @@
+<div class="container">
+  <section class="wrap imoveis com-submenu">
+    <h1 class="title title-no-icon">
+      Histórico de cobranças geradas</h1>
+
+    <div class=" btn-group-actions row clearfix">
+      <div class=" col-xs-2 clearfix">
+        <button data-toggle="button" class="btn btn-primary btn-icon" [routerLink]="['/autogestao/cobrancas']"
+          title="Voltar">
+          <i class="glyphicons glyphicons-chevron-left"></i>
+          <span>Voltar</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-4 clearfix box-actions-agrupamento">
+        <div>
+          Agrupar por:
+          <button type="button" class="btn btn-link btn-link-opcao-grupo" [class.active]="agrupamento == '1'"
+            (click)="agrupar('competencia')">Competência</button>
+          |
+          <button type="button" class="btn btn-link btn-link-opcao-grupo" [class.active]="agrupamento == '2'"
+            (click)="agrupar('imovel')">Imóvel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="!carregandoFormulario && messages">
+      <div class="col-md-12" *ngFor="let msg of messages">
+        <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+      </div>
+    </div>
+
+    <div *ngIf="carregandoFormulario">
+      <app-loading></app-loading>
+    </div>
+
+
+    <div class="list-panel" *ngIf="!carregandoFormulario">
+
+      <app-paginacao [(paginaCorrente)]="cobrancaFilter.pagina"
+        [(qtdItensPorPagina)]="cobrancaFilter.quantidadesDeItensPorPagina"
+        [qtdTotalDeItensEncontrados]="qtdTotalDeItensEncontrados"
+        [indicePrimeiroResultadoApresentado]="indicePrimeiroResultadoApresentado"
+        [indiceUltimoResultadoApresentado]="indiceUltimoResultadoApresentado" (atualizarPagina)="paginar($event)">
+      </app-paginacao>
+
+
+
+
+      <div *ngIf="existeCobrancas()">
+
+
+        <div *ngFor="let agrupadorCobranca of cobrancas ; let indexAgrupadorCobranca = index" class="list-row-group">
+          <h3 class="text-center"> {{agrupadorCobranca.Agrupador}}</h3>
+
+          <div class="panel panel-primary" *ngFor="let cobranca of agrupadorCobranca.Lista; let indexCobranca = index">
+            <div class="panel-heading has-button-detail">
+              <div class="row">
+                <div class="col-sm-6">
+                  <p class="panel-title">
+                    <a [routerLink]="['/autogestao', 'cobrancas', cobranca.Uid,'detalhe']">
+                      <span *ngIf="agrupamento == '1'">{{cobranca.Imovel }}</span>
+                      <span *ngIf="agrupamento == '2'">{{cobranca.MesAno }}</span>
+                    </a>
+                  </p>
+                </div>
+                <div class="col-sm-3">
+                  <p [class]="'panel-title status-cobranca ' + (cobranca.StatusCobranca | statusCobranca)">
+                    {{cobranca.StatusCobranca}}
+                  </p>
+
+
+                </div>
+                <div class="col-sm-3">
+                  <!-- <button class="btn btn-sm btn-primary btn-ver-boleto" [routerLink]="['/autogestao', 'cobrancas', cobranca.Uid,'detalhe']">detalhe</button> -->
+                  <a class="btn btn-sm btn-primary btn-ver-boleto"
+                    [routerLink]="['/autogestao', 'cobrancas', cobranca.Uid,'detalhe']">detalhe</a>
+                </div>
+              </div>
+            </div>
+            <div id="collapse{{ indexAgrupadorCobranca + '_' + indexCobranca }}" class="panel-collapse collapse"
+              role="tabpanel" aria-labelledby="headingOne">
+              <div class="panel-body">
+
+                <div class=" clearfix">
+                  <div class="col-md-7 col-sm-6">
+                    <button type="button" class="btn btn-primary btn-sm" id="lancarCobrancaDesconto"
+                      (click)="exibirFormNovoLancamento(cobranca)">Lançar
+                      cobrança/desconto
+                    </button>
+                  </div>
+                  <div class="col-md-5 col-sm-6 detail">
+                    <div>
+                      <p *ngIf="cobranca.ValorLocacao != 0">
+                        <label>ALUGUEL:</label> {{cobranca.ValorLocacao | currency : 'BRL' : '3.2'}}</p>
+
+                      <p *ngIf="cobranca.ValorCondominio != 0">
+                        <label>CONDOMÍNIO:</label> {{cobranca.ValorCondominio | currency : 'BRL' : '3.2'}}</p>
+
+                      <p *ngIf="cobranca.ValorIPTU != 0">
+                        <label>IPTU:</label> {{cobranca.ValorIPTU | currency : 'BRL' : '3.2'}}</p>
+                    </div>
+
+                  </div>
+                </div>
+
+
+
+
+                <div class="col-lg-12 total">
+
+                  Total: {{cobranca.ValorTotal | currency : 'BRL' : '3.2'}}
+                </div>
+
+
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <app-paginacao [(paginaCorrente)]="cobrancaFilter.pagina"
+        [(qtdItensPorPagina)]="cobrancaFilter.quantidadesDeItensPorPagina"
+        [qtdTotalDeItensEncontrados]="qtdTotalDeItensEncontrados"
+        [indicePrimeiroResultadoApresentado]="indicePrimeiroResultadoApresentado"
+        [indiceUltimoResultadoApresentado]="indiceUltimoResultadoApresentado" (atualizarPagina)="paginar($event)">
+      </app-paginacao>
+
+
+      <div *ngIf="!existeCobrancas()">
+        <div class="alert alert-warning" role="alert">Não existe cobrança(s) geradas até o momento.</div>
+      </div>
+
+    </div>
+  </section>
+
+
+
+
+</div>

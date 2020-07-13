@@ -1,0 +1,56 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+h2 {
+  font-size: 30px;
+  font-weight: normal;
+}
+
+h3 {
+  font-size: 25px;
+  font-weight: normal;
+}
+
+.faq {
+  border-color: $color-fourth;
+  margin-bottom: 20px;
+  .panel-heading {
+    background-color: $color-fourth;
+    border-color: $color-fourth;
+    h4 {
+      a {
+        &:before {
+          content: "\E601";
+          display: inline-block;
+          font-family: 'Glyphicons Halflings';
+          font-style: normal;
+          font-weight: 400;
+          line-height: 1;
+          vertical-align: top;
+          -webkit-font-smoothing: antialiased;
+          margin-right: 10px;
+        }
+      }
+      a.collapsed {
+        &:before {
+          content: "\E602";
+        }
+      }
+    }
+  }
+  .panel-body {
+    border-color: $color-fourth;
+    h4 {
+      color: $color-second;
+      font-size: 16px;
+      margin: 0 0 10px;
+    }
+    ul.list-glyphicon {
+      list-style: none;
+      font-size: ($font-size-base - 1); //14px;
+      padding: 0;
+    }
+  }
+}
+
+.faq-group {
+  margin-bottom: 40px;
+}

@@ -1,0 +1,484 @@
+<div class="container">
+
+  <!-- *ngIf="plano" -->
+  <section class="wrap analise-credito">
+    <div class="row">
+
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <h1 class="title title-bg title-analise"> {{ plano.TituloPlano }}</h1>
+
+        <div class="row" *ngIf="message">
+          <div class="col-md-12" *ngFor="let msg of message">
+            <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+          </div>
+        </div>
+
+        <div class="row">
+          <app-loading *ngIf="carregando" [message]="messageCarregando"></app-loading>
+
+          <form #fichaCreditoForm="ngForm" (ngSubmit)="onSubmit(fichaCreditoForm)" class="col-lg-12" *ngIf="!carregando">
+            <h3>Solicitação de Análise Completa</h3>
+            <div class="jumbotron">
+              <div>
+                {{ plano.DescricaoPlano }}
+              </div>
+
+              <h4>Para receber sua análise completa, informe:</h4>
+            </div>
+
+            <div class="row">
+
+              <fieldset class="col-sm-12 col-lg-6">
+                <legend>Dados do Pretendente</legend>
+                <div class="box-round">
+                  <div class="form-inline">
+                    <div class="form-group">
+                      <label for="tipoPretendente">Tipo</label>
+                      <div class="form-control border-none">
+                        <div class="radio-inline">
+                          <label>
+                            <input type="radio" id="cpf" name="tipoPretendente" value="1" [(ngModel)]="TipoPretendente" #tipoPretendente="ngModel" required
+                            /> Locatário
+                          </label>
+                        </div>
+                        <div class="radio-inline">
+                          <label>
+                            <input type="radio" id="cnpj" name="tipoPretendente" value="2" [(ngModel)]="TipoPretendente" #tipoPretendente="ngModel" />                            Fiador
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="nome">Nome completo</label>
+                    <input type="text" id="nome" name="nome" class="form-control" [(ngModel)]="plano.FichaCredito.Pretendente.Nome" #nome="ngModel"
+                      required>
+
+                    <div *ngIf="nome?.invalid && (nome.dirty || nome.touched)">
+                      <div *ngIf="nome.errors.required" class="alert alert-danger">
+                        Campo obrigatório.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-sm-6 col-lg-6">
+                      <div class="radio-inline">
+                        <label>
+                          <input type="radio" id="CPF" name="naturezaPessoa" value="CPF" [(ngModel)]="naturezaPessoa" (click)="selecionarNaturezaPessoa($event)"
+                          /> CPF
+                        </label>
+                      </div>
+                      <div class="radio-inline">
+                        <label>
+                          <input type="radio" id="CNPJ" name="naturezaPessoa" value="CNPJ" [(ngModel)]="naturezaPessoa" (click)="selecionarNaturezaPessoa($event)"
+                          /> CNPJ
+                        </label>
+                      </div>
+
+                      <div *ngIf="naturezaPessoa === 'CPF'">
+                        <input type="text" [textMask]="{mask: maskCPF, guide: false}" class="form-control" id="CPF" name="CPF" [(ngModel)]="plano.FichaCredito.Pretendente.CPFCNPJ"
+                          required #cpfcnpj="ngModel" placeholder="000.000.000-00">
+                        <div *ngIf="(cpfcnpj.invalid && (cpfcnpj.dirty || cpfcnpj.touched)) || (cpfcnpj.pristine && continuarClicked)">
+                          <div *ngIf="cpfcnpj?.errors?.required" class="alert alert-danger">
+                            Campo obrigatório.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div *ngIf="naturezaPessoa === 'CNPJ'">
+                        <input type="text" [textMask]="{mask: maskCNPJ, guide: false}" class="form-control" id="CNPJ" name="CNPJ" [(ngModel)]="plano.FichaCredito.Pretendente.CPFCNPJ"
+                          required #cpfcnpj="ngModel" placeholder="00.000.000/0000-00">
+
+                        <div *ngIf="(cpfcnpj.invalid && (cpfcnpj.dirty || cpfcnpj.touched)) || (cpfcnpj.pristine && continuarClicked)">
+                          <div *ngIf="cpfcnpj?.errors?.required" class="alert alert-danger">
+                            Campo obrigatório.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group col-sm-6 col-lg-6" *ngIf="naturezaPessoa === 'CPF'">
+                      <label for="nome">Naturalidade</label>
+                      <input type="text" id="naturalidade" name="naturalidade" class="form-control" [(ngModel)]="plano.FichaCredito.Pretendente.Naturalidade"
+                        #naturalidade="ngModel" required>
+
+                      <div *ngIf="naturalidade?.invalid && (naturalidade.dirty || naturalidade.touched)">
+                        <div *ngIf="naturalidade.errors.required" class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="naturezaPessoa === 'CPF'">
+                    <div class="row">
+                      <label for="localResidencia" class=" col-lg-12">Local de residência</label>
+                      <div class="form-group col-sm-8 col-lg-8">
+                        <input type="text" id="localResidencia" name="localResidencia" class="form-control" [(ngModel)]="plano.FichaCredito.Pretendente.LocalResidencia"
+                          #localResidencia="ngModel" required placeholder="Cidade">
+
+                        <div *ngIf="localResidencia?.invalid && (localResidencia.dirty || localResidencia.touched)">
+                          <div *ngIf="localResidencia.errors.required" class="alert alert-danger">
+                            Campo obrigatório.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group col-sm-4 col-lg-4">
+
+
+                        <input type="text" id="uFResidencia" name="uFResidencia" class="form-control" [(ngModel)]="plano.FichaCredito.Pretendente.UFResidencia"
+                          #uFResidencia="ngModel" required placeholder="UF" maxlength="2" [textMask]="{mask: maskUF, guide: false}">
+
+                        <div *ngIf="uFResidencia?.invalid && (uFResidencia.dirty || uFResidencia.touched)">
+                          <div *ngIf="uFResidencia.errors.required" class="alert alert-danger">
+                            Campo obrigatório.
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+
+                      <label for="LocalTrabalho" class=" col-lg-12">Local de trabalho</label>
+
+                      <div class="form-group col-sm-8 col-lg-8">
+
+                        <input type="text" id="localTrabalho" name="localTrabalho" class="form-control" [(ngModel)]="plano.FichaCredito.Pretendente.LocalTrabalho"
+                          #localTrabalho="ngModel" required placeholder="Cidade">
+
+                        <div *ngIf="localTrabalho?.invalid && (localTrabalho.dirty || localTrabalho.touched)">
+                          <div *ngIf="localTrabalho.errors.required" class="alert alert-danger">
+                            Campo obrigatório.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group col-sm-4 col-lg-4">
+
+
+                        <input type="text" id="uFTrabalho" name="uFTrabalho" class="form-control" [(ngModel)]="plano.FichaCredito.Pretendente.UFTrabalho"
+                          #uFTrabalho="ngModel" required placeholder="UF" maxlength="2" [textMask]="{mask: maskUF, guide: false}">
+
+                        <div *ngIf="uFTrabalho?.invalid && (uFTrabalho.dirty || uFTrabalho.touched)">
+                          <div *ngIf="uFTrabalho.errors.required" class="alert alert-danger">
+                            Campo obrigatório.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div *ngIf="naturezaPessoa === 'CNPJ'">
+                    <div class="row">
+
+                      <label for="cidade" class=" col-lg-12">Local</label>
+
+                      <div class="form-group col-sm-8 col-lg-8">
+
+                        <input type="text" id="cidade" name="cidade" class="form-control" [(ngModel)]="plano.FichaCredito.Pretendente.Cidade" #cidade="ngModel"
+                          required placeholder="Cidade">
+
+                        <div *ngIf="cidade?.invalid && (cidade.dirty || cidade.touched)">
+                          <div *ngIf="cidade.errors.required" class="alert alert-danger">
+                            Campo obrigatório.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group col-sm-4 col-lg-4">
+
+
+                        <input type="text" id="uf" name="uf" class="form-control" [(ngModel)]="plano.FichaCredito.Pretendente.UF" #uf="ngModel" required
+                          placeholder="UF" maxlength="2" [textMask]="{mask: maskUF, guide: false}">
+
+                        <div *ngIf="uf?.invalid && (uf.dirty || uf.touched)">
+                          <div *ngIf="uf.errors.required" class="alert alert-danger">
+                            Campo obrigatório.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="row">
+
+                    <!-- <div class="form-group col-lg-12">
+                      <label>Telefone Fixo</label>
+
+                      <div class="bloco-telefone row" *ngFor="let telFixo of telefonesFixos; let i=index">
+                        <div class="form-group col-lg-6">
+                          <input [textMask]="{mask: masktel, guide: false}" [(ngModel)]="telefonesFixos[i].telefone" #fixo="ngModel" [ngModelOptions]="{standalone: true}"
+                            type="text" class="form-control" placeholder="(00) 0000-0000" />
+                        </div>
+                        <div *ngIf="!disableRemoveFixo" class="form-group wrap-deletar  col-lg-6">
+                          <button class='btn btn-danger' (click)="deleteTelefoneFixo(i)">
+                            <i class="glyphicons glyphicons-bin"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12 wrap-adicionar">
+                          <button type="button" class='btn btn-sm btn-link' (click)="addTelefoneFixo()">
+                            <i class="glyphicons glyphicons-plus"></i> Adicionar telefone fixo</button>
+                        </div>
+                      </div>
+
+                    </div> -->
+                    <div class="form-group col-lg-6">
+                      <label>Telefone 1</label>
+                      <div class="bloco-telefone row">
+                        <div class="form-group col-lg-12">
+                          <input [textMask]="{mask: maskcel, guide: false}" [(ngModel)]="telefone1" #telefone1Pretendente="ngModel" name="plano.FichaCredito.Pretendente.teletone1"
+                            type="text" class="form-control" placeholder="(00) 0000-00000" required/>
+                          <div *ngIf="telefone1Pretendente?.invalid && telefone1Pretendente.dirty">
+                            <div *ngIf="telefone1Pretendente.errors.required" class="alert alert-danger">
+                              Campo obrigatório.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-lg-6">
+                      <label>Telefone 2</label>
+                      <div class="bloco-telefone row">
+                        <div class="form-group col-lg-12">
+                          <input [textMask]="{mask: maskcel, guide: false}" [(ngModel)]="telefone2" #telefone2Pretendente="ngModel" name="plano.FichaCredito.Pretendente.teletone2"
+                            type="text" class="form-control" placeholder="(00) 0000-00000" required/>
+                          <div *ngIf="telefone2Pretendente?.invalid && telefone2Pretendente.dirty">
+                            <div *ngIf="telefone2Pretendente.errors.required" class="alert alert-danger">
+                              Campo obrigatório.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+                  <!-- <div class="row">
+
+                    <div class="form-group col-lg-12">
+                      <label for="telefoneCelular">Telefone Celular</label>
+
+                      <div class="bloco-telefone row" *ngFor="let telCelular of telefonesCelulares; let i=index">
+                        <div class="form-group col-lg-6">
+                          <input [textMask]="{mask: maskcel, guide: false}" [(ngModel)]="telefonesCelulares[i].telefone" name="telefoneCelular" id="telefoneCelular"
+                            #celular="ngModel" [ngModelOptions]="{standalone: true}" type="text" class="form-control" placeholder="(00) 00000-0000"
+                          />
+                        </div>
+                        <div *ngIf="!disableRemoveCelular" class="form-group wrap-deletar  col-lg-6">
+                          <button class='btn btn-danger' (click)="deleteTelefoneCelular(i)">
+                            <i class="glyphicons glyphicons-bin"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12 wrap-adicionar">
+                          <button type="button" class='btn btn-sm btn-link' (click)="addTelefoneCelular()">
+                            <i class="glyphicons glyphicons-plus"></i> Adicionar telefone celular</button>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div> -->
+
+                </div>
+              </fieldset>
+
+              <fieldset class="col-sm-12 col-lg-6">
+                <legend>Dados do Contratante</legend>
+                <div class="box-round">
+                  <div class="row">
+                    <div class="form-group   col-sm-12  col-lg-12">
+                      <label for="nomeProprietario">Nome completo</label>
+                      <input type="text" id="nomeProprietario" name="nomeProprietario" class="form-control" [(ngModel)]="plano.FichaCredito.Proprietario.Nome"
+                        #nomeProprietario="ngModel" required>
+
+                      <div *ngIf="nomeProprietario?.invalid && (nomeProprietario.dirty || nomeProprietario.touched)">
+                        <div *ngIf="nomeProprietario.errors.required" class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <!-- <div class="form-group  col-sm-6  col-lg-6">
+                      <label for="cpf">CPF</label>
+                      <input type="text" [textMask]="{mask: maskCPF, guide: false}" class="form-control" id="cpf" name="cpf" [(ngModel)]="plano.FichaCredito.Proprietario.CPFCNPJ"
+                        required #cpf="ngModel" placeholder="000.000.000-00">
+                      <div *ngIf="cpf?.invalid && (cpf.dirty || cpf.touched)">
+                        <div *ngIf="cpf.errors.required" class="alert alert-danger">
+                          Campo obrigatório.
+                        </div>
+                      </div>
+                    </div> -->
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-sm-6 col-lg-6">
+                      <div class="radio-inline">
+                        <label>
+                          <input type="radio" id="CPFProprietario" name="naturezaPessoaProprietario" value="CPFProprietario" [(ngModel)]="naturezaPessoaProprietario"
+                          /> CPF
+                        </label>
+                      </div>
+                      <div class="radio-inline">
+                        <label>
+                          <input type="radio" id="CNPJ" name="naturezaPessoaProprietario" value="CNPJ" [(ngModel)]="naturezaPessoaProprietario" />                          CNPJ
+                        </label>
+                      </div>
+
+                      <div *ngIf="naturezaPessoaProprietario === 'CPFProprietario'">
+                        <input type="text" [textMask]="{mask: maskCPF, guide: false}" class="form-control" id="CPFProprietario" name="CPFProprietario"
+                          [(ngModel)]="plano.FichaCredito.Proprietario.CPFCNPJ" required #cpfcnpjProprietario="ngModel" placeholder="000.000.000-00">
+                        <div *ngIf="(cpfcnpjProprietario.invalid && (cpfcnpjProprietario.dirty || cpfcnpjProprietario.touched)) || (cpfcnpjProprietario.pristine && continuarClicked)">
+                          <div *ngIf="cpfcnpjProprietario?.errors?.required" class="alert alert-danger">
+                            Campo obrigatório.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div *ngIf="naturezaPessoaProprietario === 'CNPJ'">
+                        <input type="text" [textMask]="{mask: maskCNPJ, guide: false}" class="form-control" id="CNPJProprietario" name="CNPJProprietario"
+                          [(ngModel)]="plano.FichaCredito.Proprietario.CPFCNPJ" required #cpfcnpjProprietario="ngModel" placeholder="00.000.000/0000-00">
+
+                        <div *ngIf="(cpfcnpjProprietario.invalid && (cpfcnpjProprietario.dirty || cpfcnpjProprietario.touched)) || (cpfcnpjProprietario.pristine && continuarClicked)">
+                          <div *ngIf="cpfcnpjProprietario?.errors?.required" class="alert alert-danger">
+                            Campo obrigatório.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <app-input-busca-cep [(endereco)]="plano.FichaCredito.Proprietario.Enderecos[0]" [(enderecoValido)]="enderecoValido" [maxColumnlayout]="2"></app-input-busca-cep>
+
+                  <!-- <div class="row">
+                    <div class="form-group col-lg-12 clearfix">
+                      <label for="Endereco">Preencha o endereço do imóvel pretendido</label>
+                      <ng4geo-autocomplete [userSettings]="userSettings" (componentCallback)="autoCompleteCallback1($event)" id="Endereco" name="Endereco"
+                        required autocomplete="off"></ng4geo-autocomplete>
+                    </div>
+
+                    <div *ngIf="exibirBlocoEndereco" class="col-lg-12 clearfix">
+                      <div class="form-group ">
+                        <label for="Logradouro">Logradouro</label>
+                        <input type="text" class="form-control" id="Logradouro" name="Logradouro" [(ngModel)]="plano.FichaCredito.Proprietario.Enderecos[0].Logradouro"
+                          required #Logradouro="ngModel">
+
+                        <div *ngIf="Logradouro?.invalid && (Logradouro.dirty || Logradouro.touched)" class="alert alert-danger">
+                          <div *ngIf="Logradouro.errors.required">
+                            Campo obrigatório.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                          <div class="form-group">
+                            <label for="txtDescricao">Complemento
+                              <span class="opcional">(Opcional)</span>
+                            </label>
+                            <input type="text" class="form-control" id="Complemento" name="Complemento" [(ngModel)]="plano.FichaCredito.Proprietario.Enderecos[0].Complemento">
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                          <div class="form-group">
+                            <label for="txtDescricao">Número</label>
+                            <input type="text" class="form-control" id="Numero" name="Numero" #Numero="ngModel" [(ngModel)]="plano.FichaCredito.Proprietario.Enderecos[0].Numero"
+                              required>
+                            <div *ngIf="Numero.invalid && (Numero.dirty || Numero.touched)" class="alert alert-danger">
+                              <div *ngIf="Numero.errors.required">
+                                Campo obrigatório.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+
+                        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                          <div class="form-group">
+                            <label for="txtDescricao">Bairro</label>
+                            <input type="text" class="form-control" id="Bairro" name="Bairro" #Bairro="ngModel" [(ngModel)]="plano.FichaCredito.Proprietario.Enderecos[0].Bairro"
+                              required>
+                            <div *ngIf="Bairro.invalid && (Bairro.dirty || Bairro.touched)" class="alert alert-danger">
+                              <div *ngIf="Bairro.errors.required">
+                                Campo obrigatório.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                          <div class="form-group">
+                            <label for="CEP">CEP</label>
+                            <input type="text" [textMask]="{mask: maskCep, guide: false}" class="form-control" id="CEP" name="CEP" [(ngModel)]="plano.FichaCredito.Proprietario.Enderecos[0].CEP"
+                              required #CEP="ngModel" placeholder="00000-000">
+
+
+                            <div *ngIf="CEP.invalid && (CEP.dirty || CEP.touched)" class="alert alert-danger">
+                              <div *ngIf="CEP.errors.required">
+                                Campo obrigatório.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+
+                      <div class="row">
+                        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                          <div class="form-group">
+                            <label for="Cidade">Cidade</label>
+                            <input type="text" class="form-control" id="Cidade" name="Cidade" [(ngModel)]="plano.FichaCredito.Proprietario.Enderecos[0].Cidade"
+                              required #Cidade="ngModel">
+                            <div *ngIf="Cidade.invalid && (Cidade.dirty || Cidade.touched)" class="alert alert-danger">
+                              <div *ngIf="Cidade.errors.required">
+                                Campo obrigatório.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                          <div class="form-group">
+                            <label for="Estado">Estado</label>
+                            <input type="text" class="form-control" id="Estado" name="Estado" maxlength="2" [(ngModel)]="plano.FichaCredito.Proprietario.Enderecos[0].Estado"
+                              required #Estado="ngModel">
+                            <div *ngIf="Estado.invalid && (Estado.dirty || Estado.touched)" class="alert alert-danger">
+                              <div *ngIf="Estado.errors.required">
+                                Campo obrigatório.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="alert alert-info">Os dados fornecidos são de inteira responsabilidade do contratante. Confira antes
+              de enviar.</div>
+
+            <div role="group" class="form-btn-group">
+              <div class="col-lg-6 col-lg-offset-3 ">
+                <button type="submit" class="btn btn-primary btn-block" id="Contratar" [disabled]="fichaCreditoForm.invalid || !enderecoValido">Contratar
+                  {{ plano.TituloPlano }}</button>
+
+
+                <!-- [disabled]="fichaCreditoForm.invalid || !exibirBlocoEndereco" -->
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

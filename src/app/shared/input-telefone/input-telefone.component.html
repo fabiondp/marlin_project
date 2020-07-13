@@ -1,0 +1,43 @@
+<!--Bloco telefone adicionar e deletar com select de tipo -->
+
+<div class="field-contatos">
+    <legend>Contatos</legend>
+    <!-- <pre>{{telefonesCadastrados | json}}</pre> -->
+    <div class="bloco-telefone" *ngFor="let objTelefone of telefonesCadastrados; let i=index">
+      <div class="form-group">
+        <select class="form-control" [name]="'select' + i" [(ngModel)]="objTelefone.tipo" #selectTel="ngModel" (change)="objTelefone.telefone = ''">
+          <!-- <option [value]="" disabled>Escolha o tipo de telefone</option> -->
+          <option [value]="tipoContato.tipo" *ngFor="let tipoContato of tiposDeContatos">{{tipoContato.descricao}}</option>
+        </select>
+      </div>
+    
+    
+      <div class="form-group">
+        <input *ngIf="objTelefone.tipo == 1" [name]="'fixo' + i" [textMask]="{mask: masktel, guide: false}" [(ngModel)]="objTelefone.telefone"
+          #fixo="ngModel" type="text" class="form-control" placeholder="(00) 0000-0000" (keyup)="checkMinimoTelefone()"
+        />
+    
+        <input *ngIf="objTelefone.tipo == 2" [name]="'celular' + i" [textMask]="{mask: maskcel, guide: false}" [(ngModel)]="objTelefone.telefone"
+          #celular="ngModel" type="text" class="form-control" placeholder="(00) 00000-0000" (keyup)="checkMinimoTelefone()"
+        />
+    
+      </div>
+    
+    
+      <div *ngIf="telefonesCadastrados.length > 1" class="form-group wrap-deletar">
+        <button class='btn btn-danger' (click)="deleteTelefone(i)">
+          <i class="glyphicons glyphicons-bin"></i>
+        </button>
+      </div>
+    
+    
+    </div>
+    <div *ngIf="!minimoTelefone" class="alert alert-danger">
+      É necessário cadastrar ao menos um telefone.
+    </div>
+    
+    <div class="form-group wrap-adicionar">
+      <i class="glyphicons glyphicons-plus"></i>
+      <input type="button" class='btn btn-link' (click)="addTelefone()" value="Adicionar Telefone">
+    </div>
+  </div>

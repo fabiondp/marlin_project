@@ -1,0 +1,404 @@
+<div class="container">
+
+  <section class="wrap meus-planos">
+    <div class="row">
+
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 list-planos">
+
+        <h1 class="title title-glyph title-meus-planos">
+          Alteração de plano Autogestão</h1>
+
+
+
+        <div class="row" *ngIf="messages && alterandoPlano">
+          <div class="col-md-12" *ngFor="let msg of messages">
+            <app-alert [close]="closeMessage" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+          </div>
+        </div>
+
+        <app-loading *ngIf="carregandoListagem" [message]="carregandoMensagem"></app-loading>
+
+        <div class="planos" *ngIf="!carregandoListagem && exibirListaPlanos">
+          <form #simularAlteracaoPlanoForm="ngForm">
+
+            <div class="well"><strong>Clique nas opções abaixo</strong> para selecionar o novo plano que você deseja.
+            </div>
+            <div class="list-planos">
+
+              <div class="item" [class.plano_atual]="plano.PlanoAtual" btnRadio="{{plano.Uid}}" tabindex="0"
+                role="button" *ngFor="let plano of planos; let i = index" [name]="'plano'+  i"
+                [(ngModel)]="UidPlanoNovo" (click)="atualizarPlanoSelecionado(UidPlanoNovo)">
+                <div class="item_titulo">
+                  <h2>
+                    {{plano.TituloPlano}}
+                  </h2>
+                  <p *ngIf="plano.PlanoAtual">PLANO ATUAL</p>
+                </div>
+                <div class="item_descricao">{{plano.DescricaoPlano}}</div>
+                <div class="item_qtd"><label for="">Quantidade de imóveis:</label>
+                  {{plano.QuantidadeProduto}} IMÓVEIS</div>
+                <div class="item_valor"><label for="">Valor mensal:</label>
+                  {{plano.Valor | currency : 'BRL' : '3.2' }}</div>
+              </div>
+            </div>
+
+            <div class="row row-termos"
+              *ngIf="UidPlanoNovo !== UidPlanoAtual && novoPlano !== null && novoPlano != null && novoPlano.TermoContrato !== null">
+              <div class="col-md-12">
+                <h4>
+                  <i class="glyphicons glyphicons-alert"></i> <span>Para confirmar a troca de planos, você deverá ler e
+                    concordar
+                    com o termo de uso e o contrato do plano selecionado.</span></h4>
+                <ul class="list-unstyled">
+                  <li [hidden]="!novoPlano.TermoContrato">
+                    <div class="checkbox-custom" *ngIf="novoPlano.TermoContrato">
+
+
+                      <input type="checkbox" [name]="novoPlano.Uid" [id]="novoPlano.Uid" required
+                        [(ngModel)]="novoPlano.TermoContratoAceito">
+                      <label [for]="novoPlano.Uid">
+                        Li e concordo com o <a href="javascript:void(0)" (click)="abrirModalTermoDeUso(novoPlano)"
+                          class="link">termo
+                          de uso</a> e
+                        <a href="javascript:void(0)" (click)="abrirModalContratoPlano(novoPlano)"
+                          class="link">contrato</a>
+                        do
+                        item
+                        <strong>'{{ novoPlano.TituloPlano }}'</strong> {{ novoPlano.TituloProduto ? 'de ' +
+                        novoPlano.TituloProduto : ''
+                        }}.
+                      </label>
+                    </div>
+                  </li>
+                </ul>
+
+              </div>
+            </div>
+          </form>
+
+          <div role="group" class="form-btn-group">
+            <button type="button" class="btn btn-link pull-left" (click)="cancelarAlteracaoPlano()">Cancelar</button>
+
+            <button type="submit" class="btn btn-primary pull-right" id="salvar"
+              (click)="simularAlteracaoPlano( UidPlanoNovo)"
+              [disabled]="UidPlanoNovo == planoAtual.Uid || simularAlteracaoPlanoForm.invalid">Continuar</button>
+
+          </div>
+
+        </div>
+
+        <div class="imoveis list-panel" *ngIf="!carregandoListagem && exibirListaImoveisDesativar">
+
+          <div class="well"><strong>Selecione os imóveis abaixo</strong> para desativar e continuar com a troca de
+            plano.</div>
+          <div class="list-row-group">
+            <form #desativarImoveisForm="ngForm" (ngSubmit)="desativarImoveis(desativarImoveisForm)">
+
+              <div class="panel panel-primary" *ngFor="let imovel of imoveis; let i = indexImovel">
+                <div class="panel-heading has-collapse">
+                  <div class="row">
+                    <div class="col-lg-8 col-md-8  col-sm-8">
+                      <p class="panel-title">
+                        <label [for]="imovel.Uid">
+                          <input type="checkbox" [id]="imovel.Uid" [(ngModel)]="imovel.Selected"
+                            (change)="checkIfAllSelected();" name="Selected" #Selected="ngModel">
+                          {{ imovel.Logradouro }} {{ imovel.Numero }} {{ imovel.Bairro }} / {{ imovel.Cidade }} / {{
+                          imovel.Estado
+                          }}</label>
+                      </p>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-6 col-lg-offset-3 ">
+              <button type="button" class="btn btn-primary btn-block" id="Desativar"
+                (click)="abrirConfimarDasativacaoImoveis()">Desativar</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <app-modal [size]="'modal-lg'" #modalConfirmacaoAlteracaoPlano>
+    <div class="modal-header modal-warning ">
+      <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+        <span aria-hidden="true ">&times;</span>
+      </button>
+      <h4 class="modal-title text-center ">Confirmação de {{TipoAlteracaoPlanoDescricao}}!</h4>
+    </div>
+    <div class="modal-body ">
+
+
+
+      <p>Deseja realmente alterar seu plano?</p>
+      <div class="meus-planos">
+
+        <div class="panel panel-planos">
+
+          <div class="panel-body">
+            <div class="plano plano_atual" *ngIf="planoAtual">
+              <label>PLANO ATUAL</label>
+              <h5>{{planoAtual.TituloPlano}}</h5>
+              <label>QUANTIDADE DE IMÓVEIS:</label>
+              <h5>{{planoAtual.QuantidadeProduto}}</h5>
+            </div>
+
+            <div class="plano plano_novo" *ngIf="novoPlano">
+              <label>PLANO NOVO</label>
+              <h5>{{novoPlano.TituloPlano}}</h5>
+
+              <label>QUANTIDADE DE IMÓVEIS:</label>
+              <h5>{{novoPlano.QuantidadeProduto}}</h5>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+
+            <div>
+              <label>Seu plano estará ativo a partir de: </label>
+              <p>{{DataInicioVigenciaAlteracao |
+                date
+                :'shortDate'}} </p>
+            </div>
+
+            <div>
+              <label>Seu plano será cobrado a partir de: </label>
+              <p>{{DataInicioCobrancaAlteracao |
+                date
+                :'shortDate'}} </p>
+            </div>
+            <div>
+              <label>Novo Valor: </label>
+              <p>{{ValorCobrancaProximaCompetencia |
+                currency : 'BRL' :
+                '3.2'}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-warning alert-small" role="alert" *ngIf="TipoAlteracaoPlano == 1">
+        <i class="glyphicons glyphicons-alert icon"></i>
+        Atenção: A partir de <strong>{{DataInicioVigenciaAlteracao |
+          date
+          :'shortDate'}} </strong>, caso você tenha mais imóveis ativos do que seu plano comporta, sua plataforma será
+        bloqueada até que seja realizada a desativação dos imóveis em excesso.
+
+
+      </div>
+    </div>
+    <div class="modal-footer ">
+      <button type="button " class="btn btn-link pull-left " data-dismiss="modal"
+        (click)="cancelarConfirmacaoAlteracaoPlano()">Não</button>
+      <button type="button " class="btn btn-primary " (click)="confirmarAlteracaoPlano()">Sim</button>
+    </div>
+  </app-modal>
+
+  <app-modal #modalMensagemAlteracaoPlano>
+    <div *ngIf="alterandoPlano">
+      <div class="modal-header modal-success">
+        <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+          <span aria-hidden="true ">&times;</span>
+        </button>
+        <h4 class="modal-title text-center ">Aguarde...</h4>
+      </div>
+      <div class="modal-body text-center">
+        <app-loading [message]="messageStatus"></app-loading>
+      </div>
+    </div>
+    <div *ngIf="!alterandoPlano">
+      <div *ngIf="messages">
+        <div class="modal-header modal-danger">
+          <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+            <span aria-hidden="true ">&times;</span>
+          </button>
+          <h4 class="modal-title text-center text-danger">Ocorreu os seguinte(s) erro(s):</h4>
+        </div>
+        <div class="modal-body text-center">
+          <div class="row">
+            <div class="col-md-12" *ngFor="let msg of messages">
+              <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!messages">
+        <div class="modal-header modal-success">
+          <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+            <span aria-hidden="true ">&times;</span>
+          </button>
+          <h4 class="modal-title text-center ">Plano alterado com sucesso!</h4>
+        </div>
+        <div class="modal-body text-center">
+          <p>Lembre-se que novas alterações de plano só serão permitidas a partir do dia
+            {{this.dataProximaCompetencia}}.</p>
+        </div>
+        <div class="modal-footer ">
+          <button type="button" class=" btn btn-primary" title="Fechar" data-dismiss="modal"
+            (click)="acessarMeusPlanos()">
+            Fechar
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </app-modal>
+
+
+
+  <app-modal #modalErroAlteracaoPlano>
+
+    <div class="modal-header modal-warning">
+      <!-- <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+        <span aria-hidden="true ">&times;</span>
+      </button> -->
+      <h4 class="modal-title text-center ">Atenção!</h4>
+    </div>
+    <div class="modal-body text-center">
+      <div class="row">
+        <div class="col-md-12" *ngFor="let msg of messages">
+          <app-alert [close]="closeMessage" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer ">
+      <button type="button" class=" btn btn-primary" title="Fechar" data-dismiss="modal" (click)="acessarMeusPlanos()">
+        Fechar
+      </button>
+    </div>
+
+  </app-modal>
+
+
+
+  <app-modal #modalConfirmacaoDasativacaoImoveis>
+    <div class="modal-header modal-warning ">
+      <!-- <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+        <span aria-hidden="true ">&times;</span>
+      </button> -->
+      <h4 class="modal-title text-center ">Atenção!</h4>
+    </div>
+    <div class="modal-body ">
+      <p>Deseja realmente desativar os imóveis abaixo?</p>
+      <hr />
+      <div class="resumo overflow">
+
+        <div class="list-row-group">
+
+          <ol class="lista-numerada">
+            <li *ngFor="let imovel of grupoImoveisSelecionados; let indexImovel = index">{{ imovel.Logradouro }} {{
+              imovel.Numero }} - {{ imovel.Bairro }} / {{
+              imovel.Cidade }} / {{
+              imovel.Estado
+              }}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer ">
+      <button type="button " class="btn btn-link pull-left " data-dismiss="modal">Não</button>
+      <button type="button " class="btn btn-primary " (click)="desativarImoveis()">Sim</button>
+    </div>
+  </app-modal>
+
+
+  <app-modal #modalResultadoDasativacaoImoveis>
+    <div *ngIf="desativandoImoveis">
+      <div class="modal-header modal-success">
+        <!-- <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+          <span aria-hidden="true ">&times;</span>
+        </button> -->
+        <h4 class="modal-title text-center ">Aguarde...</h4>
+      </div>
+      <div class="modal-body text-center">
+        <app-loading [message]="messageStatus"></app-loading>
+      </div>
+    </div>
+    <div *ngIf="!desativandoImoveis">
+      <div *ngIf="messages">
+        <div class="modal-header modal-danger">
+          <!-- <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+            <span aria-hidden="true ">&times;</span>
+          </button> -->
+          <h4 class="modal-title text-center text-danger">Ocorreu os seguinte(s) erro(s):</h4>
+        </div>
+        <div class="modal-body text-center">
+          <div class="row">
+            <div class="col-md-12" *ngFor="let msg of message">
+              <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!messages">
+        <div class="modal-header modal-success">
+          <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+            <span aria-hidden="true ">&times;</span>
+          </button>
+          <h4 class="modal-title text-center ">Imóveis(s) desativado(s) com sucesso!</h4>
+        </div>
+        <div class="modal-body text-center">
+          <p>Deseja realmente alterar seu plano?</p>
+        </div>
+        <div class="modal-footer ">
+          <button type="button " class="btn btn-link pull-left " data-dismiss="modal">Não</button>
+          <button type="button " class="btn btn-primary " (click)="confirmarAlteracaoPlano()">Sim</button>
+        </div>
+      </div>
+
+    </div>
+  </app-modal>
+
+
+
+  <app-modal #modalTermoDeUso>
+    <div *ngIf="planoTermoDeUso">
+      <div class="modal-header modal-info modalTermoDeUsoAnuncio">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="fecharModalTermoDeUso()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Termo de Uso</h4>
+      </div>
+      <div class="modal-body">
+        <div class="overflow">
+          <app-termo-contrato-autogestao></app-termo-contrato-autogestao>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="fecharModalTermoDeUso()">Ok</button>
+      </div>
+    </div>
+  </app-modal>
+
+  <app-modal #modalContratoPlano>
+    <div *ngIf="planoContrato">
+      <div class="modal-header modal-info modal-termo">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          (click)="fecharModalContratoPlano()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Contrato
+          <i>"{{ planoContrato.TituloPlano }}"</i>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <div class="overflow">
+          <div [innerHTML]="planoContrato.TermoContrato | safeHtml"></div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="fecharModalContratoPlano()">Ok</button>
+      </div>
+    </div>
+  </app-modal>
+
+</div>

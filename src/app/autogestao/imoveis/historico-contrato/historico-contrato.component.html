@@ -1,0 +1,61 @@
+<div class="container">
+  <section class="wrap imoveis com-submenu">
+    <h1 class="title title-no-icon">{{ imovel.Numero?imovel.Logradouro + ', ' :imovel.Logradouro }} {{ imovel.Numero }}
+    </h1>
+
+    <div class=" btn-group-actions margin-top-negative row clearfix">
+      <div class=" col-xs-2 clearfix">
+        <button data-toggle="button" class="btn btn-primary btn-icon"
+          [routerLink]="['/autogestao','imoveis',imovel.Uid, 'detalhe']" title="Voltar">
+          <i class="glyphicons glyphicons-chevron-left"></i>
+          <span>Voltar</span>
+        </button>
+      </div>
+    </div>
+    <div class="content">
+      <div class="row" *ngIf="message">
+        <div class="col-md-12" *ngFor="let msg of message">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+        </div>
+      </div>
+      <div *ngIf="carregando">
+        <app-loading></app-loading>
+      </div>
+
+      <div class="list-contratos">
+        <h3 class="text-center">
+          Histórico de contrato</h3>
+        <div *ngIf="!carregando && contratos?.length > 0">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Locatário</th>
+                <th>CPF/CNPJ</th>
+                <th>Período</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let contrato of contratos">
+                <td>{{ contrato.NomeLocatario }}</td>
+                <td>{{ contrato.CPFCNPJLocatario | cpfcnpj }}</td>
+                <td>{{ contrato.DataInicioVigencia | date:'shortDate' }} até {{ contrato.DataFimVigencia |
+                  date:'shortDate' }}</td>
+                <td><a class="btn btn-sm btn-primary btn-ver-boleto pull-right" hrf="#"
+                    [routerLink]="['/autogestao','imoveis',imovel.Uid,'contrato',contrato.Uid,'detalhe']">ver
+                    detalhe</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+        <div *ngIf="contratos?.length == 0 && !carregando">
+          <strong>Nenhum contrato encontrado!</strong>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</div>

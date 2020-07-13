@@ -1,0 +1,47 @@
+<fieldset class="field-fiador">
+  <legend>Carta Fiança</legend>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="cartaFianca.Origem">Origem</label>
+        <input type="text" required id="cartaFianca.Origem" name="cartaFianca.Origem" [(ngModel)]="cartaFianca.Origem"
+          #cartaFiancaOrigem="ngModel" class="form-control" />
+        <div *ngIf="cartaFiancaOrigem.errors && cartaFiancaOrigem.dirty" class="alert alert-danger">
+          <div *ngIf="cartaFiancaOrigem.errors.required">Campo obrigatório.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="cartaFianca.DataRenovacao">Data Renovação</label>
+
+        <input type="text" autocomplete="off" [minDate]="minDate" id="cartaFianca.DataRenovacao"
+          name="cartaFianca.DataRenovacao" [(ngModel)]="cartaFianca.DataRenovacao" #cartaFiancaDataRenovacao="ngModel"
+          bsDatepicker #drp="bsDatepicker"
+          [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass: 'theme-orange' }" class="form-control" />
+
+        <!-- <div *ngIf="cartaFiancaDataRenovacao.errors && cartaFiancaDataRenovacao.dirty" class="alert alert-danger">
+          <div *ngIf="cartaFiancaDataRenovacao.errors.required">Campo obrigatório.</div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="cartaFianca.Cobertura">Cobertura</label>
+        <textarea required id="cartaFianca.Cobertura" name="cartaFianca.Cobertura" [(ngModel)]="cartaFianca.Cobertura"
+          #cartaFiancaCobertura="ngModel" class="form-control" cols="30" rows="10"></textarea>
+        <!-- <input type="text" required id="cartaFianca.Cobertura" name="cartaFianca.Cobertura" [(ngModel)]="cartaFianca.Cobertura" #cartaFiancaCobertura="ngModel"
+          class="form-control" /> -->
+        <div *ngIf="cartaFiancaCobertura.errors && cartaFiancaCobertura.dirty" class="alert alert-danger">
+          <div *ngIf="cartaFiancaCobertura.errors.required">Campo obrigatório.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>

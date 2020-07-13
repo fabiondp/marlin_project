@@ -1,0 +1,102 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+.meus-plano {
+  .row-item {
+    margin-bottom: 10px;
+  }
+}
+
+.planos {
+  border-color: $color-fourth;
+  margin-bottom: 20px;
+
+  .panel-heading {
+    background-color: $color-fourth;
+    border-color: $color-fourth;
+
+    h3 {
+      a {
+        &:before {
+          content: "\E601";
+          display: inline-block;
+          font-family: 'Glyphicons Halflings';
+          font-style: normal;
+          font-weight: 400;
+          line-height: 1;
+          vertical-align: top;
+          -webkit-font-smoothing: antialiased;
+          margin-right: 10px;
+        }
+      }
+
+      a.collapsed {
+        &:before {
+          content: "\E602";
+        }
+      }
+    }
+
+    .btn-link {
+      color: #fff;
+      padding: 0;
+      text-transform: uppercase;
+    }
+  }
+
+  .panel-body {
+    // border-color: $color-fourth;
+    border: 1px solid #a11959;
+
+    h3 {
+      color: $color-second;
+      font-size: 16px;
+      margin: 0 0 10px;
+    }
+
+    ul.list-glyphicon {
+      list-style: none;
+      font-size: 14px;
+      padding: 0;
+    }
+
+    .preco {
+      color: $color-second;
+      font-size: 32px;
+      text-align: center;
+      margin-top: -5px;
+    }
+  }
+}
+
+.pano-atual {
+  border-bottom: 1px solid #970057;
+  margin-bottom: 30px;
+
+}
+
+.textoNovoPlano {
+  strong {
+    color: #970057;
+  }
+}
+
+.novo-plano {
+
+  opacity: 0.5;
+  margin-bottom: 10px;
+  border-top: 1px solid #ccc;
+  padding-top: 20px;
+
+  h4 {
+    margin-top: 0;
+  }
+
+
+
+  label {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #970057;
+    margin-bottom: 0;
+  }
+}

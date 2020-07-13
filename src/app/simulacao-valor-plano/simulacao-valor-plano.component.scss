@@ -1,0 +1,27 @@
+.simulacao h1::before {
+  display: none;
+}
+
+.btn-calcular {}
+
+.position-relative {
+  position: relative;
+}
+
+.box-valor-total {
+  border: 2px solid #c6dfc9;
+  background-color: #e1f1e4;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: bold;
+  color: #005200;
+  font-size: 18px;
+  border-radius: 5px;
+  .valor {
+    font-size: 1.1em;
+  }
+}
+
+.btn-block {
+  margin-top: 20px;
+}

@@ -1,0 +1,157 @@
+<app-modal #modalDasativacaoImoveis [size]="'modal-lg'">
+
+  <div class="modal-header modal-warning">
+    <h4 class="modal-title text-center ">Desativar imóveis Autogestão</h4>
+  </div>
+  <div class="modal-body ">
+    <div class="list-planos">
+      <div class="row" *ngIf="messages">
+        <div class="col-md-12" *ngFor="let msg of messages">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+        </div>
+      </div>
+      <app-loading *ngIf="carregandoListagem" [message]="carregandoMensagem"></app-loading>
+      <div class="imoveis list-panel" *ngIf="!carregandoListagem && exibirListaImoveisDesativar">
+
+        <div class="well">
+
+          Selecione abaixo <strong>{{this.imoveisParaDesativar.QuantidadeImoveisParaDesativar > 1 ?
+            this.imoveisParaDesativar.QuantidadeImoveisParaDesativar + ' os imóveis' :
+            this.imoveisParaDesativar.QuantidadeImoveisParaDesativar + ' o imóvel'}} que serão desativados</strong>
+          para efetivação do seu novo plano:
+
+        </div>
+        <div class="list-row-group resumo">
+          <form #desativarImoveisForm="ngForm" (ngSubmit)="desativarImoveis(desativarImoveisForm)">
+            <div class="overflow">
+
+
+              <div class="lista" *ngFor="let imovel of imoveis; let i = indexImovel">
+
+                <div class=" checkbox-custom"> <input type="checkbox" [id]="imovel.Uid" [(ngModel)]="imovel.Selected"
+                    name="Selected" #Selected="ngModel">
+                  <label [for]="imovel.Uid">
+
+                    {{ imovel.Logradouro }} {{ imovel.Numero }} {{ imovel.Bairro }} / {{ imovel.Cidade }} / {{
+                    imovel.Estado
+                    }}</label>
+
+                </div>
+              </div>
+
+
+              <!-- <div class="panel panel-primary" *ngFor="let imovel of imoveis; let i = indexImovel">
+                <div class="panel-heading has-collapse">
+                  <div class="row">
+                    <div class="col-lg-8 col-md-8  col-sm-8">
+                      <div class="panel-title  checkbox-custom"> <input type="checkbox" [id]="imovel.Uid" [(ngModel)]="imovel.Selected"
+                          name="Selected" #Selected="ngModel">
+                        <label [for]="imovel.Uid">
+
+                          {{ imovel.Logradouro }} {{ imovel.Numero }} {{ imovel.Bairro }} / {{ imovel.Cidade }} / {{
+                          imovel.Estado
+                          }}</label>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div> -->
+            </div>
+
+          </form>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-lg-offset-3">
+
+            <button type="button" class="btn btn-primary btn-block" id="Desativar"
+              (click)="abrirConfimarDasativacaoImoveis()" [disabled]="desabilitarBotaoDesativar()">Desativar</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</app-modal>
+
+
+
+
+<app-modal #modalConfirmacaoDasativacaoImoveis [size]="'modal-lg'">
+  <div class="modal-header modal-warning ">
+    <!-- <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+      <span aria-hidden="true ">&times;</span>
+    </button> -->
+    <h4 class="modal-title text-center ">Desativar imóveis Autogestão</h4>
+  </div>
+  <div class="modal-body ">
+    <p>Deseja realmente desativar os imóveis abaixo?</p>
+    <hr />
+    <div class="resumo overflow">
+
+      <div class="list-row-group">
+
+        <ol class="lista-numerada">
+          <li *ngFor="let imovel of grupoImoveisSelecionados; let indexImovel = index">{{ imovel.Logradouro }} {{
+            imovel.Numero }} - {{ imovel.Bairro }} / {{
+            imovel.Cidade }} / {{
+            imovel.Estado
+            }}</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer ">
+    <button type="button " class="btn btn-link pull-left " (click)="naoDesativarImoveis()">Não</button>
+    <button type="button " class="btn btn-primary " (click)="desativarImoveis()">Sim</button>
+  </div>
+</app-modal>
+
+
+<app-modal #modalResultadoDasativacaoImoveis [size]="'modal-lg'">
+  <div *ngIf="desativandoImoveis">
+    <div class="modal-header modal-success">
+      <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+        <span aria-hidden="true ">&times;</span>
+      </button>
+      <h4 class="modal-title text-center ">Aguarde...</h4>
+    </div>
+    <div class="modal-body text-center">
+      <app-loading [message]="messageStatus"></app-loading>
+    </div>
+  </div>
+  <div *ngIf="!desativandoImoveis">
+    <div *ngIf="messages">
+      <div class="modal-header modal-danger">
+        <!-- <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+          <span aria-hidden="true ">&times;</span>
+        </button> -->
+        <h4 class="modal-title text-center text-danger">Ocorreu os seguinte(s) erro(s):</h4>
+      </div>
+      <div class="modal-body text-center">
+        <div class="row">
+          <div class="col-md-12" *ngFor="let msg of message">
+            <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!messages">
+      <div class="modal-header modal-success">
+        <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+          <span aria-hidden="true ">&times;</span>
+        </button>
+        <h4 class="modal-title text-center ">Imóveis(s) desativado(s) com sucesso!</h4>
+      </div>
+      <div class="modal-body text-center">
+        <p>Deseja realmente alterar seu plano?</p>
+      </div>
+      <div class="modal-footer ">
+        <button type="button " class="btn btn-link pull-left " data-dismiss="modal">Não</button>
+        <button type="button " class="btn btn-primary " (click)="confirmarAlteracaoPlano()">Sim</button>
+      </div>
+    </div>
+
+  </div>
+</app-modal>

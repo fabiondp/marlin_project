@@ -1,0 +1,356 @@
+<div class="detalhe-locacao">
+  <div class="panel panel-default panel-custom" *ngIf="proprietario && proprietario.isEdicao()">
+
+    <div class="panel-body panel-body-no-padding">
+      <h3 class="title-tab">{{proprietario.Nome}}</h3>
+
+      <div id="accordion-aba-proprietario" role="tablist" aria-multiselectable="true">
+        <div id="panelDadosPessoais" class="panel panel-form-group panel-detail">
+          <div class="panel-heading" role="tab" id="headingPanelDadosPessoais">
+            <h4 class="panel-title">
+              <button type="button" class="accordion-toggle" [class.collapsed]="!proprietario.panelDadosPessoaisIsOpen"
+                [attr.aria-expanded]="proprietario.panelDadosPessoaisIsOpen"
+                (click)="proprietario.toggleCollapse('panelDadosPessoaisIsOpen')"
+                aria-controls="collapsePanelInfoBasicas">
+                Dados pessoais
+              </button>
+            </h4>
+          </div>
+          <div id="panelDadosPessoaisIsOpen" class="panel-collapse collapse"
+            [class.in]="proprietario.panelDadosPessoaisIsOpen" role="tabpanel"
+            aria-labelledby="headingPanelDadosPessoais">
+            <div class="panel-body">
+              <fieldset>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">CPF/CNPJ: </label>
+                      {{ proprietario.CPFCNPJ | cpfcnpj  }}
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"
+                    *ngIf="proprietario.CPFCNPJ && proprietario.CPFCNPJ.length < 14">
+                    <div class="form-group">
+                      <label for="">RG: </label>
+                      {{ proprietario.RG | detailInfo  }}
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"
+                    *ngIf="proprietario.CPFCNPJ && proprietario.CPFCNPJ.length < 14">
+                    <div class="form-group">
+                      <label for="">Orgão emissor: </label>
+                      {{ proprietario.OrgaoEmissor | detailInfo }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">E-mail: </label>
+                      {{ proprietario.Email | detailInfo }}
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"
+                    *ngIf="proprietario.CPFCNPJ && proprietario.CPFCNPJ.length < 14 && !proprietario.esconderCamposNacionalidade">
+                    <div class="form-group">
+                      <label for="">Nacionalidade: </label>
+                      {{ proprietario.Nacionalidade | detailInfo }}
+                    </div>
+                  </div>
+
+                </div>
+                <div class="row"
+                  *ngIf="proprietario.CPFCNPJ && proprietario.CPFCNPJ.length < 14 && !proprietario.esconderCamposFiliacao">
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">Filiação 1: </label>
+                      {{proprietario.Filiacao1?proprietario.Filiacao1:'-'}}
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">Filiação 2: </label>
+                      {{proprietario.Filiacao2?proprietario.Filiacao2:'-'}}
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="row" *ngIf="proprietario.CPFCNPJ && proprietario.CPFCNPJ.length < 14">
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">Data de nascimento: </label>
+                      <!-- {{proprietario.DataNascimento | date: 'shortDate'}} -->
+                      {{ proprietario.DataNascimento }}
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">Estado civil: </label>
+                      {{ proprietario.DescricaoEstadoCivil | detailInfo }}
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">Sexo: </label>
+                      {{ proprietario.DescricaoSexo }}
+                    </div>
+                  </div>
+                </div>
+
+              </fieldset>
+
+              <fieldset>
+                <legend>Contatos</legend>
+                <div class="row" *ngIf="proprietario.Contatos && proprietario.Contatos.length > 0">
+                  <div *ngFor="let contato of proprietario.Contatos" class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">{{contato.TipoContato === 1 ? 'Tefone fixo: ' : 'Telefone celular: '}}</label>
+                      <span *ngIf="contato.Numero">{{ (contato.DDD + contato.Numero) | detailContato }}</span>
+                      <span *ngIf="!contato.Numero">-</span>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset *ngIf="proprietarioCasado() && proprietario.DadosConjuge ">
+                <legend>Cônjugue</legend>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">Nome: </label>
+                      {{ proprietario.DadosConjuge.Nome | detailInfo }}
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">CPF: </label>
+
+                      {{ proprietario.DadosConjuge.CPFCNPJ | cpfcnpj }}
+                    </div>
+                  </div>
+
+                </div>
+                <div class="row" *ngIf="!proprietario.esconderCamposFiliacaoConjugue">
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">Filiação 1: </label>
+                      {{proprietario.DadosConjuge.Filiacao1?proprietario.DadosConjuge.Filiacao1:'-'}}
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">Filiação 2: </label>
+                      {{proprietario.DadosConjuge.Filiacao2?proprietario.DadosConjuge.Filiacao2:'-'}}
+                    </div>
+                  </div>
+
+                </div>
+              </fieldset>
+
+              <fieldset *ngIf="!proprietario.esconderReferencia">
+                <legend>Referência</legend>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">Nome: </label>
+                      {{proprietario.Referencia?proprietario.Referencia:'-'}}
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="form-group">
+                      <label for="">Telefone: </label>
+
+                      <span *ngIf="proprietario.TelefoneReferencia">({{ proprietario.DDDReferencia | slice:0:2 }})
+                        {{proprietario.TelefoneReferencia
+                              | slice:2:7}}-{{proprietario.TelefoneReferencia | slice:7:12}}</span>
+                      <span *ngIf="!proprietario.TelefoneReferencia"> - </span>
+
+                      <!-- {{proprietario.DDDReferencia ? '(' + proprietario.DDDReferencia + ')' : '-'}} {{proprietario.TelefoneReferencia}} -->
+
+                    </div>
+                  </div>
+
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+        <div id="panelInfoBancarias" *ngIf="!proprietario.flagPreencherDadosComInformacoesCadastrais"
+          class="panel panel-form-group panel-detail">
+          <div class="panel-heading" role="tab" id="headingPanelInfoBancarias">
+            <h4 class="panel-title">
+              <button type="button" class="accordion-toggle" [class.collapsed]="!proprietario.panelInfoBancariasIsOpen"
+                [attr.aria-expanded]="proprietario.panelInfoBancariasIsOpen"
+                (click)="proprietario.toggleCollapse('panelInfoBancariasIsOpen')"
+                aria-controls="collapsePanelRepresentacao">
+                Dados bancários
+              </button>
+            </h4>
+          </div>
+          <div id="panelInfoBancariasIsOpen" class="panel-collapse collapse"
+            [class.in]="proprietario.panelInfoBancariasIsOpen" role="tabpanel"
+            aria-labelledby="headingPanelInfoBancarias">
+            <div class="panel-body">
+              <fieldset id="fieldset-info-titular-conta" class="">
+                <legend>Informações sobre o titular da conta</legend>
+
+                <div id="row-titular-cpf-cnpj" class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="">CPF/CNPJ: </label>
+                      {{ proprietario.informacaoBancaria.Titular.CPFCNPJ |  cpfcnpj  }}
+                    </div>
+                  </div>
+                </div>
+
+                <div id="row-titular-informacoes-gerais" class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="inputNomeTitular" class="control-label">Nome: </label>
+                      {{ proprietario.informacaoBancaria.Titular.Nome | detailInfo }}
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset *ngIf="proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado">
+                <legend>Conta bancária</legend>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="selectContaBancariaCodigoBanco" class="control-label">Banco: </label>
+                      {{ proprietario.informacaoBancaria.ContaBancaria.Banco }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-3" *ngIf="proprietario.informacaoBancaria.ContaBancaria.BancoSelecionado">
+                    <div class="form-group ">
+                      <label for="bancoCodigo" class="control-label">Código: </label>
+                      {{ proprietario.informacaoBancaria.ContaBancaria.CodigoBanco }}
+                    </div>
+                  </div>
+                </div>
+
+                <div id="group-campos-conta-bancaria"
+                  *ngIf="proprietario.informacaoBancaria.ContaBancaria.ExibirCampos">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="radioTipoConta">Tipo de Conta: </label>
+                        <span *ngIf="proprietario.informacaoBancaria.ContaBancaria.TipoConta === 1">Conta
+                          corrente</span>
+                        <span *ngIf="proprietario.informacaoBancaria.ContaBancaria.TipoConta === 2">Conta
+                          poupança</span>
+                        <span
+                          *ngIf="proprietario.informacaoBancaria.ContaBancaria.TipoConta !== 1 && proprietario.informacaoBancaria.ContaBancaria.TipoConta !== 2">
+                          - </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="inputContaBancariaAgencia" class="control-label"> Agência:
+                        </label>
+
+                        {{  proprietario.informacaoBancaria.ContaBancaria.Agencia }}
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="inputContaBancariaConta">
+                          Conta:
+                        </label>
+
+                        {{ proprietario.informacaoBancaria.ContaBancaria.Conta }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+        <div id="panelRepresentacao" class="panel panel-form-group">
+          <div class="panel-heading" role="tab" id="headingPanelRepresentacao">
+            <h4 class="panel-title">
+              <button type="button" class="accordion-toggle" [class.collapsed]="!proprietario.panelRepresentacaoIsOpen"
+                [attr.aria-expanded]="proprietario.panelRepresentacaoIsOpen"
+                (click)="proprietario.toggleCollapse('panelRepresentacaoIsOpen')"
+                aria-controls="collapsePanelRepresentacao">
+                Representação
+              </button>
+            </h4>
+          </div>
+          <div id="panelRepresentacaoIsOpen" class="panel-collapse collapse"
+            [class.in]="proprietario.panelRepresentacaoIsOpen" role="tabpanel"
+            aria-labelledby="headingPanelRepresentacao">
+            <div class="panel-body">
+              <fieldset>
+                <div id="row-pergunta-possui-representante" class="row">
+                  <div class="col-md-12">
+                    <label for="">Possui representante? </label>
+                    {{ proprietario.PossuiRepresentante | detailInfo }}
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset *ngIf="proprietario.PossuiRepresentante">
+                <div id="row-tipo-representante" class="row">
+                  <div class="col-md-12">
+                    <label for="">Tipo de representação: </label>
+                    {{ proprietario.Representante.TipoRepresentante | detailOpcoes: opcoesTipoRepresentante : 'Id': 'Descricao'  }}
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset *ngIf="proprietario.PossuiRepresentante">
+                <div id="row-proprietario-representante-cpfcnpj" class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="">CPF/CNPJ: </label>
+                      {{ proprietario.Representante.CPFCNPJ |  cpfcnpj   }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" [hidden]="!proprietario.Representante.TipoPessoa">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="">Nome: </label>
+                      {{ proprietario.Representante.Nome | detailInfo  }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="">Email: </label>
+                      {{ proprietario.Representante.Email | detailInfo  }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="">Telefone: </label>
+                      {{ proprietario.Representante.Telefone | detailContato  }}
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="" *ngIf="proprietario && !proprietario.isEdicao()">
+    Imóvel sem proprietário até o momento.
+  </div>
+</div>

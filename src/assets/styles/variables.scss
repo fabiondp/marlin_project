@@ -1,0 +1,70 @@
+$font-family: "Ubuntu",
+Helvetica,
+Arial,
+sans-serif;
+$color-primary: #040404;
+$primary-dark: darken(#907dda, 4%);
+$accent: #e5e4ea;
+$font-light: #e7e6f1;
+$font-dark: #333;
+$grey: #BDC4D0;
+$background-light: #F3F4F8;
+$background-dark: #2F3032;
+$border-light: darken($background-light, 2%);
+$border-dark: darken($background-dark, 2%);
+$font-color-navbar:#065838;
+//** By default, this inherits from the `<body>`.
+$headings-font-family: inherit !default;
+$headings-font-weight: 500 !default;
+$headings-line-height: 1.1 !default;
+$headings-color: inherit !default;
+//== Iconography
+//
+//## Specify custom location and filename of the included Glyphicons icon font. Useful for those including Bootstrap via Bower.
+//** Load fonts from this directory.
+$icon-font-path: "bootstrap/" !default;
+//** File name for all font files.
+$icon-font-name: "glyphicons-halflings-regular" !default;
+//** Element ID within SVG icon file.
+$icon-font-svg-id: "glyphicons_halflingsregular" !default;
+//
+//== Colors
+//
+$brand-primary: #428bca !default;
+$brand-success: #5cb85c !default;
+$brand-info: #5bc0de !default;
+$brand-warning: #f0ad4e !default;
+$brand-danger: #d9534f !default;
+//##
+//** Global textual link color.
+$link-color: $brand-primary !default;
+//** Link hover color set via `darken()` function.
+$link-hover-color: darken($link-color, 15%) !default;
+//##
+//== Navbar
+//
+//##
+$navbar-default-color: #040404 !default;
+$navbar-default-bg: #ffffff !default;
+$navbar-default-border: darken($navbar-default-bg, 6.5%) !default;
+// Navbar links
+$navbar-default-link-color: #065838 !default;
+$navbar-default-link-hover-color: #065838 !default;
+$navbar-default-link-hover-bg: transparent !default;
+$navbar-default-link-active-color: #065838 !default;
+$navbar-default-link-active-bg: darken($navbar-default-bg, 6.5%) !default;
+$navbar-default-link-disabled-color: #ccc !default;
+$navbar-default-link-disabled-bg: transparent !default;
+// Navbar brand label
+$navbar-default-brand-color: $navbar-default-link-color !default;
+$navbar-default-brand-hover-color: darken($navbar-default-brand-color, 10%) !default;
+$navbar-default-brand-hover-bg: transparent !default;
+//##
+//== Navs
+//
+//##
+//=== Shared nav styles
+$nav-link-hover-bg: $grey !default;
+$nav-disabled-link-color: $grey !default;
+$nav-disabled-link-hover-color: $grey !default;
+$nav-open-link-hover-color: #fff !default;

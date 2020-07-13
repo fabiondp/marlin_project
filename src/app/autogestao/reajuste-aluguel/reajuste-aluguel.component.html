@@ -1,0 +1,111 @@
+<div class="container">
+  <section class="wrap imoveis com-submenu">
+
+    <h1 class="title title-reajuste-aluguel title-no-icon">
+      Reajuste de aluguel
+    </h1>
+
+    <div class="col-md-12" *ngIf="carregando">
+      <app-loading [message]="messageStatus"></app-loading>
+    </div>
+
+    <div class="col-md-12" *ngIf="!carregando && messages">
+      <div *ngFor="let msg of messages">
+        <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+      </div>
+    </div>
+
+    <div *ngIf="tiposIndices">
+      <p class="text-center">
+        Os aluguéis dos imóveis abaixo devem ser reajustados. Informe o percentual e aplique aos imóveis selecionados.
+      </p>
+
+      <div>
+        <div class="marcar-todos">
+          <label for="selectAll">
+            <input name="selectAll" id="selectAll" type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();" />
+            Marcar
+            todos
+          </label>
+        </div>
+
+        <div *ngFor="let tipoIndice of tiposIndices; let indexTipoIndice = index" class="list-row-group">
+          <div *ngIf="tipoIndice.Lista.length > 0">
+            <h5 class="text-center indice"> {{tipoIndice.Indice}}</h5>
+
+            <div class="panel panel-primary" *ngFor="let imovel of tipoIndice.Lista; let indexImovel = index">
+              <div class="panel-heading">
+                <p class="panel-title">
+                  <input type="checkbox" [(ngModel)]="imovel.Selected" (change)="checkIfAllSelected();" name="Selected"
+                    #Selected="ngModel">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ indexTipoIndice + '_' + indexImovel }}"
+                    aria-expanded="true" data-target="#accordion{{ indexTipoIndice + '_' + indexImovel }}"
+                    aria-controls="collapseOne" class="collapsed">{{ imovel.Imovel }}</a>
+                </p>
+              </div>
+              <div id="collapse{{ indexTipoIndice + '_' + indexImovel }}" class="panel-collapse collapse" role="tabpanel"
+                aria-labelledby="headingOne">
+                <div class="panel-body">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <pre>{{ tiposIndices | json }}</pre> -->
+      <div class="row">
+        <div class="col-md-4 col-aplicar-reajuste col-md-offset-4">
+          <p>Selecione os imóveis e informe o percentual de reajuste:
+            <input type="text" class="form-control" [(ngModel)]="percentualReajuste" placeholder="0,0" />
+          </p>
+          <button type="button" class="btn btn-primary btn-aplicar" (click)="abrirModalConfirmacaoReajuste()">Aplicar</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="!tiposIndices && !carregando">
+      <p class="text-center">Não há contratos para serem ajustados.</p>
+    </div>
+  </section>
+</div>
+
+<app-modal #modalConfirmacaoReajuste>
+  <div class="modal-header modal-warning">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title text-center">Atenção!</h4>
+  </div>
+  <div class="modal-body">
+    <!-- processandoDesativar -->
+    <app-loading *ngIf="processandoReajuste" message="Desativando imóvel"></app-loading>
+
+    <div class="row" *ngIf="mensagensReajuste">
+      <div class="col-md-12" *ngFor="let msg of mensagensReajuste">
+        <app-alert [close]="true" color="danger">{{msg}}</app-alert>
+      </div>
+    </div>
+
+    <div *ngIf="!processandoReajuste">
+      <p class="text-center">
+        Deseja realmente aplicar o reajuste de "<strong>{{ percentualReajuste }}</strong>%" nos contratos dos imóveis
+        abaixo:
+      </p>
+
+      <div class="confirmacao-reajuste">
+        <div *ngFor="let tipoIndice of obterContratosSelecionados(); let indexTipoIndice = index">
+          <h5 class="indice">{{tipoIndice.Indice}}</h5>
+          <p *ngFor="let imovel of tipoIndice.Lista; let indexImovel = index" class="dados-imovel">
+            <span>{{ imovel.Imovel }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-link pull-left" data-dismiss="modal">Não</button>
+    <button type="button" class="btn btn-primary" (click)="aplicarPercentualReajuste()">Sim</button>
+  </div>
+</app-modal>

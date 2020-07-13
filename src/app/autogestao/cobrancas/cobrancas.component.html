@@ -1,0 +1,324 @@
+<div class="container" #content>
+  <section class="wrap imoveis com-submenu">
+    <h1 class="title title-no-icon">
+      Cobranças a serem geradas</h1>
+
+    <div class="btn-group-actions row clearfix">
+      <div class="col-xs-6 clearfix box-actions-agrupamento">
+        <div>
+          Agrupar por:
+          <button type="button" class="btn btn-link btn-link-opcao-grupo" [class.active]="agrupamento == '1'" (click)="agrupar('competencia')">Competência</button>
+          |
+          <button type="button" class="btn btn-link btn-link-opcao-grupo" [class.active]="agrupamento == '2'" (click)="agrupar('imovel')">Imóvel</button>
+        </div>
+      </div>
+      <div class="col-xs-6 clearfix">
+        <button data-toggle="button" class="btn btn-sm btn-primary pull-right" title="Histórico de cobranças geradas"
+          [routerLink]="['/autogestao', 'cobrancas', 'historico']">
+          Histórico de cobranças geradas
+          <!-- <i class="glyphicons glyphicons-file-plus"></i> -->
+        </button>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="carregandoFormulario">
+      <div class="col-md-12">
+        <app-loading [message]="messageStatus"></app-loading>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="!carregandoFormulario && messages">
+      <div class="col-md-12" *ngFor="let msg of messages">
+        <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+      </div>
+    </div>
+
+    <form #cobrancaForm="ngForm" (ngSubmit)="gerarCobrancas(cobrancaForm)" class="col-lg-12">
+      <!-- <form #cobrancaForm="ngForm" (ngSubmit)="gerarCobrancas(cobrancaForm)" class="col-lg-12" *ngIf="contaBancariaOk"> -->
+
+      <div class="list-panel" *ngIf="!carregandoFormulario && exibirFormulario">
+
+        <div class="alert alert-warning" role="alert" *ngIf="!contaBancariaOk">
+
+          <h4><span class="glyphicons glyphicons-alert"></span> Atenção</h4>
+
+          <p>Aguarde suas informações bancárias serem regularizadas para gerar suas cobranças.</p>
+        </div>
+
+        <div *ngIf="existeCobrancas() && contaBancariaOk">
+
+          <div class="marcar-todos checkbox-custom">
+            <input name="selectAll" id="selectAll" type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();" />
+            <label for="selectAll">
+              Marcar
+              todos
+            </label>
+          </div>
+
+          <div *ngFor="let agrupadorCobranca of cobrancas ; let indexAgrupadorCobranca = index" class="list-row-group">
+            <h3 class="text-center"> {{agrupadorCobranca.Agrupador}}</h3>
+
+            <div class="panel panel-primary" *ngFor="let cobranca of agrupadorCobranca.Lista; let indexCobranca = index">
+              <div class="panel-heading has-collapse">
+                <div class="row">
+                  <div class="col-lg-9 col-md-9  col-sm-7">
+                    <div class="panel-title checkbox-custom">
+                      <input type="checkbox" [(ngModel)]="cobranca.Selected" (change)="checkIfAllSelected();" name="Selected"
+                        id="cob_{{ indexAgrupadorCobranca + '_' + indexCobranca }}" #Selected="ngModel">
+                      <label for="cob_{{ indexAgrupadorCobranca + '_' + indexCobranca }}">
+                        <span *ngIf="agrupamento == '1'">{{cobranca.Imovel }}</span>
+                        <span *ngIf="agrupamento == '2'">{{cobranca.MesAno }}</span>
+                      </label>
+
+
+                    </div>
+
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-5 text-right ver-detalhamento">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ indexAgrupadorCobranca + '_' + indexCobranca }}"
+                      aria-expanded="true" data-target="#accordion{{ indexAgrupadorCobranca + '_' + indexCobranca }}"
+                      aria-controls="collapseOne" class=" collapsed">
+                      <span class="ver-detalhe-txt">Ver detalhamento</span>
+                      <span class="ver-detalhe-icone"><i class="fa fa-chevron-right"></i></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div id="collapse{{ indexAgrupadorCobranca + '_' + indexCobranca }}" class="panel-collapse collapse" role="tabpanel"
+                aria-labelledby="headingOne">
+                <div class="panel-body">
+
+                  <div class=" clearfix">
+                    <div class="col-md-7 col-sm-6">
+                      <button type="button" class="btn btn-primary btn-sm" id="lancarCobrancaDesconto" (click)="exibirFormNovoLancamento(cobranca)"
+                        placement="auto" [popover]="tooltipLancarCobrancaDesconto" [outsideClick]="true" containerClass="wider-popover-lancamento"><i
+                          class="glyphicons glyphicons-edit"></i> Lançar
+                        cobrança/desconto
+                      </button>
+
+                      <!-- Formulário de cobrança ou desconto -->
+                      <ng-template #tooltipLancarCobrancaDesconto>
+                        <app-lancamento [cobranca]="cobranca"></app-lancamento>
+                      </ng-template>
+
+
+                    </div>
+                    <div class="col-md-5 col-sm-6 detail">
+                      <div>
+                        <p *ngIf="cobranca.ValorLocacao != 0">
+                          <label>ALUGUEL:</label> {{cobranca.ValorLocacao | currency : 'BRL' : '3.2'}}</p>
+
+                        <!-- <p *ngIf="cobranca.ValorCondominio != 0">
+                          <label>CONDOMÍNIO:</label> {{cobranca.ValorCondominio | currency : 'BRL' : '3.2'}}</p>
+
+                        <p *ngIf="cobranca.ValorIPTU != 0">
+                          <label>IPTU:</label> {{cobranca.ValorIPTU | currency : 'BRL' : '3.2'}}</p> -->
+                      </div>
+                      <!-- Novo cobranca -->
+
+                      <div class="novos-lancamentos" *ngFor="let lancamento of cobranca.LancamentosBoleto; let indexLancamento=index">
+                        <p>
+                          <button class="btn btn-sm btn-danger" (click)="excluirCobrancaDesconto(cobranca, lancamento)">
+                            <i class="glyphicons glyphicons-bin"></i>
+                          </button>
+
+                          <label>{{lancamento.DescricaoLancamento}}:</label>
+                          <span *ngIf="lancamento.TipoLancamento === 1">{{lancamento.ValorLancamento
+                            |
+                            currency : 'R$' : '3.2'}}</span>
+                          <span *ngIf="lancamento.TipoLancamento === 2">{{lancamento.ValorLancamento
+                            |
+                            currency : 'R$ -' : '3.2'}}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+                  <div class="col-lg-12 total">
+                    TOTAL: {{obterValorTotalCobranca(cobranca) | currency : 'BRL' : '3.2'}}
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div role="group" class="form-btn-group" [ngClass]="{isFim:isFim}">
+            <!-- <div class="row">
+                <div class="col-lg-6 col-lg-offset-3 ">
+                  <button type="button" class="btn btn-link btn-block" id="MostrarProximosVencimentos">Mostrar próximos
+                    vencimentos</button>
+                </div>
+              </div> -->
+
+            <div class="row">
+              <div class="col-lg-6 col-lg-offset-3 ">
+                <button type="button" class="btn btn-primary btn-block" id="GerarCobrancas" (click)="abrirConfimarGeracaoCobranca()">Gerar
+                  cobranças</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div *ngIf="!existeCobrancas() && contaBancariaOk">
+          <div class="alert alert-warning" role="alert">Não existe cobrança(s) para serem geradas.</div>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- <pre>{{ cobrancas | json }}</pre> -->
+
+  <app-modal #modalSucessoGerarCobranca>
+    <div *ngIf="gerandoCobrancas">
+      <div class="modal-header modal-success">
+        <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+          <span aria-hidden="true ">&times;</span>
+        </button>
+        <h4 class="modal-title text-center ">Aguarde...</h4>
+      </div>
+      <div class="modal-body text-center">
+        <app-loading [message]="messageStatus"></app-loading>
+      </div>
+    </div>
+    <div *ngIf="!gerandoCobrancas">
+      <div *ngIf="messages">
+        <div class="modal-header modal-danger">
+          <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+            <span aria-hidden="true ">&times;</span>
+          </button>
+          <h4 class="modal-title text-center text-danger">Ocorreu os seguinte(s) erro(s):</h4>
+        </div>
+        <div class="modal-body text-center">
+          <div class="row">
+            <div class="col-md-12" *ngFor="let msg of messages">
+              <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!messages">
+        <div class="modal-header modal-success">
+          <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+            <span aria-hidden="true ">&times;</span>
+          </button>
+          <h4 class="modal-title text-center ">Cobrança(s) gerada(s) com sucesso!</h4>
+        </div>
+        <div class="modal-body text-center">
+          <p>Você pode acessar a(s) cobrança(s) gerada(s) na página de histórico de cobrança</p>
+        </div>
+        <div class="modal-footer ">
+          <button type="button" class=" btn btn-primary btn-block" title="Acessar histórico" (click)="acessarHistorico()">
+            Acessar histórico
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </app-modal>
+
+  <app-modal #confimacaoGerarCobranca size="modal-lg">
+    <div class="modal-header modal-warning">
+      <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+        <span aria-hidden="true ">&times;</span>
+      </button>
+      <h4 class="modal-title text-center ">Confirmação</h4>
+    </div>
+    <div class="modal-body">
+
+
+      <div class="row">
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+          <div class="alert alert-warning alert-small" role="alert">
+            <i class="glyphicons glyphicons-alert icon"></i> Importante: Os valores informados durante o cadastro dos
+            imóveis são apenas informativos. Caso deseje incluir na cobrança valores como taxas (IPTU, RIP, Taxa de
+            incêndio), seguros, bonificações ou quaisquer outros lançamentos, retorne a tela anterior e faça o registro
+            dos mesmos antes de confirmar as cobranças selecionadas. Não precisa se preocupar com o valor do aluguel,
+            pois já será incluído automaticamente.
+          </div>
+
+          <div class="alert alert-warning alert-small" role="alert">
+            <i class="glyphicons glyphicons-alert icon"></i> Importante: O valor da Taxa bancária é  R$ 1,98 e será 
+            descontado automaticamente quando do pagamento do boleto. Caso deseje repassar este valor ao Locatário, 
+            retorne a tela anterior e faça o registro do mesmo antes de gerar o boleto.
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <h5>Deseja realmente gerar as cobrança abaixo?</h5>
+
+      <hr />
+      <div class="resumo overflow">
+
+        <div *ngFor="let agrupadorCobranca of grupoCobrancasSelectionadas ; let indexAgrupadorCobranca = index" class="list-row-group">
+          <h3 class="text-center"> {{agrupadorCobranca.Agrupador}}</h3>
+
+          <div class="panel panel-primary" *ngFor="let cobranca of agrupadorCobranca.Lista; let indexCobranca = index">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-md-12 text-uppercase">{{
+                  cobranca.Imovel }}</div>
+
+                <div class="col-md-4">Vencimento: {{
+                  cobranca.DataVencimento | date:'shortDate' }}</div>
+                <!-- <div class="col-md-3 text-right">Total: {{
+                  cobranca.ValorTotal | currency : 'BRL' : '3.2' }}</div> -->
+                <div class="col-md-4">Total: {{ obterValorTotalCobranca(cobranca) |
+                  currency : 'BRL' : '3.2' }}</div>
+                <div class="col-md-4">
+                  Valor do Aluguel: {{cobranca.ValorLocacao | currency : 'BRL' : '3.2'}}
+                </div>
+              </div>
+
+
+
+              <div *ngIf="cobranca.LancamentosBoleto" class="box-lancamentos">
+                <h5>Lançamentos</h5>
+
+                <div class="new-items" *ngFor="let lancamento of cobranca.LancamentosBoleto; let indexLancamento=index">
+
+                  <ul>
+                    <li>
+                      <p>
+                        <label>{{lancamento.DescricaoLancamento}}:</label>
+                        <span *ngIf="lancamento.TipoLancamento === 1">{{lancamento.ValorLancamento
+                          |
+                          currency : 'R$' : '3.2'}}</span>
+                        <span *ngIf="lancamento.TipoLancamento === 2">{{lancamento.ValorLancamento
+                          |
+                          currency : 'R$ -' : '3.2'}}</span>
+                      </p>
+                    </li>
+                  </ul>
+
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer ">
+      <button type="button " class="btn btn-link pull-left " data-dismiss="modal">Não</button>
+      <button type="button " class="btn btn-primary" (click)="gerarCobrancas(cobrancaForm)">Sim</button>
+    </div>
+  </app-modal>
+
+
+
+
+</div>

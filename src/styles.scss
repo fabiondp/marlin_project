@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+
+//@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~ngx-bootstrap/datepicker/bs-datepicker.css";
+// @import "assets/bootstrap-sass/bootstrap/_variables";
+@import "assets/bootstrap-sass/_bootstrap-theme";
+@import "assets/styles/slick-theme.css";
+//@import '~bootstrap-sass/assets/stylesheets/_bootstrap';
+@media (min-width: 1440px) {
+  .container {
+    width: 1260px;
+  }
+}

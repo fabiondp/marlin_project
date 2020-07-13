@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Sessão expirada!</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="fechar()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  Para manter suas informações seguras, nós efetuamos seu logout.
+</div>
+<div class="modal-footer">
+  <!-- <a [routerLink]="['/autenticacao', 'login']" class="btn btn-primary">Ir para Login</a>
+   -->
+  <button type="button" (click)="fechar()" class="btn btn-default">Cancelar</button>
+  <button type="button" (click)="irParaLogin()" class="btn btn-primary">Ir para Login</button>
+</div>

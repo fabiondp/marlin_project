@@ -1,0 +1,36 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+.btn-group-actions {
+  //float: left;
+  position: relative;
+  z-index: $zindex-dropdown;
+  margin-top: -65px;
+  margin-bottom: 30px;
+
+  @media (max-width: $screen-md-min) {
+    margin-top: 0 !important; //float: right;
+  }
+
+  @media (min-width: $screen-xs-max) {
+    margin-top: -65px; //float: right;
+  }
+
+  div:last-child {
+    .btn {
+      margin-left: 5px;
+    }
+  }
+}
+
+.alert-troca-titular{
+  margin-top: 25px;
+  margin-bottom: 15px;
+  padding: 10px 15px;
+}
+
+
+.modal-body-confirmacao-informacoes-bancarias{
+  .text-obs{
+    margin: 30px 0;
+  }
+}

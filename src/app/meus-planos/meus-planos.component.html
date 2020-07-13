@@ -1,0 +1,218 @@
+<div class="container">
+
+  <section class="wrap meus-planos">
+    <div class="row">
+
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 list-planos">
+
+        <h1 class="title title-glyph title-meus-planos">
+          Meus Planos</h1>
+
+        <div class="row" *ngIf="message">
+          <div class="col-md-12" *ngFor="let msg of message">
+            <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+          </div>
+        </div>
+
+        <div *ngIf="carregando">
+          <app-loading></app-loading>
+        </div>
+        <div *ngIf="(PlanosAnuncios || PlanosAutoGestao) && !carregando">
+          <div class="panel-group">
+            <h3>{{PlanosAnuncios.length === 1 ? 'Plano' : 'Planos'}} de anúncios</h3>
+            <div class="panel panel-primary planos" *ngFor="let plano of PlanosAnuncios; let i = index">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ i }}"
+                    aria-expanded="true" data-target="#accordion{{ i }}" aria-controls="collapseOne" class="collapsed">Plano
+                    {{
+                    plano.TituloPlano }}</a>
+
+                </h3>
+              </div>
+              <div id="collapse{{ i }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                  <p>{{ plano.DescricaoPlano }}</p>
+                  <hr />
+                  <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                    <div *ngIf="plano.TipoProduto !== 3">
+                      <p>
+                        Quantidade de {{ plano.TipoProduto === 1 ? 'anúncios:' : 'imóveis:' }}
+                        <strong *ngIf="!plano.AnunciosIlimitado">{{ plano.QuantidadeProduto }}</strong>
+                        <strong *ngIf="plano.AnunciosIlimitado">Ilimitado</strong>
+                        <!-- Tempo de exibição do anúncio: {{ plano.PrazoEmDias == 1 ? plano.PrazoEmDias + ' dia' : plano.PrazoEmDias + ' dias' }} -->
+                      </p>
+                      <p>
+                        Tempo de exibição do anúncio:
+                        <strong> {{ plano.PrazoEmDias == 1 ? plano.PrazoEmDias + ' dia' : plano.PrazoEmDias + ' dias'
+                          }}</strong>
+                      </p>
+                      <p>Data do início da vigência:
+                        <strong>{{ plano.DataInicioVigencia | date:'shortDate' }}</strong>
+                      </p>
+                      <p>Data do fim da vigência:
+                        <strong>{{ plano.DataFimVigencia | date:'shortDate'}}</strong>
+                      </p>
+                    </div>
+
+                  </div>
+                  <!-- <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+
+                                        <h3>Características</h3>
+                                        <ul class="list-glyphicon">
+
+                                            <li *ngFor="let caracteristica of plano.CaracteristicasPlano">
+                                                <span class="glyphicons glyphicons-ok"></span> {{ caracteristica.Descricao }}</li>
+
+                                        </ul>
+                                    </div> -->
+
+                  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <p class="preco" *ngIf="plano.Valor > 0">{{ plano.Valor | currency : 'BRL'}}
+                    </p>
+                    <p class="preco" *ngIf="plano.Valor == 0">Grátis</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="PlanosAnuncios.length == 0 && !carregando">
+            <p>Você não possui Planos de anúncios ativos,
+              <a class="link" href="/home#anuncios">contrate agora!</a>
+            </p>
+          </div>
+
+          <div *ngIf="enableAutoGestaoDeLocacao">
+            <div class="panel-group">
+              <h3>{{PlanosAutoGestao.length === 1 ? 'Plano' : 'Planos'}} de autogestão</h3>
+              <div class="panel panel-primary planos" *ngFor="let plano of PlanosAutoGestao; let i = index">
+                <div class="panel-heading clearfix">
+                  <h3 class="panel-title  pull-left">
+                    <a role="button" data-toggle="collapse" href="#collapseAutogestao{{ i }}" aria-expanded="true"
+                      data-target="#accordionAutogestao{{ i }}" aria-controls="collapseOne" class="collapsed">{{
+                      plano.TituloPlano }}</a>
+                  </h3>
+
+                  <!-- [disabled]="plano.BloquearAlteracaoPlano" -->
+                  <button [routerLink]="['/meus-planos', 'alterar-plano-autogestao']" role="button" class="btn btn-sm btn-link pull-right">alterar
+                    plano <i class="glyphicons glyphicons-edit"></i></button>
+                </div>
+                <div id="collapseAutogestao{{ i }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                  <div class="panel-body">
+
+                    <div class="plano-atual">
+                      <p>{{ plano.DescricaoPlano }}</p>
+                      <!-- <hr /> -->
+                      <div class="row">
+                        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                          <div *ngIf="plano.TipoProduto !== 3">
+                            <p>
+                              Quantidade de {{plano.TipoProduto === 1 ? 'anúncios:' : 'imóveis:'}}
+                              <strong>{{plano.QuantidadeProduto}}</strong>
+
+                              <!-- Tempo de exibição do anúncio: {{ plano.PrazoEmDias == 1 ? plano.PrazoEmDias + ' dia' : plano.PrazoEmDias + ' dias' }} -->
+                            </p>
+                            <p *ngIf="plano.TipoPlano == 1">Data do contrato:
+                              <strong>{{ plano.DataInicioVigencia | date:'shortDate'}}</strong>
+                            </p>
+                            <p *ngIf="plano.TipoPlano == 1">Data de validade:
+                              <strong>{{ plano.DataFimVigencia | date:'shortDate'}}</strong>
+                            </p>
+                          </div>
+
+                        </div>
+                        <!-- <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">  
+                              <h3>Características</h3>
+                              <ul class="list-glyphicon">  
+                                  <li *ngFor="let caracteristica of plano.CaracteristicasPlano">
+                                      <span class="glyphicons glyphicons-ok"></span> {{ caracteristica.Descricao }}</li>  
+                              </ul>
+                            </div> -->
+
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+
+                          <p class="preco">{{ plano.Valor | currency : 'BRL' }}
+                          </p>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div *ngIf="plano.DadosDowngradeNovoPlano">
+
+
+
+                      <div class="novo-plano">
+                        <label for="">NOVO PLANO</label>
+                        <h4>{{plano.DadosDowngradeNovoPlano.TituloNovoPlano}}</h4>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div *ngIf="plano.TipoProduto !== 3">
+                              <p>
+                                Quantidade de {{plano.TipoProduto === 1 ? 'anúncios:' : 'imóveis:'}}
+                                <strong>{{plano.DadosDowngradeNovoPlano.QuantidadeProdutoNovoPlano}}</strong>
+                              </p>
+                            </div>
+
+                            <p>Valor: <strong>{{ plano.DadosDowngradeNovoPlano.ValorNovoPlano | currency : 'BRL' }}</strong>
+                            </p>
+                            <p>Data de início: <strong>{{plano.DataInicioProximaVigencia | date:'shortDate'}}</strong></p>
+                          </div>
+
+                        </div>
+
+                      </div>
+                      <!-- <div class="alert alert-warning">Você efetuou um downgrade do seu plano de autogestão. Este novo
+                        plano só
+                        entrará em vigor no dia {{plano.DataInicioProximaVigencia | date:'shortDate'}}.</div> -->
+                    </div>
+
+                    <!-- <div class="alert alert-warning" *ngIf="plano.DadosDowngradeNovoPlano && plano.BloquearAlteracaoPlano && plano.DataInicioProximaVigencia">
+                      Você efetuou uma alteração de plano recentemente, sendo assim, só poderá alterá-lo novamente na
+                      próxima vigência do plano, cuja data é {{plano.DataInicioProximaVigencia | date:'shortDate'}}.
+
+                      <br>
+
+                      Você efetuou uma alteração de plano recentemente, aguarde a data da próxima vigência do plano
+                      {{plano.DataInicioProximaVigencia | date:'shortDate'}} para efetuar uma nova alteração de plano.
+
+                    </div> -->
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="PlanosAutoGestao.length == 0 && !carregando">
+              <p>Você não possui Planos de autogestão ativos,
+                <a class="link" href="/home#autogestao-locacao">contrate agora!</a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!--
+                <div class="row row-item" *ngFor="let item of planos; let i = index">
+
+                    <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 col-item">
+
+                        <div>
+                            <h3>{{ item.TituloPlano }} - {{ item.TituloProduto}}</h3>
+                            <p>Quantidade de anúncio: {{ item.QuantidadeProduto }}</p>
+                            <p>{{ item.DescricaoPlano }} </p>
+
+                            <h3>Características</h3>
+                            <ul class="list-glyphicon">
+
+                                <li *ngFor="let caracteristica of item.CaracteristicasPlano">
+                                    <span class="glyphicons glyphicons-ok"></span> {{ caracteristica.Descricao }}</li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            -->
+
+      </div>
+    </div>
+  </section>
+</div>

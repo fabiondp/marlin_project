@@ -1,0 +1,385 @@
+//
+// Dropdown menus
+// --------------------------------------------------
+// Dropdown arrow/caret
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: $caret-width-base dashed;
+  border-top: $caret-width-base solid \9; // IE8
+  border-right: $caret-width-base solid transparent;
+  border-left: $caret-width-base solid transparent;
+}
+
+// The dropdown wrapper (div)
+.dropup,
+.dropdown {
+  position: relative;
+}
+
+// Prevent the focus on the dropdown toggle when closing dropdowns
+.dropdown-toggle:focus {
+  outline: 0;
+}
+
+// The dropdown menu (ul)
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: $zindex-dropdown;
+  display: none; // none by default, but block on "open" of the menu
+  float: left;
+  min-width: 180px;
+  padding: 5px 0;
+  margin: 2px 0 0; // override default ul
+  list-style: none;
+  font-size: $font-size-base;
+  text-align: left; // Ensures proper alignment if parent has it changed (e.g., modal footer)
+  background-color: $dropdown-bg;
+  border: 1px solid $dropdown-fallback-border; // IE8 fallback
+  border: 1px solid $dropdown-border;
+  border-radius: $border-radius-base;
+  @include box-shadow(0 6px 12px rgba(0, 0, 0, 0.175));
+  background-clip: padding-box; // Aligns the dropdown menu to right
+  //
+  // Deprecated as of 3.1.0 in favor of `.dropdown-menu-[dir]`
+  &.pull-right {
+    right: 0;
+    left: auto;
+  } // Dividers (basically an hr) within the dropdown
+  .divider {
+    @include nav-divider($dropdown-divider-bg);
+  } // Links within the dropdown menu
+  >li>a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: $line-height-base;
+    color: $dropdown-link-color;
+    white-space: nowrap; // prevent links from randomly breaking onto new lines
+  }
+}
+
+// Hover/Focus state
+.dropdown-menu>li>a {
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: $dropdown-link-hover-color;
+    background-color: $dropdown-link-hover-bg;
+  }
+}
+
+// Active state
+.dropdown-menu>.active>a {
+  &,
+  &:hover,
+  &:focus {
+    color: $dropdown-link-active-color;
+    text-decoration: none;
+    outline: 0;
+    background-color: $dropdown-link-active-bg;
+  }
+}
+
+// Disabled state
+//
+// Gray out text and ensure the hover/focus state remains gray
+.dropdown-menu>.disabled>a {
+  &,
+  &:hover,
+  &:focus {
+    color: $dropdown-link-disabled-color;
+  } // Nuke hover/focus effects
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    background-color: transparent;
+    background-image: none; // Remove CSS gradient
+    @include reset-filter;
+    cursor: $cursor-disabled;
+  }
+}
+
+// Open state for the dropdown
+.open {
+  // Show the menu
+  >.dropdown-menu {
+    display: block;
+  } // Remove the outline when :focus is triggered
+  >a {
+    outline: 0;
+  }
+}
+
+// Menu positioning
+//
+// Add extra class to `.dropdown-menu` to flip the alignment of the dropdown
+// menu with the parent.
+.dropdown-menu-right {
+  left: auto; // Reset the default from `.dropdown-menu`
+  right: -1px;
+}
+
+// With v3, we enabled auto-flipping if you have a dropdown within a right
+// aligned nav component. To enable the undoing of that, we provide an override
+// to restore the default dropdown menu alignment.
+//
+// This is only for left-aligning a dropdown menu within a `.navbar-right` or
+// `.pull-right` nav component.
+.dropdown-menu-left {
+  left: 0;
+  right: auto;
+}
+
+// Dropdown section headers
+.dropdown-header {
+  display: block;
+  padding: 3px 20px;
+  font-size: $font-size-small;
+  line-height: $line-height-base;
+  color: $dropdown-header-color;
+  white-space: nowrap; // as with > li > a
+}
+
+// Backdrop to catch body clicks on mobile, etc.
+.dropdown-backdrop {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: ($zindex-dropdown - 10);
+}
+
+// Right aligned dropdowns
+.pull-right>.dropdown-menu {
+  right: 0;
+  left: auto;
+}
+
+// Allow for dropdowns to go bottom up (aka, dropup-menu)
+//
+// Just add .dropup after the standard .dropdown class and you're set, bro.
+// TODO: abstract this so that the navbar fixed styles are not placed here?
+.dropup,
+.navbar-fixed-bottom .dropdown {
+  // Reverse the caret
+  .caret {
+    border-top: 0;
+    border-bottom: $caret-width-base dashed;
+    border-bottom: $caret-width-base solid \9; // IE8
+    content: "";
+  } // Different positioning for bottom up menu
+  .dropdown-menu {
+    top: auto;
+    bottom: 100%;
+    margin-bottom: 2px;
+  }
+}
+
+.dropdown-user {
+  margin-top: -15px;
+  .username {
+    font-size: 14px;
+    padding: 10px 20px;
+    font-weight: bold; // border-bottom: 1px solid $color-fifth;
+    display: block;
+    margin-bottom: 5px;
+  }
+  .btn-user {
+    background-color: transparent;
+    border-radius: 30px 30px 0 0;
+    padding: 8px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: "Ubuntu";
+    font-size: 30px;
+    margin-right: -1px; // margin-top: 5px;
+    >span {
+      // padding: 4px;
+      // display: inline-block;      
+      i {
+        display: block;
+        width: 46px;
+        height: 46px;
+        padding: 4px;
+        border-radius: 46px;
+        background: url("./assets/images/icone-user-login.png") $color-nineth no-repeat center;
+      }
+    }
+    &:hover,
+    &:focus,
+    &.focus {
+      color: $btn-default-color;
+      text-decoration: none;
+    }
+    &:active,
+    &.active {
+      outline: 0;
+      background-image: inherit;
+      box-shadow: none !important;
+      border-radius: 30px 30px 0 0;
+    }
+  }
+  &.open {
+    .btn-user {
+      background-color: $color-nineth;
+    }
+  }
+  .dropdown-menu-user {
+    background-color: $color-nineth;
+    border-radius: 20px 0 20px 20px;
+    margin: -1px 0 0 0;
+    border: 1px solid $color-nineth;
+    >li {
+      // border-bottom:1px solid $dropdown-divider-bg;
+      color: #fff;
+      >a {
+        color: inherit;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-family: "Ubuntu";
+        font-size: 14px;
+        padding: 10px 20px;
+        i.glyphicons {
+          top: 2px;
+          margin-right: 3px;
+        }
+      }
+    }
+    .dropdown-highlight {
+      background: $color-nineth;
+      text-transform: none;
+      a {
+        text-transform: inherit !important;
+        &:hover,
+        &:focus {
+          text-decoration: none;
+          color: $color-third;
+          background-color: transparent;
+        }
+      }
+      .alert {
+        padding: 5px 15px !important;
+        margin-bottom: 0 !important;
+        border-radius: 0 !important;
+        font-size: 12px !important;
+      }
+    }
+  } // Hover/Focus state
+  .dropdown-menu-user>li>a {
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      color: $color-second;
+      background-color: transparent;
+    }
+  } // Active state
+  .dropdown-menu-user>.active>a {
+    &,
+    &:hover,
+    &:focus {
+      color: $color-second;
+      text-decoration: none;
+      outline: 0;
+      background-color: transparent;
+    }
+    &.meus-anuncios {
+      .icone {
+        background-position: -288px -50px;
+      }
+    }
+  }
+  .meus-anuncios {
+    .icone {
+      background-position: -257px -50px;
+      height: 21px !important;
+      width: 21px !important;
+    }
+    &:hover,
+    &:focus {
+      .icone {
+        background-position: -288px -50px;
+      }
+    }
+  }
+  .meus-imoveis {
+    .icone {
+      background-position: -78px -42px;
+    }
+  }
+}
+
+// @media (max-width: 768px) {
+@media (max-width: $screen-sm-max) {
+  .nav-login {
+    .navbar-nav {
+      width: 100%;
+    }
+    .meus-anuncios .icone {
+      background-position: -46px -42px !important;
+      width: 27px !important;
+    }
+  }
+  .dropdown-user {
+    // border-top: 2px solid $color-primary;
+    background-color: #f1f1f1;
+    margin-top: 0;
+    .btn-user {
+      display: none;
+    }
+    .li-user {
+      display: none !important;
+    }
+    .dropdown-menu-user {
+      float: none;
+      display: block;
+      position: relative;
+      background-color: transparent;
+      border-radius: 0;
+      margin: 0;
+      border: 1px solid transparent;
+      box-shadow: none;
+      >li {
+        color: #777;
+        >a {
+          color: #777;
+          padding: 10px 9px;
+          font-weight: normal;
+          font-size: 13px;
+          i.glyphicons {
+            font-size: 18px;
+          }
+        }
+      }
+      .dropdown-highlight {
+        >a {
+          color: #fff !important;
+        }
+      }
+    }
+  }
+}
+
+// Component alignment
+//
+// Reiterate per navbar.less and the modified component alignment there.
+@media (min-width: $grid-float-breakpoint) {
+  .navbar-right {
+    .dropdown-menu {
+      right: 0;
+      left: auto;
+    } // Necessary for overrides of the default right aligned menu.
+    // Will remove come v4 in all likelihood.
+    .dropdown-menu-left {
+      left: 0;
+      right: auto;
+    }
+  }
+}

@@ -1,0 +1,601 @@
+<div class="container">
+
+  <section *ngIf="!enviado" class="wrap">
+
+    <h1 class="title-secundary"> {{ !usuario.Uid?'Cadastro':'Editar perfil' }}</h1>
+
+    <!-- Mensagem de erro para lista de mensagens -->
+    <div class="row" *ngIf="messageArray">
+      <div class="col-md-12" *ngFor="let msg of messageArray">
+        <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+      </div>
+    </div>
+
+    <!-- Mensagem erro para objeto com uma mensagem -->
+    <div class="row" *ngIf="message">
+      <div class="col-md-12">
+        <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{message}}</app-alert>
+      </div>
+    </div>
+
+    <app-loading *ngIf="carregandoForm"></app-loading>
+
+    <form #usuarioValidationForm="ngForm" (ngSubmit)="callValidations(usuarioValidationForm)" *ngIf="!registerStatus && !usuario.Uid && !carregandoForm"
+      class="col-lg-12">
+
+      <h5>Preencha seu CPF/CNPJ e aceite o termo para continuar.</h5>
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="form-group emailgroup">
+            <label for="email">E-mail</label>
+            <input type="text" id="email" name="email" class="form-control" placeholder="E-mail" required email pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+              #email="ngModel" [(ngModel)]="entradaEmail" (keyup)="invalidEmailFormat = false" />
+            <div *ngIf="email.invalid && (email.dirty || email.touched)">
+              <div *ngIf="email.errors.required" class="alert alert-danger">
+                Campo obrigatório.
+              </div>
+              <div *ngIf="invalidEmailFormat && !email.errors.required" class="alert alert-danger">
+                Formato de e-mail inválido.
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="form-group">
+            <div (change)="entradaCPFCNPJ = ''">
+              <div class="radio-inline">
+                <label>
+                  <input type="radio" id="cpf1" name="tipoCPFCNPJ" value="CPF" [(ngModel)]="tipoCPFCNPJ" (change)="alterarTipoPessoa()" />CPF
+                </label>
+              </div>
+              <div class="radio-inline">
+                <label>
+                  <input type="radio" id="cnpj1" name="tipoCPFCNPJ" value="CNPJ" [(ngModel)]="tipoCPFCNPJ" (change)="alterarTipoPessoa()" />CNPJ
+                </label>
+              </div>
+            </div>
+            <div *ngIf="tipoCPFCNPJ === 'CPF'">
+              <input type="text" [textMask]="{mask: maskCPF, guide: false}" class="form-control" id="CPF" name="CPF"
+                [(ngModel)]="entradaCPFCNPJ" required #cpfcnpj="ngModel" (keyup)="resetSettingsCPFCNPJ()" placeholder="000.000.000-00">
+              <div *ngIf="(cpfcnpj.invalid && (cpfcnpj.dirty || cpfcnpj.touched)) || (cpfcnpj.pristine && continuarClicked)">
+                <div *ngIf="cpfcnpj?.errors?.required" class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+              <!-- <div *ngIf="cpfcnpj.dirty && invalidSizeCPFNPJ" class="alert alert-danger">
+                  CPF inválido.
+                </div> -->
+            </div>
+
+            <div *ngIf="tipoCPFCNPJ == 'CNPJ'">
+              <input type="text" [textMask]="{mask: maskCNPJ, guide: false}" class="form-control" id="CNPJ" name="CNPJ"
+                [(ngModel)]="entradaCPFCNPJ" required #cpfcnpj="ngModel" (keyup)="resetSettingsCPFCNPJ()" placeholder="00.000.000/0000-00">
+
+              <div *ngIf="(cpfcnpj.invalid && (cpfcnpj.dirty || cpfcnpj.touched)) || (cpfcnpj.pristine && continuarClicked)">
+                <div *ngIf="cpfcnpj?.errors?.required" class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+              <!-- <div *ngIf="cpfcnpj.dirty && invalidSizeCPFNPJ" class="alert alert-danger">
+                  CNPJ inválido.
+                </div> -->
+            </div>
+
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="form-group checkbox-custom">
+
+            <input type="checkbox" name="termo" id="termo" #termo="ngModel" [(ngModel)]="termoAceite" required>
+            <label for="termo" class="checkbox-inline"> Eu li e concordo
+              com o
+              <a [routerLink]="['/termos-condicoes-uso']" target="_blank" class="link">Termo de Uso</a>
+            </label>
+            <div *ngIf="!termoAceite && continuarClicked" class="alert alert-danger">
+              Você deve aceitar os Termos de Uso.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div role="group" class="form-btn-group">
+        <button type="button" class="btn btn-link pull-left" routerLink="/home">Cancelar</button>
+        <div class="pull-right">
+          <button type="submit" class="btn btn-primary" [disabled]="usuarioValidationForm.invalid" id="Continuar">Continuar</button>
+        </div>
+      </div>
+    </form>
+
+    <form *ngIf="registerStatus && !carregandoForm" #cadastroUsuarioForm="ngForm" class="col-md-12" (ngSubmit)="onSubmit(cadastroUsuarioForm)">
+      <!-- <pre>alerta - {{alertaVerificarDados}} <->  cadastroCompleto - {{this.authService.user.cadastroCompleto}}</pre> -->
+      <div class="alert alert-warning" role="alert" *ngIf="alertaVerificarDados && this.authService.user.cadastroCompleto">
+
+        <p>Ocorreu um problema ao verificar seus dados.</p>
+        <p>Por favor,
+          clique no botão para
+          <a href="#" (click)="atualizarClienteNoParceiro($event)" class="btn btn-default btn-sm"> <i class="glyphicons glyphicons-refresh"></i>
+            Atualizar</a>
+          suas informações em nossa base de dados.</p>
+      </div>
+
+      <fieldset>
+        <legend *ngIf="tipoCPFCNPJ == 'CPF'">Dados Pessoais</legend>
+        <legend *ngIf="tipoCPFCNPJ == 'CNPJ'">Dados da Empresa</legend>
+
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="form-group emailgroup">
+              <label for="email">E-mail</label>
+              <input type="text" id="email" name="email" class="form-control" placeholder="E-mail" required email
+                pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" #email="ngModel" [(ngModel)]="usuario.Email"
+                (keyup)="invalidEmailFormat = false" [disabled]="usuario.Uid ? true : false" />
+              <div *ngIf="email.invalid && (email.dirty || email.touched)">
+                <div *ngIf="email.errors.required" class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+                <div *ngIf="invalidEmailFormat && !email.errors.required" class="alert alert-danger">
+                  Formato de e-mail inválido.
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="form-group">
+              <div *ngIf="!usuario.Uid" (change)="entradaCPFCNPJ = ''">
+                <div class="radio-inline">
+                  <label>
+                    <input type="radio" id="cpf1" name="tipoCPFCNPJ" value="CPF" [(ngModel)]="tipoCPFCNPJ" (change)="alterarTipoPessoa()" />CPF
+                  </label>
+                </div>
+                <div class="radio-inline">
+                  <label>
+                    <input type="radio" id="cnpj1" name="tipoCPFCNPJ" value="CNPJ" [(ngModel)]="tipoCPFCNPJ" (change)="alterarTipoPessoa()" />CNPJ
+                  </label>
+                </div>
+              </div>
+              <div *ngIf="usuario.Uid">
+                <label *ngIf="tipoCPFCNPJ == 'CPF'">
+                  CPF
+                </label>
+                <label *ngIf="tipoCPFCNPJ == 'CNPJ'">
+                  CNPJ
+                </label>
+              </div>
+              <div *ngIf="tipoCPFCNPJ === 'CPF'">
+                <input type="text" [textMask]="{mask: maskCPF, guide: false}" class="form-control" id="CPF" name="CPF"
+                  [(ngModel)]="usuario.CPFCNPJ" required #cpfcnpj="ngModel" (keyup)="resetSettingsCPFCNPJ()"
+                  placeholder="000.000.000-00" [disabled]="usuario.Uid ? true : false">
+                <div *ngIf="(cpfcnpj.invalid && (cpfcnpj.dirty || cpfcnpj.touched)) || (cpfcnpj.pristine && continuarClicked)">
+                  <div *ngIf="cpfcnpj?.errors?.required" class="alert alert-danger">
+                    Campo obrigatório.
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="tipoCPFCNPJ == 'CNPJ'">
+                <input type="text" [textMask]="{mask: maskCNPJ, guide: false}" class="form-control" id="CNPJ" name="CNPJ"
+                  [(ngModel)]="usuario.CPFCNPJ" required #cpfcnpj="ngModel" (keyup)="resetSettingsCPFCNPJ()"
+                  placeholder="00.000.000/0000-00" [disabled]="usuario.Uid ? true : false">
+
+                <div *ngIf="(cpfcnpj.invalid && (cpfcnpj.dirty || cpfcnpj.touched)) || (cpfcnpj.pristine && continuarClicked)">
+                  <div *ngIf="cpfcnpj?.errors?.required" class="alert alert-danger">
+                    Campo obrigatório.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="form-group checkbox-custom">
+
+              <input id="termo" type="checkbox" name="termo" [ngModel]="termoAceite" disabled> <label for="termo" class="checkbox-inline">
+                Eu
+                li e concordo com o
+                <a [routerLink]="['/termos-condicoes-uso']" target="_blank" class="link">Termo de Uso</a>
+              </label>
+            </div>
+          </div>
+          <!--Fim campos disabled-->
+
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group" *ngIf="tipoCPFCNPJ === 'CPF'">
+            <label for="Nome" *ngIf="tipoCPFCNPJ === 'CPF'">Nome</label>
+
+            <input type="text" class="form-control" id="Nome" name="Nome" [(ngModel)]="usuario.Nome" placeholder="Digite o seu nome"
+              required #Nome="ngModel">
+            <div *ngIf="Nome.invalid && Nome.dirty && Nome?.errors.required" class="alert alert-danger">
+              Campo obrigatório.
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group" *ngIf="tipoCPFCNPJ === 'CNPJ'">
+            <label for="Nome">Nome da Empresa</label>
+            <input type="text" class="form-control" id="Nome" name="Nome" [(ngModel)]="usuario.Nome" placeholder="Digite o nome da empresa"
+              required #Nome="ngModel">
+            <div *ngIf="Nome.invalid && Nome.dirty && Nome?.errors.required" class="alert alert-danger">
+              Campo obrigatório.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row" *ngIf="tipoCPFCNPJ === 'CNPJ'">
+
+          <div class="col-lg-6">
+            <div class="form-group">
+              <label for="ResponsavelNome">Nome da Pessoa Responsável</label>
+
+              <input type="text" class="form-control" id="ResponsavelNome" name="ResponsavelNome" [(ngModel)]="usuario.ResponsavelNome"
+                placeholder="Digite o nome da pessoa responsável da empresa" required [disabled]="possuiResponsavel"
+                #ResponsavelNome="ngModel">
+
+              <div *ngIf="ResponsavelNome.invalid && (ResponsavelNome.dirty || ResponsavelNome.touched)">
+                <div *ngIf="ResponsavelNome.errors.required" class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="form-group ">
+              <label for="ResponsavelCPF">CPF da Pessoa Responsável</label>
+
+              <input type="text" class="form-control" id="ResponsavelCPF" name="ResponsavelCPF" [(ngModel)]="usuario.ResponsavelCPF"
+                #ResponsavelCPF="ngModel" required [disabled]="possuiResponsavel" placeholder="000.000.000-00"
+                [textMask]="{mask: maskCPF, guide: false}">
+
+              <div *ngIf="ResponsavelCPF.invalid && (ResponsavelCPF.dirty || ResponsavelCPF.touched)">
+                <div *ngIf="ResponsavelCPF.errors.required" class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="tipoCPFCNPJ === 'CPF'">
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label for="DataNascimento">Data de Nascimento</label>
+              <input type="text" placeholder="dd/mm/aaaa" [textMask]="{mask: maskDate, guide: false}" class="form-control"
+                id="DataNascimento" #dataNascimento="ngModel" name="DataNascimento" [(ngModel)]="usuario.DataNascimento"
+                required>
+              <!-- <input type="date" min="1900-01-01" max="2018-01-01" class="form-control" id="DataNascimento" #dataNascimento="ngModel" name="DataNascimento"
+                  [(ngModel)]="usuario.DataNascimento" (keyup)="checkYear()" required> -->
+              <div *ngIf="dataNascimento.invalid && dataNascimento.dirty && dataNascimento?.errors.required" class="alert alert-danger">
+                Campo obrigatório.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label for="EstadoCivil">Estado Civil</label>
+              <select class="form-control" id="EstadoCivil" name="EstadoCivil" #estadoCivil="ngModel" [(ngModel)]="usuario.EstadoCivil"
+                required>
+                <option value="" disabled>Escolha uma opção</option>
+                <option *ngFor="let estado of estadosCivis" [value]="estado.Id">{{estado.Descricao}}</option>
+              </select>
+              <div *ngIf="estadoCivil.invalid && estadoCivil.dirty && estadoCivil?.errors.required" class="alert alert-danger">
+                Campo obrigatório.
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+            <label for="Sexo">Sexo
+              <span class="obrigatorio">(obrigatório)</span>
+            </label>
+            <div class="form-group">
+              <div class="radio-inline" *ngFor="let sexo of sexoList; let i = index">
+                <label>
+                  <input type="radio" class="form-group" id="{{'sexo.Descricao' + sexo.Id}}" name="Sexo" #sexoTemplate="ngModel"
+                    [value]="sexo.Id" [(ngModel)]="usuario.Sexo" required>{{sexo.Descricao}}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <!-- <pre>{{ usuario.Enderecos[0] | json }}</pre> -->
+
+        <legend>Endereço</legend>
+
+        <app-input-busca-cep [(endereco)]="usuario.Enderecos[0]" [(enderecoValido)]="enderecoValido"></app-input-busca-cep>
+
+        <!--*ngIf="!usuario.Logradouro" -->
+
+        <!-- <input-busca-cep (componentCallback)="atualizarEnderecoPeloCep($event)"></input-busca-cep> -->
+
+        <!--
+  
+          <div class="form-group clearfix" *ngIf="!ocultarAutocompleteDeEndereco">
+            <label for="Endereco">Preencha o seu endereço</label>
+            <ng4geo-autocomplete [userSettings]="userSettings" (componentCallback)="autoCompleteCallback1($event)" id="Endereco" name="Endereco"
+              required autocomplete="off"></ng4geo-autocomplete>
+          </div>
+          
+          <div *ngIf="exibirBlocoEndereco" class="clearfix">
+            <div class="form-group ">
+              <label for="Logradouro">Logradouro</label>
+              <input type="text" class="form-control" id="Logradouro" name="Logradouro" [(ngModel)]="usuario.Enderecos[0].Logradouro" required
+                #Logradouro="ngModel">
+  
+              <div *ngIf="Logradouro.invalid && (Logradouro.dirty || Logradouro.touched)" class="alert alert-danger">
+                <div *ngIf="Logradouro.errors.required">
+                  Campo obrigatório.
+                </div>
+              </div>
+            </div>
+  
+             <div class="row">
+  
+              <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                <div class="form-group">
+                  <label for="txtDescricao">Complemento
+                    <span class="opcional">(Opcional)</span>
+                  </label>
+                  <input type="text" class="form-control" id="Complemento" name="Complemento" [(ngModel)]="usuario.Enderecos[0].Complemento">
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="txtDescricao">Número</label>
+                  <input type="text" class="form-control" id="Numero" name="Numero" #Numero="ngModel" [(ngModel)]="usuario.Enderecos[0].Numero"
+                    required>
+                  <div *ngIf="Numero.invalid && (Numero.dirty || Numero.touched)" class="alert alert-danger">
+                    <div *ngIf="Numero.errors.required">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="row">
+  
+              <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                <div class="form-group">
+                  <label for="txtDescricao">Bairro</label>
+                  <input type="text" class="form-control" id="Bairro" name="Bairro" #Bairro="ngModel" [(ngModel)]="usuario.Enderecos[0].Bairro"
+                    required>
+                  <div *ngIf="Bairro.invalid && (Bairro.dirty || Bairro.touched)" class="alert alert-danger">
+                    <div *ngIf="Bairro.errors.required">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="CEP">CEP</label>
+                  <input type="text" [textMask]="{mask: maskCep, guide: false}" class="form-control" id="CEP" name="CEP" [(ngModel)]="usuario.Enderecos[0].CEP"
+                    required #CEP="ngModel" placeholder="00000-000">
+  
+  
+                  <div *ngIf="CEP.invalid && (CEP.dirty || CEP.touched)" class="alert alert-danger">
+                    <div *ngIf="CEP.errors.required">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+            </div>
+  
+            <div class="row">
+              <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                <div class="form-group">
+                  <label for="Cidade">Cidade</label>
+                  <input type="text" class="form-control" id="Cidade" name="Cidade" [(ngModel)]="usuario.Enderecos[0].Cidade" required #Cidade="ngModel">
+                  <div *ngIf="Cidade.invalid && (Cidade.dirty || Cidade.touched)" class="alert alert-danger">
+                    <div *ngIf="Cidade.errors.required">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="Estado">Estado</label>
+                  <input type="text" class="form-control" id="Estado" name="Estado" maxlength="2" [(ngModel)]="usuario.Enderecos[0].Estado"
+                    required #Estado="ngModel">
+                  <div *ngIf="Estado.invalid && (Estado.dirty || Estado.touched)" class="alert alert-danger">
+                    <div *ngIf="Estado.errors.required">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          </div>
+          -->
+
+      </fieldset>
+
+      <fieldset class="field-contatos">
+
+        <legend>Contatos</legend>
+        <div class="row">
+          <div class="col-lg-6">
+            <h6>Telefone Fixo</h6>
+            <div class="bloco-telefone" *ngFor="let telFixo of telefonesFixos; let i=index">
+              <div class="form-group">
+                <input [textMask]="{mask: masktel, guide: false}" [(ngModel)]="telefonesFixos[i].telefone" #fixo="ngModel"
+                  [ngModelOptions]="{standalone: true}" type="text" class="form-control" placeholder="(00) 0000-0000"
+                  minlength="14" [pattern]="regexPadraoTelefoneFixo" />
+              </div>
+              <div *ngIf="!disableRemoveFixo" class="form-group wrap-deletar">
+                <button class='btn btn-danger' (click)="deleteTelefoneFixo(i)">
+                  <i class="glyphicons glyphicons-bin"></i>
+                </button>
+              </div>
+              <div *ngIf="fixo.invalid && fixo.dirty && fixo.touched && (fixo.errors.minlength || fixo.errors.pattern )"
+                class="alert alert-danger">
+                Telefone inválido.
+              </div>
+            </div>
+            <div class="form-group wrap-adicionar">
+              <button type="button" class="btn-link" (click)="addTelefoneFixo()" value="Adicionar Telefone Fixo">
+                <i class="glyphicons glyphicons-plus"></i> Adicionar Telefone Fixo</button>
+            </div>
+
+            <!-- <div class="form-group col-lg-12 wrap-adicionar">
+                <i class="glyphicons glyphicons-plus"></i>
+                <input type="button" class='btn btn-link' (click)="addTelefoneFixo()" value="Adicionar Telefone Fixo">
+              </div> -->
+
+          </div>
+
+          <div class="col-lg-6">
+            <h6>Telefone Celular</h6>
+            <div class="bloco-telefone" *ngFor="let telCelular of telefonesCelulares; let i=index">
+              <div class="form-group">
+                <input [textMask]="{mask: maskcel, guide: false}" [(ngModel)]="telefonesCelulares[i].telefone" #celular="ngModel"
+                  required [ngModelOptions]="{standalone: true}" type="text" class="form-control" placeholder="(00) 00000-0000"
+                  minlength="15" [pattern]="regexPadraoCelular" />
+              </div>
+              <div *ngIf="!disableRemoveCelular" class="form-group wrap-deletar">
+                <button class='btn btn-danger' (click)="deleteTelefoneCelular(i)">
+                  <i class="glyphicons glyphicons-bin"></i>
+                </button>
+              </div>
+              <div *ngIf="celular.invalid && celular.dirty && celular.touched && celular.errors.required" class="alert alert-danger">
+                Telefone obrigatório.
+              </div>
+              <div *ngIf="celular.invalid && celular.dirty && celular.touched && celular.errors.pattern" class="alert alert-danger">
+                Telefone inválido.
+              </div>
+              <!-- <div *ngIf="celular.invalid && celular.dirty && celular.touched && celular.errors.minlength" class="alert alert-danger">
+                  Número inválido.
+                </div> -->
+
+            </div>
+            <div class="form-group wrap-adicionar">
+              <button type="button" class="btn-link" (click)="addTelefoneCelular()" value="Adicionar Celular">
+                <i class="glyphicons glyphicons-plus"></i> Adicionar Celular</button>
+            </div>
+
+            <!-- <div class="form-group col-lg-12 wrap-adicionar">
+                  <i class="glyphicons glyphicons-plus"></i>
+                  <input type="button" class='btn btn-link' (click)="addTelefoneCelular()" value="Adicionar Celular">
+                </div> -->
+
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset *ngIf="usuario.Uid && !usuario.UsuarioAreaExclusiva">
+        <legend>Informações de Autenticação</legend>
+
+        <div class="row">
+          <div>
+            <h5 class="col-lg-12">Alterar Senha</h5>
+            <div class="form-group col-lg-8">
+              <input type="password" id="senhaAtual" name="senhaAtual" class="form-control" placeholder="Senha Atual"
+                #senhaAtual="ngModel" [(ngModel)]="autenticacao.senhaAtual" />
+            </div>
+
+            <div class="form-group col-lg-8">
+              <input type="password" id="senha" name="senha" class="form-control" placeholder="Senha" minlength="6"
+                #senha="ngModel" [(ngModel)]="autenticacao.senha" />
+              <div *ngIf="senha.invalid && (senha.dirty || senha.touched)">
+                <div *ngIf="senha?.errors.required" class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+
+              <span class="pattern-error" *ngIf="senha.errors?.minlength && !senha.pristine && senha.dirty">
+                <i class="glyphicons glyphicons-remove"></i>
+              </span>
+              <span class="pattern-ok" *ngIf="!senha.errors?.minlength && autenticacao.senha.length >= 1 && !senha.pristine">
+                <i class="glyphicons glyphicons-ok"></i>
+              </span>
+
+            </div>
+            <div class="form-group col-lg-8">
+              <input type="password" id="confirmaSenha" name="confirmaSenha" class="form-control" minlength="6"
+                placeholder="Confirmar Senha" #confirmaSenha="ngModel" [(ngModel)]="autenticacao.confirmaSenha" />
+              <small>A nova senha deve ter pelo menos 6 caracteres e pode conter símbolos.</small>
+              <span class="pattern-error" *ngIf="(senha.errors?.minlength || autenticacao.confirmaSenha != autenticacao.senha) && !confirmaSenha.pristine && confirmaSenha.dirty">
+                <i class="glyphicons glyphicons-remove"></i>
+              </span>
+              <span class="pattern-ok" *ngIf="(!senha.errors?.minlength && autenticacao.confirmaSenha === autenticacao.senha) && autenticacao.confirmaSenha.length >= 1 && !confirmaSenha.pristine">
+                <i class="glyphicons glyphicons-ok"></i>
+              </span>
+              <!-- <div *ngIf="confirmaSenha.invalid && (confirmaSenha.dirty || confirmaSenha.touched)">
+                  <div *ngIf="confirmaSenha.errors.required" class="alert alert-danger">
+                    Campo obrigatório.
+                  </div>
+                </div> -->
+              <div *ngIf="autenticacao.senha.length >= 1 && autenticacao.confirmaSenha.length >= 1 && autenticacao.confirmaSenha != autenticacao.senha"
+                class="alert alert-danger">
+                Senhas não conferem.
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <div role="group" class="form-btn-group">
+        <button type="button" class="btn btn-link pull-left" routerLink="/home">Cancelar</button>
+        <div class="pull-right">
+          <button type="submit" class="btn btn-primary" [disabled]="cadastroUsuarioForm.invalid || !enderecoValido || !possuiTelefoneCelular() || possuiTelefoneFixoInvalido() || possuiTelefoneCelularInvalido()"
+            id="Salvar">{{ !usuario.Uid ? 'Cadastrar' : 'Salvar' }}</button>
+          <!-- || !exibirBlocoEndereco -->
+        </div>
+      </div>
+    </form>
+  </section>
+  <app-modal>
+    <div class="modal-header modal-success">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+        <span aria-hidden="true" (click)="closeModal()">&times;</span>
+      </button>
+
+      <h4 class="modal-title text-center">Cadastro realizado com sucesso!</h4>
+
+    </div>
+    <div class="modal-body" *ngIf="message">
+      <div class="alert alert-success">
+        {{message}}
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="closeModal()">Ok</button>
+    </div>
+  </app-modal>
+
+  <ng-template #modalUsuarioAdm>
+    <div class="modal-header modal-warning">
+      <h4 class="modal-title pull-left">Usuário já cadastrado!</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <app-loading *ngIf="atualizandoPerfil"></app-loading>
+
+      <div class="row" *ngIf="!atualizandoPerfil && message">
+        <div class="col-md-12">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{message}}</app-alert>
+        </div>
+      </div>
+
+      <p *ngIf="!atualizandoPerfil">
+        O usuário já esta cadastrado como usuário Administrativo. Deseja dar permissão ao usuário para acessar o click
+        alugue?
+      </p>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modalRef.hide()" [disabled]="atualizandoPerfil">Cancelar</button>
+      <button type="button" class="btn btn-primary" (click)="atualizarPerfilDeAdministradorJaCadastrado()" [disabled]="atualizandoPerfil">Atualizar
+        perfil do cadastro existente</button>
+    </div>
+
+  </ng-template>
+</div>

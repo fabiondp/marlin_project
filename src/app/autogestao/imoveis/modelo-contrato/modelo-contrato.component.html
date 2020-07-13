@@ -1,0 +1,28 @@
+<div class="btn-group wrapper-dropdown pull-right" dropdown>
+  <button id="button-basic" dropdownToggle type="button" class="btn btn-sm btn-primary dropdown-toggle" aria-controls="dropdown-modelos-contrato">
+    Modelos de contrato <span class="caret"></span>
+  </button>
+
+  <ul id="dropdown-modelos-contrato" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+    <li *ngIf="!carregandoModelosDeContrato && modelosContrato != null" role="menuitem">
+      <ul>
+        <li *ngFor="let modelo of modelosContrato">
+          <a class="dropdown-item" [href]="obterUrlParaDownload(modelo.Uid)" target="_blank">{{ modelo.TipoModeloContratoDescricao
+            }}
+          </a>
+        </li>
+      </ul>
+
+      <!-- <a class="dropdown-item" (click)="downloadArquivo(modelo.Uid)" target="_blank">{{ modelo.TipoModeloContratoDescricao
+            }}
+          </a> -->
+    </li>
+    <li *ngIf="carregandoModelosDeContrato || modelosContrato == null" role="menuitem">
+      <app-loading message="Buscando opções..."></app-loading>
+    </li>
+  </ul>
+</div>
+
+
+
+<!-- <div *ngIf="!carregandoModelosDeContrato && modelosContrato != null"></div> -->

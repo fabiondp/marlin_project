@@ -1,0 +1,18 @@
+.bloco-telefone {
+  display: flex;
+}
+
+.fieldset-taxas {
+  padding-bottom: 15px;
+}
+
+@media(max-width: 375px) {
+  .salvar-dadosImovel .form-btn-group button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+.alert {
+  margin-bottom: 15px;
+}

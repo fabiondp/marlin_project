@@ -1,0 +1,14 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+
+.well {
+  text-align: center;
+  background: none;
+  border: none;
+  box-shadow: 0;
+  border-radius: 0;
+
+  strong {
+    color: $color-primary;
+  }
+}

@@ -1,0 +1,262 @@
+<div class="container">
+  <section class="wrap imoveis com-submenu">
+
+    <h1 class="title title-bg title-autogestao-imoveis">
+      Meus Imóveis</h1>
+
+
+    <div class="row" *ngIf="mensagensService">
+      <div class="col-md-12" *ngFor="let msg of mensagensService">
+        <app-alert [close]="true" timeout="4000" color="success">{{msg}}</app-alert>
+      </div>
+    </div>
+
+    <app-alerta-convenio-bancario [close]="true"></app-alerta-convenio-bancario>
+
+    <div class="row" *ngIf="mensagens">
+      <div class="col-md-12" *ngFor="let msg of mensagens">
+        <app-alert [close]="true" [color]="typeMessage">{{msg}}</app-alert>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="mensagensSuccess">
+      <div class="col-md-12" *ngFor="let msg of mensagensSuccess">
+        <app-alert [close]="true" color="success" timeout="4000">{{msg}}</app-alert>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <app-modelo-contrato></app-modelo-contrato>
+      </div>
+    </div>
+
+    <app-loading *ngIf="carregandoImoveis"></app-loading>
+
+
+
+    <div *ngIf="!carregandoImoveis && mensagens == null">
+      <section class="section-imoveis" *ngIf="possuiImoviesDePlanosContratuais()">
+        <h2>Plano Contratual</h2>
+        <div class="row">
+          <div *ngFor="let imovel of imoveisContratos"
+            class="col-lg-4 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0 col-resultado-imovel ">
+            <div class="apsa-imovel clearfix" [class.disabled]="!imovel.Enabled">
+              <div class="btn-group btn-group-actions">
+                <button data-toggle="button" class="btn btn-icon"
+                  [routerLink]="['/autogestao', 'imoveis', imovel.Uid,'editar']" title="Editar este imóvel">
+                  <i class="glyphicons glyphicons-edit"></i>
+                </button>
+                <button data-toggle="button" *ngIf="imovel.Enabled" class="btn btn-icon btn-remove"
+                  (click)="abrirModalDesativarImovelContratual(imovel)" title="Desativar este imóvel">
+                  <i class="glyphicons glyphicons-ban-circle"></i>
+                </button>
+              </div>
+              <!-- ['/autogestao','imoveis', imovel.Uid, 'detalhe'] -->
+              <a class="container-description " [routerLink]="obterLink(imovel)" target="_blank">
+                <div class="container-header">
+                  <h3 *ngIf="!imovelComCadastroFinalizado(imovel)" class="text-warning">Finalize o cadastro deste
+                    imóvel!
+                  </h3>
+                  <h3 *ngIf="imovelComCadastroFinalizado(imovel)">{{ imovel.Logradouro }} {{ imovel.Numero }}</h3>
+                  <span *ngIf="imovelComCadastroFinalizado(imovel)">{{ imovel.Bairro }} / {{ imovel.Cidade }}/ {{
+                    imovel.Estado
+                    }}
+                  </span>
+                </div>
+
+                <div class="container-body">
+                  <p>{{ imovel.TituloPlano }}</p>
+                  <p>
+                    <strong>Vigência:</strong> {{ imovel.VigenciaContratoMeses }} meses</p>
+                  <p>
+                    <strong>Valor do Aluguel:</strong> {{imovel.ValorLocacao | currency : 'BRL' : true : '3.2' }}</p>
+                  <p class="situacao" *ngIf="imovel.DescricaoSituacaoImovel">{{ imovel.DescricaoSituacaoImovel }}</p>
+
+
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr *ngIf="possuiImoviesDePlanosContratuais() && possuiImoviesDePlanosMensais()" />
+
+      <section class="section-imoveis" *ngIf="possuiImoviesDePlanosMensais()">
+        <button type="button" class="btn btn-sm btn-primary pull-right"
+          routerLink="/autogestao/imoveis/relatorio-contrato">
+          Relatório de contratos
+        </button>
+        <h2>Plano Mensal </h2>
+        <div class="row">
+          <div
+            class="col-lg-4 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0 col-novo"
+            *ngIf="totalImoveisDisponiveis > 0">
+            <div>
+              <button type="button" class="btn btn-novo" routerLink="/autogestao/imoveis/cadastrar">
+                <i class="glyphicons glyphicons-plus"></i>
+                <span>
+                  Cadastrar novo imóvel</span>
+              </button>
+              <p>(Você ainda pode cadastrar mais {{ totalImoveisDisponiveis }})</p>
+            </div>
+          </div>
+
+          <div *ngFor="let imovel of imoveisMensais"
+            class="col-lg-4 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0 col-resultado-imovel">
+            <div class="apsa-imovel clearfix" [class.disabled]="!imovel.Enabled">
+              <div class="btn-group btn-group-actions">
+                <button data-toggle="button" *ngIf="imovel.Enabled" class="btn btn-icon"
+                  [routerLink]="['/autogestao', 'imoveis', imovel.Uid, 'editar']" title="Editar este imóvel">
+                  <i class="glyphicons glyphicons-edit"></i>
+                </button>
+                <button data-toggle="button" *ngIf="imovel.Enabled" class="btn btn-icon btn-remove"
+                  (click)="abrirModalDesativarImovel(imovel)" title="Desativar este imóvel">
+                  <i class="glyphicons glyphicons-ban-circle"></i>
+                </button>
+              </div>
+
+              <div *ngIf="!imovel.Enabled" class="flag-imovel-desativado">
+                <i class="glyphicons glyphicons-ban-circle"></i> Imóvel Desativado
+              </div>
+
+              <a class="container-description col-md-12" [routerLink]="obterLink(imovel)" target="_blank">
+                <div class="container-header">
+                  <h3 *ngIf="!imovelComCadastroFinalizado(imovel)" class="text-warning">Finalize o cadastro deste
+                    imóvel!
+                  </h3>
+                  <h3 *ngIf="imovelComCadastroFinalizado(imovel)">{{ imovel.Logradouro }} {{ imovel.Numero }}</h3>
+                  <span *ngIf="imovelComCadastroFinalizado(imovel)">{{ imovel.Bairro }} / {{ imovel.Cidade }}/ {{
+                    imovel.Estado
+                    }}
+                  </span>
+                </div>
+
+                <div class="container-body">
+                  <!-- <p>{{ imovel.TituloPlano }}</p>  -->
+                  <!-- <p>Vigência: {{ imovel.VigenciaContratoMeses }}</p> -->
+                  <!-- <p>Valor do Aluguel: {{imovel.ValorLocacao | currency : 'BRL' : true : '3.2' }}</p> -->
+
+                  <p *ngIf="imovel.NomeProprietario">
+                    <strong>Proprietário:</strong> {{ imovel.NomeProprietario }}</p>
+                  <p *ngIf="imovel.NomeLocatario">
+                    <strong>Locatário:</strong> {{ imovel.NomeLocatario }}</p>
+                  <p class="situacao" *ngIf="imovel.DescricaoSituacaoImovel">{{ imovel.DescricaoSituacaoImovel }}</p>
+
+                  <!-- Taga para contrato de adminitração  -->
+                  <div class="tags tag-contrato-adm" *ngIf="imovel.PossuiContratoAdministracao">
+                    <i class="fas fa-file-contract"></i>
+                    <span>CONTRATO DE ADMINISTRAÇÂO</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <app-modal #modalDesativarImovelMensal>
+    <div class="modal-header modal-warning">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title text-center">Atenção!</h4>
+    </div>
+    <div class="modal-body" *ngIf="imovelParaDesativar">
+      <!-- processandoDesativar -->
+      <app-loading *ngIf="processandoDesativar" message="Desativando imóvel"></app-loading>
+
+      <div class="row" *ngIf="mensagensDesativar">
+        <div class="col-md-12" *ngFor="let msg of mensagensDesativar">
+          <app-alert [close]="true" color="danger">{{msg}}</app-alert>
+        </div>
+      </div>
+
+      <div *ngIf="!processandoDesativar">
+        <p>
+          Deseja realmente desativar este imóvel?
+        </p>
+        <!-- <p class="truncate">
+        <strong>[ {{ imovelParaDesativar }} ]</strong>
+      </p> -->
+        <div>
+          <h3 *ngIf="imovelComCadastroFinalizado(imovelParaDesativar)">{{ imovelParaDesativar.Logradouro }} {{
+            imovelParaDesativar.Numero
+            }}
+          </h3>
+          <span *ngIf="imovelComCadastroFinalizado(imovelParaDesativar)">{{ imovelParaDesativar.Bairro }} / {{
+            imovelParaDesativar.Cidade
+            }}/ {{ imovelParaDesativar.Estado }}</span>
+          <p *ngIf="imovelParaDesativar.NomeProprietario">
+            <strong>Proprietário:</strong> {{ imovelParaDesativar.NomeProprietario }}</p>
+          <p *ngIf="imovelParaDesativar.NomeLocatario">
+            <strong>NomeLocatario:</strong> {{ imovelParaDesativar.NomeLocatario }}</p>
+          <p class="situacao" *ngIf="imovelParaDesativar.DescricaoSituacaoImovel">{{
+            imovelParaDesativar.DescricaoSituacaoImovel
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-link pull-left" data-dismiss="modal"
+        [disabled]="mensagensDesativar">Não</button>
+      <button type="button" class="btn btn-primary" (click)="desavitarImovel(imovelParaDesativar)"
+        [disabled]="mensagensDesativar">Sim</button>
+    </div>
+  </app-modal>
+
+  <app-modal #modalDesativarImovelContratual>
+    <div class="modal-header modal-warning">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title text-center">Atenção!</h4>
+    </div>
+    <div class="modal-body" *ngIf="imovelParaDesativar">
+      <!-- processandoDesativar -->
+      <app-loading *ngIf="processandoDesativar" message="Desativando imóvel"></app-loading>
+
+      <div class="row" *ngIf="mensagensDesativar">
+        <div class="col-md-12" *ngFor="let msg of mensagensDesativar">
+          <app-alert [close]="true" color="danger">{{msg}}</app-alert>
+        </div>
+      </div>
+
+      <div *ngIf="!processandoDesativar">
+        <p>
+          Deseja realmente desativar este imóvel?
+        </p>
+        <div>
+          <h3 *ngIf="imovelComCadastroFinalizado(imovelParaDesativar)">{{ imovelParaDesativar.Logradouro }} {{
+            imovelParaDesativar.Numero
+            }}
+          </h3>
+          <span *ngIf="imovelComCadastroFinalizado(imovelParaDesativar)">{{ imovelParaDesativar.Bairro }} / {{
+            imovelParaDesativar.Cidade
+            }}/ {{ imovelParaDesativar.Estado }}
+          </span>
+          <p>{{ imovelParaDesativar.TituloPlano }}</p>
+          <p>
+            <strong>Vigência:</strong> {{ imovelParaDesativar.VigenciaContratoMeses }} meses</p>
+          <p>
+            <strong>Valor do Aluguel:</strong> {{imovelParaDesativar.ValorLocacao | currency : 'BRL' : true : '3.2' }}
+          </p>
+          <p class="situacao" *ngIf="imovelParaDesativar.DescricaoSituacaoImovel">{{
+            imovelParaDesativar.DescricaoSituacaoImovel
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-link pull-left" data-dismiss="modal"
+        [disabled]="mensagensDesativar">Não</button>
+      <button type="button" class="btn btn-primary" (click)="desavitarImovel(imovelParaDesativar)"
+        [disabled]="mensagensDesativar">Sim</button>
+    </div>
+  </app-modal>
+</div>

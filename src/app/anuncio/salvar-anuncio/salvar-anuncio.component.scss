@@ -1,0 +1,51 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+[hidden] {
+  display: none !important;
+}
+
+.my-drop-zone {
+  border: dotted 3px lightgray;
+}
+
+.nv-file-over {
+  border: dotted 3px red;
+}
+
+
+/* Default class applied to drop zones on over */
+
+.another-file-over-class {
+  border: dotted 3px green;
+}
+
+
+
+.custom-autocomplete__dropdown {
+
+  .heading-recent,
+  .currentlocation {
+    display: none !important;
+  }
+}
+
+.custom-autocomplete__dropdown .heading {
+  display: none;
+}
+
+.tooltip-inner {
+  ul {
+    padding-left: 20px;
+  }
+}
+
+
+.alerta-plano {
+  h5 {
+    padding-left: 15px;
+
+    span.glyphicons {
+      margin-right: 10px;
+    }
+  }
+}

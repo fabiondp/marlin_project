@@ -1,0 +1,31 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+h1 {
+  padding: 0 10%;
+}
+
+.btn-group-actions {
+  //float: left;
+  position: relative;
+  z-index: $zindex-dropdown;
+  margin-top: -65px;
+  margin-bottom: 30px;
+
+  @media (max-width: $screen-md-min) {
+    margin-top: 0 !important; //float: right;
+  }
+
+  @media (min-width: $screen-xs-max) {
+    margin-top: -65px; //float: right;
+  }
+}
+
+#tabImovelSelect {
+  margin-bottom: 10px;
+}
+
+@media(min-width: 769px) {
+  #tabImovelSelect {
+    display: none
+  }
+}

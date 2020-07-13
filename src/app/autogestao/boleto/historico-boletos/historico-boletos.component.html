@@ -1,0 +1,65 @@
+<div class="container">
+  <section class="wrap imoveis com-submenu">
+    <h1 class="title title-no-icon">
+      Histórico de boletos gerados</h1>
+    <div class=" btn-group-actions row clearfix">
+      <div class=" col-xs-2 clearfix">
+        <button data-toggle="button" class="btn btn-primary btn-icon" [routerLink]="['/autogestao/boleto']" title="Voltar">
+          <i class="glyphicons glyphicons-chevron-left"></i>
+          <span>Voltar</span>
+        </button>
+      </div>
+    </div>
+
+
+
+    <div class="list-panel">
+
+      <div *ngFor="let item of rows ; let x = index" class="list-row-group">
+        <p class="text-center">Vencimento: {{item.data}}</p>
+
+        <div class="panel panel-primary" *ngFor="let row of item.imoveis; let i = index">
+          <div class="panel-heading has-button-detail">
+            <div class="row">
+              <div class="col-lg-8 col-md-8  col-sm-8">
+                <p class="panel-title">
+
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ x + '_' + i }}"
+                    aria-expanded="true" data-target="#accordion{{ x + '_' + i }}" aria-controls="collapseOne" class="collapsed">{{
+                    row.name }}</a>
+                </p>
+              </div>
+              <div class="col-lg-4 col-md-4  col-sm-4">
+                <button class="btn btn-sm btn-primary btn-ver-boleto">ver boleto</button>
+              </div>
+            </div>
+
+          </div>
+          <div id="collapse{{ x + '_' + i }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+
+
+
+              <div class="col-lg-6">
+                <p>
+                  <label>ALUGUEL:</label> R$ sadsad
+                  <br>
+                  <label>CONDOMÍNIO:</label> R$ 4111,00
+                  <br>
+                  <label>IPTU:</label> R$ 4111,00</p>
+              </div>
+              <div class="col-lg-12 total">
+                Total: R$ 1111,00
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </section>
+</div>

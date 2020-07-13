@@ -1,0 +1,18 @@
+[
+    {
+        "CreationDate": "0001-01-01T00:00:00",
+        "Email": "ldominguesadm2@marlin.com.br",
+        "Nome": "LD ADM 2",
+        "Telefone": "1212345678",
+        "Uid": "658ee6ad-222a-e911-80e9-a55861c768b2",
+        "UpdateDate": "0001-01-01T00:00:00"
+    },
+    {
+        "CreationDate": "0001-01-01T00:00:00",
+        "Email": "ldadm@marlin.com.br",
+        "Nome": "LD ADM",
+        "Telefone": "21979656321",
+        "Uid": "5bc4f05e-0e2a-e911-80e9-a55861c768b2",
+        "UpdateDate": "0001-01-01T00:00:00"
+    }
+]

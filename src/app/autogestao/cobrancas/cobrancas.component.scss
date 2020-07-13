@@ -1,0 +1,106 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+.col-no-label {
+  padding-top: 35px;
+}
+
+.detail {
+  div {
+    padding-left: 51px;
+    padding-bottom: 10px;
+
+    &.new-items {
+      padding-left: 0;
+
+      .btn {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+
+.lancDesconto {
+  &::before {
+    content: '- ';
+
+  }
+}
+
+
+.panel-heading {
+  background-color: $color-fourth;
+  border-color: $color-fourth;
+
+
+
+
+  &.has-collapse {
+    .ver-detalhamento {
+      a {
+        text-decoration: none;
+        color: #a10358;
+
+
+
+
+        font-family: 'Open Sans', sans-serif;
+        font-size: 12px;
+
+        font-weight: 700;
+        text-transform: uppercase;
+
+        .ver-detalhe-icone {
+          i {
+            transform: rotate(90deg);
+            font-size: 17px;
+            margin-left: 8px;
+            transition: all .2s ease-in-out;
+          }
+        }
+
+      }
+
+      a.collapsed {
+        color: #888888;
+
+        .ver-detalhe-icone {
+          color: #888;
+
+          i {
+            transform: rotate(0);
+
+          }
+        }
+      }
+
+      a:hover {
+        color: #a10358;
+
+        .ver-detalhe-icone {
+          color: inherit;
+        }
+      }
+    }
+
+
+
+  }
+}
+
+// .form-btn-group {
+//   position: fixed;
+//   bottom: 0px;
+//   left: 0px;
+//   width: 100%;
+//   z-index: 1000;
+//   border-top: transparent;
+
+//   background-image: linear-gradient(to bottom, #ffffff, #fbfbfb, #f8f8f8, #f4f4f4, #f1f1f1);
+
+//   &.isFim {
+
+//     position: relative;
+//     bottom: 0;
+//   }
+// }

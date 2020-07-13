@@ -1,0 +1,30 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+.detalhe-locacao {
+  .jumbotron {
+    border-radius: 0 !important;
+    padding: 20px;
+  }
+
+  .panel-custom {
+    margin-bottom: 0;
+
+    .inner {
+      background-color: $color-seventh;
+      border: 1px solid $color-sixth;
+      padding: 15px;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    // legend {
+    //   font-size: 13px;
+    //   text-transform: uppercase;
+    //   text-align: center;
+    // }
+  }
+}
+
+alert {
+  margin-bottom: 15px;
+}

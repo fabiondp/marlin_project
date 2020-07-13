@@ -1,0 +1,61 @@
+<div class="container">
+  <section class="wrap imoveis com-submenu">
+    <h1 class="title title-no-icon">{{ imovel.Numero?imovel.Logradouro + ', ' :imovel.Logradouro }} {{ imovel.Numero }}</h1>
+
+    <div class=" btn-group-actions margin-top-negative row clearfix">
+      <div class=" col-xs-2 clearfix">
+        <button data-toggle="button" class="btn btn-primary btn-icon" [routerLink]="['/autogestao','imoveis',imovel.Uid, 'detalhe']"
+          title="Voltar">
+          <i class="glyphicons glyphicons-chevron-left"></i>
+          <span>Voltar</span>
+        </button>
+      </div>
+    </div>
+    <div class="content">
+      <div class="row" *ngIf="message">
+        <div class="col-md-12" *ngFor="let msg of message">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+        </div>
+      </div>
+
+      <div *ngIf="carregando">
+        <app-loading></app-loading>
+      </div>
+
+      <div class="list-proprietarios">
+        <h3 class="text-center" *ngIf="!carregando">
+          Histórico de proprietário</h3>
+        <div *ngIf="!carregando && proprietarios?.length > 0">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Proprietário</th>
+                <th>CPF/CNPJ</th>
+                <th>Período</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let proprietario of proprietarios">
+                <td>{{proprietario.Nome}}</td>
+                <td>{{proprietario.CPFCNPJ}}</td>
+                <td>{{proprietario.DataInicioCadastro | date:'shortDate'}} até {{proprietario.DataFimCadastro | date:'shortDate'}}
+                </td>
+                <td><button class="btn btn-sm btn-primary btn-ver-boleto pull-right" [routerLink]="['/autogestao','imoveis',imovel.Uid,'proprietario',proprietario.Uid,'detalhe']">ver
+                    detalhe
+                  </button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+        <div *ngIf="proprietarios?.length == 0 && !carregando">
+          <strong>Nenhum proprietário encontrado!</strong>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</div>

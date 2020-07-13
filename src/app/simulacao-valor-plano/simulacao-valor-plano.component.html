@@ -1,0 +1,104 @@
+<div class="container">
+  <section class="wrap simulacao">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <h1 class="title title-bg">
+          <i class="glyphicons glyphicons-calculator"></i> Simulação do valor do plano
+        </h1>
+
+        <div class="row" *ngIf="plano">
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <h3>{{ plano.TituloPlano }}</h3>
+            <p [innerHTML]="plano.DescricaoPlano"></p>
+          </div>
+
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div>
+              <h4>Para calcular o valor do plano, informe os dados do aluguel:</h4>
+            </div>
+
+            <div *ngIf="erros">
+              <div class="col-md-12" *ngFor="let msg of erros">
+                <app-alert [close]="true" [timeout]="0" [color]="'danger'">{{ msg }}</app-alert>
+              </div>
+            </div>
+
+            <app-loading *ngIf="carregando" [message]="carregandoMensagem"></app-loading>
+
+            <form #simulacaoValorForm="ngForm" (ngSubmit)="calcularSimulacao(simulacaoValorForm)" class="form-horizontal"
+              [hidden]="carregando">
+              <div class="position-relative">
+                <div class="col-md-8">
+                  <div class="form-group">
+                    <label for="vigenciaContrato">Vigência do contrato: </label>
+                    <div class="input-group">
+                      <input type="number" min="1" class="form-control" id="vigenciaContrato" name="vigenciaContrato"
+                        [(ngModel)]="plano.DadosContrato.VigenciaContratoMeses" required #vigenciaContrato="ngModel">
+                      <div class="input-group-addon">meses</div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="vigenciaContrato.invalid && (vigenciaContrato.dirty || vigenciaContrato.touched)" class="alert alert-danger">
+                    <div *ngIf="vigenciaContrato.errors.required">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="valorAluguel">Valor do aluguel:</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">R$</div>
+
+                      <input currencyMask type="text" class="form-control text-right" id="ValorLocacao" name="ValorLocacao"
+                        [(ngModel)]="plano.DadosContrato.ValorLocacao" #ValorLocacao="ngModel" [options]="{prefix: '', thousands: '.', decimal: ',' }"
+                        required placeholder="0,00">
+                      <div class="input-group-addon">/ mês</div>
+                    </div>
+
+                    <div *ngIf="ValorLocacao.errors && ValorLocacao.touched" class="alert alert-danger">
+                      <div *ngIf="ValorLocacao.errors.required">Campo obrigatório.</div>
+                    </div>
+                  </div>
+
+                  <div class="form-group text-right">
+                    <button type="submit" class="btn btn-primary btn-calcular" id="Calcular" [disabled]="simulacaoValorForm.invalid || carregando">Calcular</button>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="plano.Valor">
+                <div class="col-md-8">
+                  <div class="row box-valor-total">
+                    <div class="col-md-7">
+                      Acesso à plataforma por {{ plano.DadosContrato.VigenciaContratoMeses }} meses:
+                    </div>
+
+                    <div class="col-md-5 text-right valor">{{ plano.Valor | currency : 'BRL' }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="col-md-8">
+                  <div class="form-group text-right">
+                    <button type="button" class="btn btn-default btn-block" id="Contratar" [disabled]="!plano.Valor || carregando"
+                      (click)="contratarPlano()">Contratar plano</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="!plano">
+          <div class="col-md-12">
+            <p>Não foi possível identificar o plano escolhido para simulação.</p>
+            <p>Volte a página inicial e tente novamente!</p>
+            <a [routerLink]="['/']" class="btn btn-primary">Voltar a página principal</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

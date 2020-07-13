@@ -1,0 +1,68 @@
+<div class="container">
+  <section class="wrap login">
+
+    <div class="login-head">
+
+      <h1 class="title title-glyph title-identificacao">
+        Identificação</h1>
+    </div>
+
+    <div class="row login-body">
+
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+        <div class="box-round clearfix">
+          <div class="box-round-head">
+            <h2>
+              <i class="icon-ad"></i> Sou usuário da Área Exclusiva</h2>
+          </div>
+
+          <div class="row" *ngIf="message">
+            <div class="col-md-12">
+              <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{message}}</app-alert>
+            </div>
+          </div>
+
+          <app-loading *ngIf="carregandoForm" message="Aguarde..."></app-loading>
+          <div class="box-round-body" *ngIf="!carregandoForm">
+            <form #loginForm="ngForm" (ngSubmit)="onSubmitLogin(loginForm)">
+              <div class="form-group">
+                <label for="username">Login</label>
+                <input type="text" class="form-control" id="Login" name="Login" [(ngModel)]="user.Login" #Login="ngModel"
+                  required>
+
+                <div *ngIf="Login.invalid && Login.dirty" class="alert alert-danger">
+                  <div *ngIf="Login?.errors.required">
+                    Campo obrigatório.
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" class="form-control" id="Senha" name="Senha" [(ngModel)]="user.Senha" #Senha="ngModel"
+                  required>
+
+                <div *ngIf="Senha.invalid && Senha.dirty" class="alert alert-danger">
+                  <div *ngIf="Senha?.errors.required">
+                    Campo obrigatório.
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group text-center">Caso não lembre sua senha,<br>acesse à <a href="https://areaexclusiva.apsa.com.br/wLogin/login.aspx"
+                  target="_blank" class="btn-link">área exclusiva</a> para clientes APSA.
+
+              </div>
+              <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || carregandoForm || validandoEmail"
+                  id="continuar">Continuar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+</div>

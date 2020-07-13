@@ -1,0 +1,390 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+section.wrap.anuncios {
+    padding-bottom: 0px;
+}
+
+.apsa-box-detalhe-imovel {
+    border-bottom: 1px solid #f7941d;
+    background-color: #f4f4f4;
+    min-height: 174px;
+
+    &.imovel-sem-foto {
+        .apsa-row-descricao-imovel .col-box-valor {
+            margin-top: 0;
+        }
+    }
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel {
+    position: relative;
+    padding: 20px 0;
+}
+
+// .apsa-box-detalhe-imovel .apsa-row-descricao-imovel .apsa-row-descricao-info {
+//      float: right;
+// }
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .apsa-row-descricao-info span.ng-scope {
+    font-size: 18px;
+    text-transform: uppercase;
+    margin: 15px 0 10px;
+    display: block;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .apsa-row-descricao-endereco {
+    color: #666666;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .apsa-row-descricao-endereco h3 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    color: inherit;
+    word-wrap: break-word;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .apsa-row-descricao-endereco h4 {
+    margin: 0 0 2px;
+    font-size: 22px;
+    color: inherit;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .apsa-row-descricao-endereco p {
+    font-size: 14px;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .btn-favorito {
+    position: absolute;
+    top: 0;
+    right: 15px;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .table-info {
+    border: 1px solid #999999;
+    background-color: #ffffff;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .table-info tr td {
+    text-align: center;
+    padding: 5px 10px;
+
+    @media (max-width: $screen-xs-max) {
+        padding: 5px 10px;
+    }
+
+    @media (max-width: 360px) {
+        padding: 5px 8px;
+    }
+
+    @media (max-width: 320px) {
+        padding: 5px 5px;
+    }
+
+    border-left: 1px solid #999999;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .table-info tr td strong {
+    display: block;
+    font-size: 21px;
+
+    @media (max-width: $screen-xs-min) {
+        font-size: 13px;
+    }
+
+    text-transform: none;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .col-box-valor {
+    border: 1px solid $color-second;
+    background-color: #fff;
+
+    @media (min-width: $screen-md-min) {
+        margin-top: -69px;
+    }
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .col-box-valor .valor-condominio-iptu,
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .col-box-valor .valor-total {
+    margin: 0 20px;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .col-box-valor .valor-condominio-iptu {
+    padding: 10px 0;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .col-box-valor .valor-total {
+    padding: 10px 0;
+    border-top: 1px solid #f7941d;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .col-box-valor .valor-total p {
+    margin: 0;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .col-box-valor .valor-total p span {
+    font-size: 12px;
+    color: #f37021;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .col-box-valor .valor-total p:last-child {
+    font-size: 12px;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .col-box-valor>div {
+    font-size: 21px;
+}
+
+.apsa-box-detalhe-imovel .apsa-row-descricao-imovel .col-box-valor .valor-destaque {
+    background: $color-second;
+    color: #fff;
+    font-weight: normal;
+    font-size: 31px;
+    padding: 2px 15px;
+}
+
+.apsa-box-detalhe-imovel .texto-descricao {
+    background: #dfdfdf;
+    padding: 30px;
+}
+
+.apsa-box-detalhe-imovel .texto-descricao ul {
+    list-style: none;
+}
+
+.apsa-box-descricao {
+
+    // margin-bottom: 30px;
+    h2 {
+        color: $color-primary;
+        font-weight: normal;
+        margin-bottom: 0.7em;
+    }
+}
+
+.apsa-box-descricao .texto-descricao {
+    font-size: 18px;
+}
+
+div.contato-apsa {
+    display: inline-block;
+    padding: 10px 0;
+}
+
+// div.contato-apsa.ver-cel {
+//     margin-right: 4%;
+// }
+div.contato-apsa a.ver-phone {
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    position: relative;
+    padding: 10px;
+    color: #fff;
+    background-color: #008bcc;
+    border-radius: 5px;
+    width: 175px;
+}
+
+div.contato-apsa a.ver-phone span {
+    margin-left: 20px;
+}
+
+div.contato-apsa a.ver-phone span.ng-hide-add,
+div.contato-apsa a.ver-phone span.ng-hide-remove {
+    transition: all 2s linear;
+}
+
+div.contato-apsa a.ver-phone:before {
+    content: "";
+    width: 27px;
+    height: 27px;
+    position: absolute;
+    left: 10px;
+    bottom: 6px;
+}
+
+div.contato-apsa a.ver-phone.ver-tel:before {
+    background-image: url("../../../assets/images/fone.png");
+}
+
+div.contato-apsa a.ver-phone.ver-cel:before {
+    background-image: url("../../../assets/images/whatsapp.png");
+}
+
+.apsa-box-tools {
+    margin: 15px 0;
+}
+
+.apsa-box-tools .btn-link {
+    font-weight: bold;
+}
+
+.apsa-box-tools .block-addthis {
+    border-top: 0;
+    margin: 0;
+    padding-top: 0;
+}
+
+.apsa-box-tools .btn-print {
+    padding: 5px 0;
+    display: inline-block;
+}
+
+.apsa-box-tools .btn-print:before {
+    content: ' ';
+    background: url('../../../assets/images/ico-print.png') no-repeat;
+    display: block;
+    width: 31px;
+    height: 36px;
+    float: left;
+    margin-right: 8px;
+    margin-top: -5px;
+}
+
+.apsa-box-mapa {
+    background-color: #ebebeb; // padding: 20px 0;
+}
+
+.apsa-box-mapa h3 {
+    font-size: 18px;
+}
+
+.apsa-box-mapa .apsa-box-mapa-detalhe-distancia ul {
+    list-style: none;
+    padding: 0;
+}
+
+.apsa-box-mapa .apsa-box-mapa-detalhe-distancia ul li {
+    border: 1px solid #666666;
+    background-color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.apsa-box-mapa .apsa-box-mapa-detalhe-distancia ul li label {
+    background-color: #666666;
+    color: #ffffff;
+    display: inline-block;
+    margin: 0;
+    width: 80px;
+    padding: 5px 8px;
+    text-align: center;
+}
+
+.apsa-box-mapa .apsa-box-mapa-detalhe-distancia ul li span {
+    display: inline-block;
+    padding: 5px;
+}
+
+.apsa-box-mapa .apsa-box-mapa-detalhe-distancia .form-group {
+    text-align: center;
+}
+
+.apsa-box-mapa .apsa-box-mapa-detalhe-distancia .form-group label {
+    font-weight: normal;
+    text-align: left !important;
+    display: block;
+}
+
+.apsa-box-mapa .apsa-box-mapa-detalhe-distancia .form-group div {
+    position: relative;
+}
+
+.apsa-box-mapa .apsa-box-mapa-detalhe-distancia .form-group div .glyphicon {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    z-index: 1;
+}
+
+.apsa-box-mapa .apsa-box-mapa-detalhe-distancia .form-group .btn {
+    margin-top: 10px;
+}
+
+.apsa-box-mapa .apsa-box-mapa-detalhe-distancia .box-result {
+    background-color: #e9e1cf;
+    padding: 20px 10px;
+}
+
+.apsa-box-mapa .apsa-box-mapa-detalhe-distancia .box-result p {
+    padding-left: 25px;
+    margin-bottom: 15px;
+}
+
+.apsa-box-mapa .apsa-box-mapa-detalhe-distancia .box-result:before {
+    content: '\e062';
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    font-size: 18px;
+    margin-top: 3px;
+}
+
+.apsa-box-mapa-detalhe-distancia .form-group {
+    margin-bottom: 0;
+}
+
+.apsa-box-mapa-detalhe-distancia .box-result {
+    margin-top: 15px;
+    position: relative;
+}
+
+.apsa-box-mapa-detalhe-distancia .box-result .btn-remove {
+    position: absolute;
+    right: 15px;
+    top: 5px;
+}
+
+agm-map {
+    height: 320px;
+}
+
+.block-addthis {
+    border-top: 1px solid #E5E5E5;
+    margin: 20px 0;
+    padding-top: 20px;
+}
+
+.block-addthis p {
+    margin-right: 30px;
+    font-weight: bold;
+    float: left !important;
+}
+
+.block-addthis .addthis_sharing_toolbox {
+    clear: none !important;
+    float: left !important;
+}
+
+.btn-group-actions {
+    //float: left;
+    position: relative;
+    z-index: 2;
+    margin-top: -65px;
+    margin-bottom: 30px;
+
+    @media (max-width: $screen-md-min) {
+        margin-top: 0 !important; //float: right;
+    }
+
+    @media (min-width: $screen-xs-max) {
+        margin-top: -65px; //float: right;
+    }
+
+    div:last-child {
+        .btn {
+            margin-left: 5px;
+        }
+    }
+}
+
+.slide-detalhe {
+    clear: both;
+}
+
+.box-info-publicado {
+    color: $color-primary;
+}

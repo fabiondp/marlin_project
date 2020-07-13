@@ -1,0 +1,271 @@
+<div class="container">
+
+    <form class="wrap carrinho carrinho-desgusta" #carrinhoForm="ngForm">
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 list-planos">
+
+                <h1 class="title title-bg title-carrinho">Carrinho de compras</h1>
+
+                <div class="row" *ngIf="message">
+                    <div class="col-md-12" *ngFor="let msg of message">
+                        <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+                    </div>
+                </div>
+
+                <app-loading *ngIf="carregando" [message]="carregandoMensagem"></app-loading>
+                <!-- LISTA DE PRODUTOS DO CARRINHO -->
+                <!-- <pre>{{ carrinhoService.items | json }}</pre> -->
+                <div *ngIf="!carregando">
+
+                    <!-- <div class="row box-experimente-agora"
+                        *ngIf="aindaNaoDegustou && !carregando && !planoDegustacaoAtivo && carrinhoService.items.length > 0"
+                        id="row-ainda-nao-degustou">
+                        <div class="col-md-12">
+                            <p>VIMOS QUE VOCÊ AINDA NÃO EXPERIMENTOU...</p>
+                            <p>
+                                FAÇA <strong>ANÚNCIOS ILIMITADOS</strong> AGORA MESMO POR ATÉ <strong>
+                                    POR ATÉ 60 DIAS
+                                </strong> !
+                            </p>
+                            <button (click)="degustarAnuncio()" class="btn btn-default" type="button">
+                                CLIQUE AQUI E EXPERIMENTE ANTES
+                                DE COMPRAR
+                            </button>
+                        </div>
+                    </div> -->
+
+                    <div class="row row-item" *ngFor="let item of carrinhoService.items; let i = index"
+                        [@animationRemove]="item.state">
+                        <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 col-item">
+                            <div>
+
+                                <button type="button" class="btn btn-link btn-remover" (click)="removerItem(item)"
+                                    title="Excluir item do carrinho">
+                                    <i class="glyphicons glyphicons-remove-circle"></i> <span>Excluir</span>
+                                </button>
+                                <div class="item">
+                                    <h3>{{ item.TituloPlano }}</h3>
+                                    <h4 *ngIf="item.TituloProduto">{{ item.TituloProduto }}</h4>
+                                    <!-- Modificação solicitada pelo Cliente - alterar o plano degustação por Experimente Grátis -->
+                                    <!-- <h3 *ngIf="item.TituloPlano !== 'Degustação'">Plano {{ item.TituloPlano }}</h3>
+                                    <h3 *ngIf="item.TituloPlano === 'Degustação'">Experimente Grátis</h3> -->
+
+                                    <p>{{ item.DescricaoPlano }} </p>
+                                    <!-- <hr /> -->
+                                    <div *ngIf="!item.FichaCredito">
+                                        <div *ngIf="item.TipoPlano === 0">
+                                            <p>
+                                                <label>Quantidade de anúncios:</label>
+
+                                                <span *ngIf="!item.Ilimitado">
+                                                    {{
+ item.QuantidadeProduto == 1 ? item.QuantidadeProduto + ' imóvel' :
+                          item.QuantidadeProduto + '
+                          imóveis'
+                                                    }}
+                                                </span>
+                                                <span *ngIf="item.Ilimitado">
+                                                    Ilimitado
+                                                </span>
+                                            </p>
+                                            <p>
+                                                <!-- <label>Tempo de exibição do anúncio:</label>  -->
+                                                <label>Validade do plano:</label>
+                                                <span>
+                                                    {{
+ item.PrazoEmDias == 1 ?
+                          item.PrazoEmDias + ' dia' :
+                          item.PrazoEmDias
+                          + ' dias'
+                                                    }}
+                                                </span>
+                                            </p>
+                                        </div>
+
+                                        <div *ngIf="item.TipoPlano === 2">
+                                            <p>
+                                                <label>Quantidade de imóveis:</label>
+                                                <span>{{ item.QuantidadeProduto}}</span>
+                                            </p>
+
+                                        </div>
+                                    </div>
+
+                                    <p *ngIf="item.FichaCredito">
+                                        {{ item.FichaCredito.Pretendente.Nome }} - {{
+                    item.FichaCredito.Pretendente.CPFCNPJ
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 col-valor">
+                            <div class="box-valor">
+                                <label>Valor:</label>
+                                <div *ngIf="item.ComDesconto" class="valor-sem-desconto">
+                                    <span class="">{{ item.ValorSemDesconto | currency : 'BRL' }}</span>
+                                </div>
+
+                                <!-- <span *ngIf="item.ComDesconto" class="desconto">- {{ item.Desconto | currency : 'BRL' : true : ''}}</span> -->
+                                <div class="valor">
+                                    <span *ngIf="item.Valor != 0">
+                                        {{ item.Valor | currency : 'BRL' }}
+                                    </span>
+
+                                    <span *ngIf="item.Valor == 0">
+                                        GRÁTIS
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div *ngIf="carrinhoService.items.length > 0">
+                        <!-- TOTAL -->
+                        <div class="row row-total">
+                            <div class="col-xs-12 col-sm-7 col-md-7 box-cupom">
+                                <span class="cupom"></span>
+                                <form class="form-inline" (ngSubmit)="aplicarCupom()">
+                                    <div class="form-group">
+                                        <label for="cupom">Cupom de desconto: </label>
+                                        <input type="text" class="form-control" name="cupom" [(ngModel)]="cupom" />
+                                        <button type="submit"
+                                            class="btn btn-default btn-aplicar btn-sm">Aplicar</button>
+                                    </div>
+
+                                    <div class="descricao-cupom" *ngIf="carrinhoService.desontoInfo">
+                                        <p>{{ carrinhoService.desontoInfo.Descricao }}</p>
+                                        <p *ngIf="carrinhoService.desontoInfo.PorcentagemDesconto">
+                                            Desconto de
+                                            {{carrinhoService.desontoInfo.PorcentagemDesconto }}%
+                                        </p>
+                                        <p *ngIf="carrinhoService.desontoInfo.ValorDesconto">
+                                            Desconto de
+                                            {{carrinhoService.desontoInfo.ValorDesconto | currency : 'BRL'}}.
+                                        </p>
+                                        <!-- Descrição do Cupom. Desconto de 10%. -->
+                                    </div>
+
+                                    <!-- <span *ngIf="item.ComDesconto" class="desconto">- {{ item.Desconto | currency : 'BRL' : true : ''}}</span> -->
+                                </form>
+
+                                <!-- <button type="button" (click)="removerCupom()">Remover Cupom</button> -->
+                            </div>
+                            <div class="col-xs-6 col-sm-2 col-md-1 col-md-offset-1 col-label-total no-border">
+                                <h4 class="total text-right">Total</h4>
+                            </div>
+                            <div class="col-xs-6 col-sm-3 col-md-3 col-value-total">
+                                <span class="valor-total">{{ total() | currency: 'BRL' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row row-termos" *ngIf="planosComContrato && planosComContrato.length > 0">
+                            <div class="col-md-12">
+                                <h4>
+                                    <i class="glyphicons glyphicons-alert"></i> <span>
+                                        Para confirmar sua compra, deverá ler e concordar
+                                        com o termo de uso e o contrato dos itens acima.
+                                    </span>
+                                </h4>
+                                <ul class="list-unstyled">
+                                    <li *ngFor="let item of planosComContrato; let i = index"
+                                        [hidden]="!item.TermoContrato">
+                                        <div class="checkbox-custom" *ngIf="item.TermoContrato">
+
+                                            <input type="checkbox" [name]="item.Uid + i" [id]="item.Uid + i" required
+                                                [(ngModel)]="item.TermoContratoAceito"
+                                                (change)="updateAceitarTermoPlano(item, $event)">
+                                            <label [for]="item.Uid + i">
+                                                Li e concordo com o <a href="javascript:void(0)"
+                                                    (click)="abrirModalTermoDeUso(item)" class="link">termo de uso</a> e
+                                                <a href="javascript:void(0)" (click)="abrirModalContratoPlano(item)"
+                                                    class="link">contrato</a>
+                                                do
+                                                item
+                                                <strong>'{{ item.TituloPlano }}'</strong> {{
+ item.TituloProduto ? 'de ' + item.TituloProduto :
+                        ''
+                                                }}.
+                                            </label>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <!-- *ngIf="item.TermoContrato" -->
+                            </div>
+                        </div>
+
+                        <!-- <div class="row box-experimente-agora" *ngIf="aindaNaoDegustou && !carregando && !planoDegustacaoAtivo" id="row-ainda-nao-degustou">
+                          <div class="col-md-12">
+                            <p>CLIQUE AQUI E
+                              <button (click)="degustarAnuncio()" class="btn btn-default" type="button">EXPERIMENTE GRÁTIS</button>
+                              <strong>ILIMITADO POR ATÉ 60 DIAS</strong></p>
+                          </div>
+                        </div> -->
+
+                    </div>
+                    <div *ngIf="carrinhoService.items.length == 0">
+                        <p>Seu carrinho está vazio.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div role="group " class="form-btn-group clearfix" *ngIf="carrinhoService.items.length > 0 && !carregando">
+            <button type="button " class="btn btn-link pull-left btn-continuar-comprando" [routerLink]="['/home']">
+                Continuar
+                comprando
+            </button>
+            <button type="button" class="btn btn-primary btn-confirmar-compra pull-right" id="ConfirmarCompra"
+                (click)="confirmarCompra()" [disabled]="carrinhoForm.invalid">
+                Confirmar compra
+            </button>
+        </div>
+    </form>
+</div>
+
+<app-modal #modalContratoPlano>
+    <div *ngIf="planoContrato">
+        <div class="modal-header modal-info modal-termo">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                (click)="fecharModalContratoPlano()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">
+                Contrato
+                <i>"{{ planoContrato.TituloPlano }}"</i>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <div class="overflow-carrinho">
+                <div [innerHTML]="planoContrato.TermoContrato | safeHtml"></div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="fecharModalContratoPlano()">Ok</button>
+        </div>
+    </div>
+</app-modal>
+
+<app-modal #modalTermoDeUso>
+    <div *ngIf="planoTermoDeUso">
+        <div class="modal-header modal-info modalTermoDeUsoAnuncio">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                (click)="fecharModalTermoDeUso()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Termo de Uso</h4>
+        </div>
+        <div class="modal-body">
+            <div class="overflow-carrinho">
+                <app-termos-condicoes-uso-texto *ngIf="planoTermoDeUso.TipoProduto == 'Anuncio' || planoTermoDeUso.TipoProduto == 'Analise' || planoTermoDeUso.TipoProduto == 'Autogestao'">
+                </app-termos-condicoes-uso-texto>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="fecharModalTermoDeUso()">Ok</button>
+        </div>
+    </div>
+</app-modal>

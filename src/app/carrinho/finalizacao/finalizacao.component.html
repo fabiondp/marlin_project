@@ -1,0 +1,68 @@
+<div class="container">
+  <section class="wrap">
+    <div class="row row-processando" *ngIf="emProcessamento()">
+      <div class="col-md-12">
+        <h1 class="title title-sm title-carrinho">Finalização do pedido.</h1>
+      </div>
+
+      <div class="col-md-12">
+        <app-loading [message]="descricaoDoStatus"></app-loading>
+      </div>
+    </div>
+
+    <div class="row row-problemas-na-finalizacao"
+      *ngIf="!emProcessamento() && mensagens && !pedidoFinalizadoComSucesso">
+      <div class="col-md-12">
+        <h1 class="title title-sm title-carrinho">Ocorreu um erro ao finalizar o pedido.</h1>
+      </div>
+
+      <div class="row-motivos">
+        <div class="col-md-12">
+          <p>Motivo(s):</p>
+        </div>
+        <div class="col-md-12" *ngFor="let msg of mensagens">
+          <app-alert *ngIf="msg.text" [close]="true" [timeout]="msg.time" [color]="msg.type">{{msg.text}}</app-alert>
+        </div>
+      </div>
+
+      <div *ngIf="identificadorCompra">
+        <div class="col-md-12">
+          <p>Entre em contato com a apsa informando o número do pedido:
+            <strong>{{ identificadorCompra }}.</strong>
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <div class="col-md-12">
+          <a [routerLink]="['/carrinho']" class="btn btn-primary">Voltar para o carrinho.</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="row row-finalizado-com-sucesso" *ngIf="!emProcessamento() && !mensagens"> -->
+    <div class="carrinho carrinho-desgusta" *ngIf="pedidoFinalizadoComSucesso">
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="title title-sm title-carrinho">Compra concluída com sucesso!</h1>
+        </div>
+      </div>
+
+
+      <div class="row">
+
+        <div class="col-md-12">
+          <div>
+            <p class="text-success">Número do pedido:
+              <strong>{{ identificadorCompra }}</strong>
+            </p>
+          </div>
+
+          <p>Caso ocorra algum problema entre com contato com o ClickAlugue informando o número do pedido.</p>
+
+          <a [routerLink]="['/dashboard']" class="btn btn-primary">Ir para sua página</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

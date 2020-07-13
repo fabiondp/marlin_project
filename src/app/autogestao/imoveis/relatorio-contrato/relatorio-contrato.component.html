@@ -1,0 +1,107 @@
+<div class="container">
+  <section class="wrap imoveis  com-submenu">
+
+    <app-loading *ngIf="carregandoFiltro"></app-loading>
+    <div *ngIf="!carregandoFiltro">
+
+      <h1 class="title title-no-icon">Relatório de contratos</h1>
+
+      <div class="clearfix btn-reajustar">
+        <button type="button" class="btn btn-sm btn-primary pull-right" routerLink="/autogestao/reajuste-aluguel">
+          Reajustar Aluguel
+        </button>
+      </div>
+
+      <!-- Mensagem de erro para lista de mensagens -->
+      <div class="row" *ngIf="messageArray">
+        <div class="col-md-12" *ngFor="let msg of messageArray">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+        </div>
+      </div>
+
+      <!-- Mensagem erro para objeto com uma mensagem -->
+      <div class="row" *ngIf="message">
+        <div class="col-md-12">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{message}}</app-alert>
+        </div>
+      </div>
+
+      <div class="panel  panel-info panel-filter">
+        <div class="panel-heading clearfix">
+          <h3 class="panel-title">
+            <span>Buscar</span>
+            <button type="button" class="btn btn-xs pull-right" (click)="isCollapsed = !isCollapsed"
+              [attr.aria-expanded]="!isCollapsed" aria-controls="collapseEvent">
+              <span class="glyphicons {{iconCollapse}}" title="{{textCollapse}}"></span>
+            </button>
+          </h3>
+        </div>
+
+        <div id="collapseEvent" (collapsed)="collapsed()" (expanded)="expanded()" [collapse]="isCollapsed">
+          <div class="panel-body">
+            <form (ngSubmit)="buscar(filtroForm)" class="filter" #filtroForm="ngForm">
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label for="tipoFiltro">Tipo relatório</label>
+                  <select required name="tipoFiltro" [(ngModel)]="filtro.tipoFiltro" id="tipoRelatorio" class="form-control">
+                    <option *ngFor="let option of tiposRelatorios" [ngValue]="option.Id">{{
+                      option.Descricao }}</option>
+                  </select>
+                </div>
+
+                <div class="form-group col-md-2">
+                  <label for="mes">Mês</label>
+                  <select required class="form-control" id="txtmeses" name="mes" [(ngModel)]="filtro.mes">
+                    <option *ngFor="let mes of meses" [ngValue]="mes.value" selected="selected">
+                      {{mes.mes}}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="form-group col-md-2" *ngIf="filtro.tipoFiltro == '1'">
+                  <label for="ano">Ano</label>
+                  <input required type="text" class="form-control" name="ano" [(ngModel)]="filtro.ano" />
+                </div>
+
+                <div class="col-md-4 box-buttons">
+                  <button type="button" class="btn btn-link" (click)="limpar()">Limpar</button>
+                  <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+      <app-loading *ngIf="carregando"></app-loading>
+      <div *ngIf="contratos?.length > 0" class="div-table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Imóvel</th>
+              <th>Locatário</th>
+              <th>Início vigência</th>
+              <th>Fim vigência</th>
+              <th>Mês reajuste</th>
+              <th>Índice reajuste</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let contrato of contratos">
+              <td>{{contrato.DescricaoImovel}}</td>
+              <td>{{contrato.NomeLocatario}}</td>
+              <td>{{contrato.DataInicioVigencia | date: 'shortDate'}}</td>
+              <td>{{contrato.DataFimVigencia | date: 'shortDate'}}</td>
+              <td>{{contrato.DescricaoMesReajuste}}</td>
+              <td>{{contrato.DescricaoPercentualReajuste}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="contratos?.length == 0 && !carregando">
+        <strong>Nenhum resultado encontrado!</strong>
+      </div>
+    </div>
+  </section>
+</div>

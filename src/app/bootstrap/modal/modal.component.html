@@ -1,0 +1,11 @@
+<div class="modal fade" tabindex="-1" role="dialog" #divModal>
+  <!-- <div class="modal-dialog modal-sm" role="document"> -->
+  <div [className]="'modal-dialog '+size" role="document">
+    <div class="modal-content clearfix">
+      <ng-content></ng-content>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

@@ -1,0 +1,111 @@
+<app-modal #modalFaleConosco>
+  <div *ngIf="!mensagemEnviada">
+    <div class="modal-header  modal-info">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">Fale conosco</h4>
+    </div>
+    <div class="modal-body">
+      <div class="row" *ngIf="messageFaleConosco">
+        <div class="col-md-12" *ngFor="let msg of messageFaleConosco">
+          <app-alert [close]="true" [timeout]="timeMessageFaleConosco" [color]="typeMessageFaleConosco">{{msg}}</app-alert>
+        </div>
+      </div>
+
+      <form #faleConoscoForm="ngForm" (ngSubmit)="enviarMensagem()">
+        <div class="form-group">
+          <label for="nomeCompleto">Nome Completo</label>
+          <input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto" [(ngModel)]="faleConosco.nome"
+            required #nome="ngModel" minlength="3">
+
+          <div *ngIf="nome.invalid && (assunto.dirty || nome.touched)" class="alert alert-danger">
+            <div *ngIf="nome.errors.required">
+              Campo obrigatório.
+            </div>
+            <div *ngIf="nome.errors.minlength">
+              O nome deve ter pelo menos 3 caracteres.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="text" class="form-control" id="email" name="email" [(ngModel)]="faleConosco.email" required
+            #email="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+
+          <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+            <div *ngIf="email.errors.required">
+              Campo obrigatório.
+            </div>
+            <div *ngIf="email.errors.pattern">
+              Digite um e-mail válido
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="assunto">Assunto</label>
+          <input type="text" class="form-control" id="assunto" name="assunto" [(ngModel)]="faleConosco.assunto"
+            required #assunto="ngModel" minlength="3">
+
+          <div *ngIf="assunto.invalid && (assunto.dirty || assunto.touched)" class="alert alert-danger">
+            <div *ngIf="assunto.errors.required">
+              Campo obrigatório.
+            </div>
+            <div *ngIf="assunto.errors.minlength">
+              O assunto deve ter pelo menos 3 caracteres.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="mensagem">Mensagem</label>
+          <textarea class="form-control" name="mensagem" id="mensagem" cols="30" rows="5" [(ngModel)]="faleConosco.mensagem"
+            required minlength="10" maxlength="500" #mensagem="ngModel"></textarea>
+
+          <p class="text-muted text-right">
+            <code>{{faleConosco.mensagem | contadorCaracteres:500}}</code>
+          </p>
+
+          <div *ngIf="mensagem.invalid && (mensagem.dirty || mensagem.touched)" class="alert alert-danger">
+            <div *ngIf="mensagem.errors.required">
+              Campo obrigatório.
+            </div>
+            <div *ngIf="mensagem.errors.minlength">
+              A mensagem deve ter pelo menos 10 caracteres.
+            </div>
+            <div *ngIf="mensagem.errors.maxlength">
+              A mensagem excedeu a quantidade máxima de 500 caracteres.
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-link pull-left" data-dismiss="modal">Cancelar</button>
+      <button type="button" class="btn btn-primary" (click)="enviarMensagem()" [disabled]="faleConoscoForm.invalid">Enviar</button>
+    </div>
+  </div>
+
+  <div *ngIf="mensagemEnviada">
+    <div class="modal-header  modal-info">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">Fale conosco!</h4>
+    </div>
+    <div class="modal-body">
+
+      <div *ngIf="mensagemEnviada">
+        <p>Mensagem enviada com sucesso! </p>
+        <p>Em breve entraremos em contato.</p>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="fecharMensagem()">Ok</button>
+    </div>
+  </div>
+
+</app-modal>

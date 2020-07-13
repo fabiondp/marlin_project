@@ -1,0 +1,57 @@
+<fieldset class="field-fiador">
+  <legend>Seguro Fiança</legend>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="seguroFianca.Seguradora">Seguradora</label>
+        <input type="text" required id="seguroFianca.Seguradora" name="seguroFianca.Seguradora"
+          [(ngModel)]="seguroFianca.Seguradora" #seguroFiancaSeguradora="ngModel" class="form-control" />
+        <div *ngIf="seguroFiancaSeguradora.errors && seguroFiancaSeguradora.dirty" class="alert alert-danger">
+          <div *ngIf="seguroFiancaSeguradora.errors.required">Campo obrigatório.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group ">
+        <label for="seguroFianca.CodigoPropostaApolice ">Nº Proposta/ Apólice</label>
+        <input type="text " required id="seguroFianca.CodigoPropostaApolice" name="seguroFianca.CodigoPropostaApolice"
+          [(ngModel)]="seguroFianca.CodigoPropostaApolice" #seguroFiancaCodigoPropostaApolice="ngModel"
+          class="form-control " />
+        <div *ngIf="seguroFiancaCodigoPropostaApolice.errors && seguroFiancaCodigoPropostaApolice.dirty"
+          class="alert alert-danger">
+          <div *ngIf="seguroFiancaCodigoPropostaApolice.errors.required">Campo obrigatório.</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="seguroFianca.DataRenovacao">Data Renovação</label>
+        <input type="text" id="seguroFianca.DataRenovacao" [minDate]="minDate" name="seguroFianca.DataRenovacao"
+          [(ngModel)]="seguroFianca.DataRenovacao" #seguroFiancaDataRenovacao="ngModel" class="form-control"
+          bsDatepicker #drp="bsDatepicker"
+          [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass: 'theme-orange' }" />
+        <!-- <div *ngIf="seguroFiancaDataRenovacao.errors && seguroFiancaDataRenovacao.dirty" class="alert alert-danger">
+          <div *ngIf="seguroFiancaDataRenovacao.errors.required">Campo obrigatório.</div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="seguroFianca.Cobertura">Cobertura</label>
+        <!-- <input type="text" required id="seguroFianca.Cobertura" name="seguroFianca.Cobertura" [(ngModel)]="seguroFianca.Cobertura"
+          #seguroFiancaCobertura="ngModel" class="form-control" /> -->
+        <textarea required id="seguroFianca.Cobertura" name="seguroFianca.Cobertura"
+          [(ngModel)]="seguroFianca.Cobertura" #seguroFiancaCobertura="ngModel" class="form-control" cols="30" rows="10"
+          required></textarea>
+        <div *ngIf="seguroFiancaCobertura.errors && seguroFiancaCobertura.dirty" class="alert alert-danger">
+          <div *ngIf="seguroFiancaCobertura.errors.required">Campo obrigatório.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>

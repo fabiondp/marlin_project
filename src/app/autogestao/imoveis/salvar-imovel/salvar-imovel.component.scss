@@ -1,0 +1,51 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+#tabImovelSelect {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+@media(min-width: 769px) {
+  #tabImovelSelect {
+    display: none;
+  }
+}
+
+.btn-group-actions {
+  //float: left;
+  position: relative;
+  z-index: $zindex-dropdown;
+  margin-top: -65px;
+  margin-bottom: 30px;
+
+  @media (max-width: $screen-md-min) {
+    margin-top: 0 !important; //float: right;
+  }
+
+  @media (min-width: $screen-xs-max) {
+    margin-top: -65px; //float: right;
+  }
+  
+  @media (max-width: 359px) {
+    margin-bottom: 15px;
+
+    .col-modelo-contrato{
+      width: 100%;
+      margin-top: 15px;      
+    }
+  }
+  
+
+  div:last-child {
+    .btn {
+      margin-left: 5px;
+    }
+  }
+}
+
+@media(max-width: 375px) {
+  .salvar-dadosProprietario .form-btn-group button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

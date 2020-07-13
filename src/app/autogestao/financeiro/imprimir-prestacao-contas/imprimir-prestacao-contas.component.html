@@ -1,0 +1,529 @@
+<div class="container">
+  <section class="wrap imoveis com-submenu wrap-page-print">
+
+    <table class="table-wrap-page-print">
+      <thead>
+        <tr>
+          <td>
+            <header class="header-page-print" id="header-page-print">
+              <h1 class="title title-no-icon title-prestacao-contas">
+                <i class="fas fa-calculator"></i>
+                Prestação de contas
+                <span *ngIf="cobranca && cobranca.Detail && cobranca.Detail.MesAno ">-
+                  {{ cobranca.Detail.MesAno  }}</span>
+              </h1>
+              <h2 class="sub-title-prestacao-contas">{{cobranca.ImovelCobranca}}</h2>
+            </header>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div *ngIf="!carregando" class="content-print">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                  <div class="Item_DetalhamentoCompetencia_Proprietario">
+                    <div class="Item_DetalhamentoCompetencia_Titulo">Dados do Proprietário:</div>
+                    <p class="Item_DetalhamentoCompetencia_Valor">
+                      <label>Nome:</label> <span class="span_valor">{{ cobranca.ProprietarioCobranca }}</span> |
+                      <label>Dia da
+                        Remessa:</label> <span class="span_valor">{{ cobranca.Detail.DiaRemessa
+                              }}</span>
+                    </p>
+
+                    <div class="DetalhamentoCompetencia_Proprietario_Painel">
+
+                      <div class="Proprietario_Painel_DadosBancarios"
+                        *ngIf="cobranca.Detail.Proprietario.ContaBancaria">
+
+                        <div class="Painel_DadosBancarios_Info Item_DadosBancarios_Dados_Titular">
+                          <div class="Painel_DadosBancarios_Icone  hidden-print">
+                            <i class="fas fa-user"></i>
+
+                          </div>
+                          <div class="Painel_DadosBancarios_Titulo">Titular da <span>conta</span></div>
+                          <div class="Item_DadosBancarios_Dados Item_DadosBancarios_Titular">
+                            <div class="DadosBancarios_Dados_Label">CPF/CNPJ: </div>
+                            <div class="DadosBancarios_Dados_Valor">
+                              {{ cobranca.Detail.Proprietario.ContaBancaria.CPFCNPJTitular | cpfcnpj}}</div>
+                          </div>
+
+                          <div class="Item_DadosBancarios_Dados Item_DadosBancarios_Titular">
+                            <div class="DadosBancarios_Dados_Label">Nome: </div>
+                            <div class="DadosBancarios_Dados_Valor">{{
+                                    cobranca.Detail.Proprietario.ContaBancaria.NomeTitular }}</div>
+                          </div>
+                        </div>
+
+
+                        <div class=" Painel_DadosBancarios_Info Item_DadosBancarios_Dados_Conta">
+                          <div class="Painel_DadosBancarios_Icone  hidden-print">
+
+
+                            <i class="glyphicons glyphicons-bank"></i>
+                          </div>
+                          <div class="Painel_DadosBancarios_Titulo">Dados <span>bancários</span></div>
+                          <div class="Item_DadosBancarios_Dados Item_DadosBancarios_Conta">
+                            <div class="DadosBancarios_Dados_Label">Banco: </div>
+                            <div class="DadosBancarios_Dados_Valor">{{
+                                    cobranca.Detail.Proprietario.ContaBancaria.Banco }}</div>
+                          </div>
+
+                          <div class="Item_DadosBancarios_Dados Item_DadosBancarios_Conta">
+                            <div class="DadosBancarios_Dados_Label">Agência: </div>
+                            <div class="DadosBancarios_Dados_Valor">{{
+                                    cobranca.Detail.Proprietario.ContaBancaria.Agencia }}</div>
+                          </div>
+                          <div class="Item_DadosBancarios_Dados Item_DadosBancarios_Conta">
+                            <div class="DadosBancarios_Dados_Label">Conta {{
+                                    cobranca.Detail.Proprietario.ContaBancaria.DescricaoTipoConta }}: </div>
+                            <div class="DadosBancarios_Dados_Valor">{{
+                                    cobranca.Detail.Proprietario.ContaBancaria.Conta }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="Item_DetalhamentoCompetencia_BoletosPagos" *ngIf="cobranca.Detail.BoletosPagos">
+                    <div class="Item_DetalhamentoCompetencia_Titulo">Boletos Pagos:</div>
+                    <div class="DetalhamentoCompetencia_BoletosPagos_Lista">
+                      <div class="BoletosPagos_Lista_Item" [class.__is-open]="boleto.isExpanded"
+                        *ngFor="let boleto of cobranca.Detail.BoletosPagos ; let x = index">
+                        <!-- Adicionar ou remover a classe "__is-open" ao clicar no detalhamento do boleto -->
+                        <div class="Lista_Item_ResumoBoleto">
+                          <div class="Item_ResumoBoleto_Valor">{{boleto.ValorTotal | currency: 'BRL' :3.2}}</div>
+                          <div class="Item_ResumoBoleto_Dados Item_ResumoBoleto_Emissao">
+                            <div class="ResumoBoleto_Dados_Label">Emissão:</div>
+                            <div class="ResumoBoleto_Dados_Valor">{{boleto.DataEmissao | date:'shortDate'}}</div>
+                          </div>
+                          <div class="Item_ResumoBoleto_Dados Item_ResumoBoleto_Vencimento">
+                            <div class="ResumoBoleto_Dados_Label">Vencimento:</div>
+                            <div class="ResumoBoleto_Dados_Valor">{{boleto.DataVencimento | date:'shortDate'}}</div>
+                          </div>
+                          <div class="Item_ResumoBoleto_Dados Item_ResumoBoleto_PagoEm">
+                            <div class="ResumoBoleto_Dados_Label">Pago em:</div>
+                            <div class="ResumoBoleto_Dados_Valor">{{boleto.DataPagamento | date:'shortDate'}}</div>
+                          </div>
+                        </div>
+                        <div class="Lista_Item_Detalhamento" *ngIf="boleto.Lancamentos">
+                          <div class="Item_Detalhamento_Titulo">Detalhamento do boleto</div>
+                          <div class="Item_Detalhamento_Lista">
+                            <ul>
+                              <li *ngFor="let lancamento of boleto.Lancamentos; let indexLancamento=index">
+                                {{lancamento.DescricaoLancamento}}:
+                                <span *ngIf="lancamento.TipoLancamento === 1">{{lancamento.ValorLancamento
+                                        |
+                                        currency : 'R$' : '3.2'}}</span>
+                                <span *ngIf="lancamento.TipoLancamento === 2">{{lancamento.ValorLancamento
+                                        |
+                                        currency : 'R$ -' : '3.2'}}</span></li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="Item_DetalhamentoCompetencia_ResumoOperacao">
+                    <div class="Item_DetalhamentoCompetencia_Titulo">Resumo da Operação:</div>
+                    <div class="DetalhamentoCompetencia_ResumoOperacao_Painel">
+                      <div class="ResumoOperacao_Painel_AnaliseRecebimento "
+                        [ngClass]="{'__is-success' : cobranca.Detail.Status === 3, '__is-error' : cobranca.Detail.Status === 1 || cobranca.Detail.Status === 2}">
+                        <div class="Painel_AnaliseRecebimento_BoxValores">
+
+
+                          <div class="AnaliseRecebimento_BoxValores_Item AnaliseRecebimento_BoxValores_ValorPago">
+                            <div class="BoxValores_Item_Valor">
+                              <div class="Item_Valor_Sifrao">R$</div>
+                              <div class="Item_Valor_Real">
+                                {{ cobranca.Detail.Totais.ValorTotalPago | currency : ' ' : '3.2'}}
+                              </div>
+                            </div>
+                            <div class="BoxValores_Item_Label">Valor Pago</div>
+                          </div>
+
+                          <div class="AnaliseRecebimento_BoxValores_Item AnaliseRecebimento_BoxValores_ValorEsperado">
+                            <div class="BoxValores_Item_Valor">
+                              <div class="Item_Valor_Sifrao">R$</div>
+                              <div class="Item_Valor_Real">
+                                {{ cobranca.Detail.Totais.ValorTotalPago | currency : ' ' : '3.2'}}
+                              </div>
+                            </div>
+                            <div class="BoxValores_Item_Label">Valor Esperado</div>
+                          </div>
+                        </div>
+                        <div class="Painel_AnaliseRecebimento_StatusCompetencia">
+                          <div
+                            class="AnaliseRecebimento_StatusCompetencia_Item AnaliseRecebimento_StatusCompetencia_Sucesso"
+                            *ngIf="cobranca.Detail.Status === 3">
+                            <div class="StatusCompetencia_Item_Icone ">
+                              <i class="far fa-check-circle"></i>
+                            </div>
+                            <div class="StatusCompetencia_Item_Msg">Recebido conforme o esperado.</div>
+                          </div>
+
+                          <div
+                            class="AnaliseRecebimento_StatusCompetencia_Item AnaliseRecebimento_StatusCompetencia_Error"
+                            *ngIf="cobranca.Detail.Status === 1 || cobranca.Detail.Status === 2">
+                            <div class="StatusCompetencia_Item_Icone">
+                              <i class="far fa-times-circle"></i>
+                            </div>
+                            <div class="StatusCompetencia_Item_Msg">Competência com disparidade de valores.</div>
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="ResumoOperacao_Painel_TaxaAdministracao"
+                        *ngIf="cobranca.Detail.Taxas.TaxaAdministracao.percentualTaxa">
+                        <div class="Painel_TaxaAdministracao_Icone hidden-print"></div>
+                        <div class="Painel_TaxaAdministracao_Titulo">Taxa de <span>administração</span></div>
+                        <div class="Painel_TaxaAdministracao_Percentual">
+                          {{cobranca.Detail.Taxas.TaxaAdministracao.TipoTaxaAdministracaoDescricao}}</div>
+                        <div class="Painel_TaxaAdministracao_BoxValores">
+                          <div class="TaxaAdministracao_BoxValores_Item TaxaAdministracao_BoxValores_ValorRecebido">
+                            <div class="BoxValores_Item_Valor">
+                              <div class="Item_Valor_Sifrao">R$</div>
+                              <div class="Item_Valor_Real">{{cobranca.Detail.Taxas.TaxaAdministracao.Pago | currency :
+                                      ' ' : '3.2'}}</div>
+                              <!-- <div class="Item_Valor_Centavos">,00</div> -->
+                            </div>
+                            <div class="BoxValores_Item_Msg">
+                              calculo com base no valor recebido.
+                            </div>
+                          </div>
+                          <div class="TaxaAdministracao_BoxValores_Item TaxaAdministracao_BoxValores_ValorEsperado"
+                            *ngIf="cobranca.Detail.Taxas.TaxaAdministracao.TipoTaxaAdministracao == 1">
+                            <div class="BoxValores_Item_Valor">
+                              <div class="Item_Valor_Sifrao">R$</div>
+                              <div class="Item_Valor_Real">{{cobranca.Detail.Taxas.TaxaAdministracao.Esperado | currency :
+                                      ' ' : '3.2'}}</div>
+                              <!-- <div class="Item_Valor_Centavos">,00</div> -->
+                            </div>
+                            <div class="BoxValores_Item_Msg">
+                              calculo com base no valor esperado.
+                            </div>
+                          </div>
+                        </div>
+
+
+
+                      </div>
+                      <div class="ResumoOperacao_Painel_TaxaIntermediacao"
+                        *ngIf="cobranca.Detail.Taxas.TaxaIntermediacao.percentualTaxa">
+                        <div class="Painel_TaxaIntermediacao_Icone  hidden-print"></div>
+                        <div class="Painel_TaxaIntermediacao_Titulo">Taxa de <span>Intermediação</span></div>
+                        <div class="Painel_TaxaIntermediacao_Percentual">
+                          {{cobranca.Detail.Taxas.TaxaIntermediacao.percentualTaxa}}%
+                        </div>
+                        <div class="Painel_TaxaIntermediacao_BoxValores">
+                          <div class="TaxaIntermediacao_BoxValores_Item TaxaIntermediacao_BoxValores_ValorRecebido">
+                            <div class="BoxValores_Item_Valor">
+                              <div class="Item_Valor_Sifrao">R$</div>
+                              <div class="Item_Valor_Real">{{cobranca.Detail.Taxas.TaxaIntermediacao.Pago | currency :
+                                      ' ' : '3.2'}}</div>
+                              <!-- <div class="Item_Valor_Centavos">,00</div> -->
+                            </div>
+                            <div class="BoxValores_Item_Msg">
+                              calculo com base no valor recebido.
+                            </div>
+                          </div>
+                          <div class="TaxaIntermediacao_BoxValores_Item TaxaIntermediacao_BoxValores_ValorEsperado">
+                            <div class="BoxValores_Item_Valor">
+                              <div class="Item_Valor_Sifrao">R$</div>
+                              <div class="Item_Valor_Real">{{cobranca.Detail.Taxas.TaxaIntermediacao.Esperado | currency :
+                                      ' ' : '3.2'}}</div>
+                              <!-- <div class="Item_Valor_Centavos">,00</div> -->
+                            </div>
+                            <div class="BoxValores_Item_Msg">
+                              calculo com base no valor esperado.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="Item_DetalhamentoCompetencia_LancamentosAdicionais">
+                    <div class="Item_DetalhamentoCompetencia_Titulo">Lançamentos Adicionais:</div>
+                    <div class="DetalhamentoCompetencia_LancamentosAdicionais_Painel">
+                      <div class="LancamentosAdicionais_Painel_ListaLancamentos">
+                        <div class="Painel_ListaLancamentos_Item"
+                          [ngClass]="{'Painel_ListaLancamentos_Entrada': lancamento.TipoLancamento === 2, 'Painel_ListaLancamentos_Saida': lancamento.TipoLancamento === 1 }"
+                          *ngFor="let lancamento of cobranca.Detail.LancamentosPagarReceber; let indexLancamentosPagarReceber=index">
+                          <!-- Alterna entre as classes "Painel_ListaLancamentos_Saida e Painel_ListaLancamentos_Entrada" conforme o tipo de lancamento -->
+                          <a class="ListaLancamentos_Item_Excluir" (click)="excluirEntradaSaida(cobranca, lancamento)">
+                            <i class="far fa-trash-alt"></i>
+                          </a>
+                          <div class="ListaLancamentos_Item_Info">
+                            <div class="Item_Info_Label">Data:</div>
+                            <div class="Item_Info_Valor">{{lancamento.DataLancamento | date:'shortDate'}}</div>
+                          </div>
+                          <div class="ListaLancamentos_Item_Info">
+                            <div class="Item_Info_Label">Valor:</div>
+                            <div class="Item_Info_Valor">{{lancamento.ValorLancamento
+                                    |
+                                    currency : 'BRL' : '3.2'}}</div>
+                          </div>
+                          <div class="ListaLancamentos_Item_Descricao">
+                            {{lancamento.DescricaoLancamento}}
+                          </div>
+                        </div>
+                        <div *ngIf="!cobranca.Detail.LancamentosPagarReceber">Não existe lançamentos adicionais</div>
+                      </div>
+                      <div class="LancamentosAdicionais_Painel_TotaisLancamentos">
+                        <div class="Painel_TotaisLancamentos_ItemTotal Painel_TotaisLancamentos_TotalReceber">
+                          <div class="TotaisLancamentos_ItemTotal_Titulo">Lançamentos <span>(ENTRADA)</span></div>
+                          <div class="TotaisLancamentos_ItemTotal_Valor">
+                            <div class="ItemTotal_Valor_Sifrao">R$</div>
+                            <div class="ItemTotal_Valor_Real">{{cobranca.Detail.Totais.ValorTotalLancamentosReceber |
+                                    currency :
+                                    ' ' : '3.2'}}</div>
+
+                          </div>
+                        </div>
+                        <div class="Painel_TotaisLancamentos_ItemTotal Painel_TotaisLancamentos_TotalPagar">
+                          <div class="TotaisLancamentos_ItemTotal_Titulo">Lançamentos <span>(SAÍDA)</span></div>
+                          <div class="TotaisLancamentos_ItemTotal_Valor">
+                            <div class="ItemTotal_Valor_Sifrao">R$</div>
+                            <div class="ItemTotal_Valor_Real">{{cobranca.Detail.Totais.ValorTotalLancamentosPagar |
+                                    currency
+                                    :
+                                    ' ' : '3.2'}}</div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="Item_DetalhamentoCompetencia_TabelaTotais">
+                    <table class="table table-totais">
+                      <tbody>
+                        <tr>
+                          <td class="descricao-valor">
+                            Total de
+                            <span>Boletos Pagos</span>
+                          </td>
+                          <td class="valor">
+                            <span class="Item_BoxValores_SinalOperador">+</span>
+                            <span class="BoxValores_Valor_Real">
+                              {{ cobranca.Detail.Totais.ValorTotalPago | currency : 'BRL' : '3.2' }}
+                            </span>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="descricao-valor">
+                            Total de LANÇAMENTOS ADICIONAIS
+                            <span>Entrada</span>
+                          </td>
+                          <td class="valor">
+                            <span class="Item_BoxValores_SinalOperador">+</span>
+                            <span class="BoxValores_Valor_Real">
+                              {{ cobranca.Detail.Totais.ValorTotalLancamentosReceber | currency  :  'BRL' : '3.2' }}
+                            </span>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="descricao-valor">
+                            Total de LANÇAMENTOS ADICIONAIS
+                            <span>Saída</span>
+                          </td>
+                          <td class="valor">
+                            <span class="Item_BoxValores_SinalOperador">-</span>
+                            <span class="BoxValores_Valor_Real">
+                              {{ cobranca.Detail.Totais.ValorTotalLancamentosPagar | currency : 'BRL' : '3.2' }}
+                            </span>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="descricao-valor">
+                            Total de Taxa
+                            <span>Administração</span>
+                          </td>
+                          <td class="valor">
+                            <span class="Item_BoxValores_SinalOperador">-</span>
+                            <span class="BoxValores_Valor_Real"
+                              *ngIf="cobranca.Detail.Taxas.TaxaAdministracao.TipoTaxaAdministracao === 1 && cobranca.Detail.Taxas.TaxaAdministracao.Esperado">
+                              {{ cobranca.Detail.Taxas.TaxaAdministracao.Esperado | currency : 'BRL' : '3.2' }}
+                            </span>
+                            <span class="BoxValores_Valor_Real"
+                              *ngIf="cobranca.Detail.Taxas.TaxaAdministracao.TipoTaxaAdministracao === 2 && cobranca.Detail.Taxas.TaxaAdministracao.Pago">
+                              {{ cobranca.Detail.Taxas.TaxaAdministracao.Pago | currency : 'BRL' : '3.2' }}
+                            </span>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="descricao-valor">
+                            Total de Taxa
+                            <span>Intermediação</span>
+                          </td>
+                          <td class="valor">
+                            <span class="Item_BoxValores_SinalOperador">-</span>
+                            <span class="BoxValores_Valor_Real">
+                              {{ cobranca.Detail.Taxas.TaxaIntermediacao.Esperado | currency :'BRL' : '3.2' }}
+                            </span>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="descricao-valor">
+                            Total de Taxa
+                            <span>Bancária</span>
+                          </td>
+                          <td class="valor">
+                            <span class="Item_BoxValores_SinalOperador">-</span>
+                            <span class="BoxValores_Valor_Real">
+                              {{ cobranca.Detail.Taxas.TaxaBancaria.Pago | currency :  'BRL' : '3.2' }}
+                            </span>
+                          </td>
+                        </tr>
+                      </tbody>
+
+                      <tbody class="saldo-liquido">
+                        <tr>
+                          <td class="descricao-valor ">
+                            Total
+                            <span>Saldo Líquido</span>
+                          </td>
+                          <td class="valor">
+                            <span class="Item_BoxValores_SinalOperador">=</span>
+                            <span class="BoxValores_Valor_Real">
+                              {{ cobranca.Detail.Totais.SaldoLiquido | currency : 'BRL' : '3.2' }}
+                            </span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="Item_DetalhamentoCompetencia_ResumoTotais" *ngIf="false">
+                    <div
+                      class="DetalhamentoCompetencia_ResumoTotais_Item DetalhamentoCompetencia_ResumoTotais_TotalBoletosPagos">
+                      <div class="ResumoTotais_Item_Titulo">
+                        Total de Total de
+                        <span>Boletos Pagos</span>
+                      </div>
+                      <div class="ResumoTotais_Item_BoxValores">
+                        <div class="Item_BoxValores_Valor">
+
+                          <div class="BoxValores_Valor_Real">{{cobranca.Detail.Totais.ValorTotalPago | currency :
+                                  'BRL' : '3.2'}}</div>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="DetalhamentoCompetencia_ResumoTotais_SinalOperador">+</div>
+                    <div
+                      class="DetalhamentoCompetencia_ResumoTotais_Item DetalhamentoCompetencia_ResumoTotais_TotalLancamentos">
+                      <div class="ResumoTotais_Item_Titulo">
+                        Total de
+                        <span>Lançamentos adicionais</span>
+                      </div>
+                      <div class="ResumoTotais_Item_BoxValores">
+                        <div class="Item_BoxValores_Valor Item_BoxValores_AReceber">
+
+                          <div class="BoxValores_Valor_Real">{{cobranca.Detail.Totais.ValorTotalLancamentosReceber |
+                                  currency
+                                  :
+                                  'BRL' : '3.2'}}</div>
+
+                          <div class="BoxValores_Valor_Descricao">Entrada</div>
+                        </div>
+                        <div class="Item_BoxValores_SinalOperador">-</div>
+                        <div class="Item_BoxValores_Valor Item_BoxValores_APagar">
+
+                          <div class="BoxValores_Valor_Real">{{cobranca.Detail.Totais.ValorTotalLancamentosPagar |
+                                  currency
+                                  :
+                                  'BRL' : '3.2'}}</div>
+
+                          <div class="BoxValores_Valor_Descricao">Saída</div>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="DetalhamentoCompetencia_ResumoTotais_SinalOperador">-</div>
+                    <div
+                      class="DetalhamentoCompetencia_ResumoTotais_Item DetalhamentoCompetencia_ResumoTotais_TotalTaxas">
+                      <div class="ResumoTotais_Item_Titulo">
+                        Total de
+                        <span>Taxas</span>
+                      </div>
+                      <div class="ResumoTotais_Item_BoxValores">
+                        <div class="Item_BoxValores_Valor"
+                          *ngIf="cobranca.Detail.Taxas.TaxaAdministracao.TipoTaxaAdministracao === 1 && cobranca.Detail.Taxas.TaxaAdministracao.Esperado">
+                          <div class="BoxValores_Valor_Real">
+                            {{ cobranca.Detail.Taxas.TaxaAdministracao.Esperado | currency : 'BRL' : '3.2'}}
+                          </div>
+                          <div class="BoxValores_Valor_Descricao">Administração</div>
+                        </div>
+
+                        <div class="Item_BoxValores_Valor"
+                          *ngIf="cobranca.Detail.Taxas.TaxaAdministracao.TipoTaxaAdministracao === 2 && cobranca.Detail.Taxas.TaxaAdministracao.Pago">
+                          <div class="BoxValores_Valor_Real">
+                            {{ cobranca.Detail.Taxas.TaxaAdministracao.Pago | currency : 'BRL' : '3.2'}}
+                          </div>
+                          <div class="BoxValores_Valor_Descricao">Administração</div>
+                        </div>
+                        <div class="Item_BoxValores_SinalOperador"
+                          *ngIf="cobranca.Detail.Taxas.TaxaAdministracao.Esperado">+
+                        </div>
+                        <div class="Item_BoxValores_Valor" *ngIf="cobranca.Detail.Taxas.TaxaIntermediacao.Esperado">
+
+                          <div class="BoxValores_Valor_Real">{{cobranca.Detail.Taxas.TaxaIntermediacao.Esperado | currency
+                                  :
+                                  'BRL' : '3.2'}}</div>
+
+                          <div class="BoxValores_Valor_Descricao">Intermediação</div>
+                        </div>
+                        <div class="Item_BoxValores_SinalOperador"
+                          *ngIf="cobranca.Detail.Taxas.TaxaIntermediacao.Esperado">+
+                        </div>
+                        <div class="Item_BoxValores_Valor">
+
+                          <div class="BoxValores_Valor_Real">{{cobranca.Detail.Taxas.TaxaBancaria.Pago | currency :
+                                  'BRL' : '3.2'}}</div>
+
+                          <div class="BoxValores_Valor_Descricao">Bancária</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="DetalhamentoCompetencia_ResumoTotais_SinalOperador">=</div>
+                    <div
+                      class="DetalhamentoCompetencia_ResumoTotais_Item DetalhamentoCompetencia_ResumoTotais_TotalSaldoLiquido">
+                      <div class="ResumoTotais_Item_Titulo">
+                        Total
+                        <span>Saldo Líquido</span>
+                      </div>
+                      <div class="ResumoTotais_Item_BoxValores">
+                        <div class="Item_BoxValores_Valor">
+
+                          <div class="BoxValores_Valor_Real">{{cobranca.Detail.Totais.SaldoLiquido | currency :
+                                  'BRL' : '3.2'}}</div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <pre>{{cobranca | json}}</pre> -->
+                </div>
+
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+  </section>
+</div>

@@ -1,0 +1,13 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+
+
+a.link,
+.link {
+  color: $color-primary !important;
+  margin: 0;
+  padding: 0;
+  line-height: initial !important;
+  border: 0 !important;
+  vertical-align: initial;
+}

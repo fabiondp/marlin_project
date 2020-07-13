@@ -1,0 +1,400 @@
+<div class="" *ngIf="carregandoFormulario">
+  <app-loading [message]="messageStatus"></app-loading>
+</div>
+<!-- {{imovel | json}} -->
+<div class="" *ngIf="!carregandoFormulario && messages">
+  <div *ngFor="let msg of messages">
+    <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+  </div>
+</div>
+
+<form class="salvar-dadosLocatario" #cadastroForm="ngForm" (ngSubmit)="salvarDadosContrato(cadastroForm)" [hidden]="carregandoFormulario || !exibirFormulario">
+
+  <div id="accordion-aba-contrato-locacao-contrato" role="tablist" aria-multiselectable="true">
+    <div id="panelInfoVigencia" class="panel panel-form-group">
+      <div class="panel-heading" role="tab" id="headingPanelInfoVigencia">
+        <h4 class="panel-title">
+          <button type="button" class="accordion-toggle" [class.collapsed]="!contratoLocacao.panelInfoVigenciaIsOpen"
+            [attr.aria-expanded]="contratoLocacao.panelInfoVigenciaIsOpen" (click)="contratoLocacao.toggleCollapse('panelInfoVigenciaIsOpen')"
+            aria-controls="collapsePanelInfoVigencia">
+            Vigência
+          </button>
+        </h4>
+      </div>
+      <div id="panelInfoVigenciaIsOpen" class="panel-collapse collapse" [class.in]="contratoLocacao.panelInfoVigenciaIsOpen"
+        role="tabpanel" aria-labelledby="headingPanelDadosPessoais">
+        <div class="panel-body">
+          <fieldset>
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="txtDataInicioVigencia">Data início
+                  </label>
+                  <input required type="text" [maxDate]="maxDate" [bsConfig]="bsConfig" class="form-control"
+                    bsDatepicker id="txtDataInicioVigencia" name="txtDataInicioVigencia" [(ngModel)]="contratoLocacao.DataInicioVigencia"
+                    #DataInicioVigencia="ngModel" [disabled]="isEdicao()" autocomplete="off" (bsValueChange)="contratoLocacao.calcularDataFinalVigenciaContrato($event)"
+                    (change)="contratoLocacao.calcularDataFinalVigenciaContrato()">
+
+                  <div *ngIf="DataInicioVigencia.invalid && (DataInicioVigencia.dirty || DataInicioVigencia.touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="DataInicioVigencia.errors.required">
+                      Campo obrigatório.
+                    </div>
+                    <div *ngIf="DataInicioVigencia.errors.bsDate">
+                      Data inválida.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="txtVigenciaContratoMeses">Duração
+                    <span class="opcional">(meses)</span>
+                  </label>
+                  <input type="number" class="form-control" id="txtVigenciaContratoMeses" name="txtVigenciaContratoMeses"
+                    [(ngModel)]="contratoLocacao.VigenciaContratoMeses" #VigenciaContratoMeses="ngModel" [disabled]="isEdicao()"
+                    [min]="0" (change)="contratoLocacao.calcularDataFinalVigenciaContrato()" autocomplete="off"
+                    required />
+                  <div *ngIf="VigenciaContratoMeses.invalid && (VigenciaContratoMeses.dirty || VigenciaContratoMeses.touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="VigenciaContratoMeses.errors.required">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="txtDataInicioVigencia">Encerramento previsto
+                  </label>
+                  <input type="text" class="form-control" name="txtDataFinalContrato" bsDatepicker [bsConfig]="bsConfig"
+                    [(ngModel)]="contratoLocacao.DataFinalContrato" readonly="true" autocomplete="off" [isDisabled]="true">
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+        </div>
+      </div>
+    </div>
+
+    <div id="panelInfoCobranca" class="panel panel-form-group">
+      <div class="panel-heading" role="tab" id="headingPanelInfoCobranca">
+        <h4 class="panel-title">
+          <button type="button" class="accordion-toggle" [class.collapsed]="!contratoLocacao.panelInfoCobrancaIsOpen"
+            [attr.aria-expanded]="contratoLocacao.panelInfoCobrancaIsOpen" (click)="contratoLocacao.toggleCollapse('panelInfoCobrancaIsOpen')"
+            aria-controls="collapsePanelInfoCobranca">
+            Cobrança
+          </button>
+        </h4>
+      </div>
+      <div id="panelInfoCobrancaIsOpen" class="panel-collapse collapse" [class.in]="contratoLocacao.panelInfoCobrancaIsOpen"
+        role="tabpanel" aria-labelledby="headingPanelInfoCobranca">
+        <div class="panel-body">
+          <fieldset>
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="txtValorLocacao">Valor do aluguel
+                  </label>
+                  <div class="input-group">
+                    <div class="input-group-addon">R$</div>
+                    <input currencyMask type="text" class="form-control" id="txtValorLocacao" name="txtValorLocacao"
+                      [(ngModel)]="contratoLocacao.ValorLocacao" #ValorLocacao="ngModel" [options]="{prefix: '', thousands: '.', decimal: ',' }"
+                      required placeholder="0,00" [disabled]="bloquearEdicaoPlanoContratual()" autocomplete="off">
+                  </div>
+                  <div *ngIf="ValorLocacao.invalid && (ValorLocacao.dirty || ValorLocacao.touched)" class="alert alert-danger">
+                    <div *ngIf="ValorLocacao.errors.required">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <div>
+                    <label for="DiaPagamento">Dia do vencimento
+                    </label>
+                    <select name="DiaPagamento" id="DiaPagamento" class="form-control" [(ngModel)]="contratoLocacao.DiaPagamento"
+                      required>
+                      <option [value]="null">Selecione</option>
+                      <option *ngFor="let opcao of totalDias" [value]="opcao.value">{{ opcao.value }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Em caso de atraso dos pagamentos</legend>
+            <div class="row">
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label for="MultaSobreBoletoLocacao">Cobrar multa?</label>
+
+                  <div class="form-group clearfix">
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" name="Multa" [value]="false" [(ngModel)]="contratoLocacao.MultaSobreBoletoLocacao"
+                          (change)="resetarMulta()" />Não</label>
+                    </div>
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" name="MultaSobreBoletoLocacao" [value]="true" [(ngModel)]="contratoLocacao.MultaSobreBoletoLocacao" />Sim</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group" *ngIf="contratoLocacao.MultaSobreBoletoLocacao">
+                  <label for="ValorPercentualMultaSobreBoletoLocacao">Valor da multa (%)</label>
+                  <div class="input-group col-md-8 col-xs-12">
+                    <input type="number" class="form-control" id="ValorPercentualMultaSobreBoletoLocacao" name="ValorPercentualMultaSobreBoletoLocacao"
+                      width="5" placeholder="0" min="1" [(ngModel)]="contratoLocacao.ValorPercentualMultaSobreBoletoLocacao"
+                      #ValorPercentualMultaSobreBoletoLocacao="ngModel" required pattern="^[0-9]*$" />
+                    <div class="input-group-addon">%</div>
+                  </div>
+
+                  <div *ngIf="
+                                      ValorPercentualMultaSobreBoletoLocacao.invalid &&
+                                      (ValorPercentualMultaSobreBoletoLocacao.dirty || ValorPercentualMultaSobreBoletoLocacao.touched)
+                                    ">
+                    <div *ngIf="ValorPercentualMultaSobreBoletoLocacao.errors.required" class="alert alert-danger">
+                      Campo obrigatório.
+                    </div>
+
+                    <div *ngIf="ValorPercentualMultaSobreBoletoLocacao.errors.pattern" class="alert alert-danger">
+                      Somente número inteiro.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- </div>
+                            <div class="row"> -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="JurosMoraSobreBoletoLocacao">Cobrar juros de mora? <button type="button" class="btn btn-icon btn-tooltip"
+                      placement="top" [tooltip]="tooltipJurosMoraSobreBoletoLocacao">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+                  <ng-template #tooltipJurosMoraSobreBoletoLocacao>
+                    <div>Cobrança de 0,033% ao dia em caso de atrasos.</div>
+                  </ng-template>
+
+                  <div class="form-group clearfix">
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" name="JurosMoraSobreBoletoLocacao" [value]="false" [(ngModel)]="contratoLocacao.JurosMoraSobreBoletoLocacao" />Não</label>
+                    </div>
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" name="JurosMoraSobreBoletoLocacao" [value]="true" [(ngModel)]="contratoLocacao.JurosMoraSobreBoletoLocacao" />Sim</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div id="panelInfoReajuste" class="panel panel-form-group">
+      <div class="panel-heading" role="tab" id="headingPanelInfoReajuste">
+        <h4 class="panel-title">
+          <button type="button" class="accordion-toggle" [class.collapsed]="!contratoLocacao.panelInfoReajusteIsOpen"
+            [attr.aria-expanded]="contratoLocacao.panelInfoReajusteIsOpen" (click)="contratoLocacao.toggleCollapse('panelInfoReajusteIsOpen')"
+            aria-controls="collapsePanelInfoVigencia">
+            Reajustes
+          </button>
+        </h4>
+      </div>
+      <div id="panelInfoReajusteIsOpen" class="panel-collapse collapse" [class.in]="contratoLocacao.panelInfoReajusteIsOpen"
+        role="tabpanel" aria-labelledby="headingPanelInfoReajuste">
+        <div class="panel-body">
+          <fieldset>
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="txtDescricaoPercentualReajuste">Índice base
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipDescricaoPercentualReajuste">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+                  <ng-template #tooltipDescricaoPercentualReajuste>
+                    <div>Descrição do percentual de reajuste anual. Ex.: IGP-M, IPCA ou INPC</div>
+                  </ng-template>
+                  <input required type="text" class="form-control" id="txtDescricaoPercentualReajuste" name="DescricaoPercentualReajuste"
+                    [(ngModel)]="contratoLocacao.DescricaoPercentualReajuste" #DescricaoPercentualReajuste="ngModel" />
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="txtMesReajuste">Mês de Reajuste
+                  </label>
+                  <select required class="form-control" id="txtMesReajuste" name="MesReajuste" [(ngModel)]="contratoLocacao.MesReajuste"
+                    #MesReajuste="ngModel">
+                    <option [disabled]="true" [ngValue]="null">Selecione um mês</option>
+                    <option *ngFor="let mes of mesReajuste" [ngValue]="mes.value" selected="selected">
+                      {{mes.mes}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div id="panelInfoBonificacao" class="panel panel-form-group">
+      <div class="panel-heading" role="tab" id="headingPanelInfoBonificacao">
+        <h4 class="panel-title">
+          <div type="button" class="accordion-toggle" [class.collapsed]="!contratoLocacao.panelInfoBonificacaoIsOpen"
+            [attr.aria-expanded]="contratoLocacao.panelInfoBonificacaoIsOpen" (click)="contratoLocacao.toggleCollapse('panelInfoBonificacaoIsOpen')"
+            aria-controls="collapsePanelInfoVigencia">
+            Bonificações
+            <i class="glyphicons glyphicons-question-sign" [tooltip]="tooltipCollapseBonificacao"></i>
+          </div>
+          <ng-template #tooltipCollapseBonificacao>
+            <div [innerHtml]="tooltip.collapseBonificacao">
+            </div>
+          </ng-template>
+        </h4>
+      </div>
+      <div id="panelInfoBonificacaoIsOpen" class="panel-collapse collapse" [class.in]="contratoLocacao.panelInfoBonificacaoIsOpen"
+        role="tabpanel" aria-labelledby="headingPanelInfoBonificacao">
+        <div class="panel-body">
+
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <div>
+                  <label for="">Deseja registrar bonificações?
+                  </label>
+                </div>
+                <div class="radio-inline">
+                  <label>
+                    <input type="radio" id="PossuiBonificacoes" name="PossuiBonificacoes" [value]="false" [(ngModel)]="contratoLocacao.PossuiBonificacoes"
+                      (change)="contratoLocacao.alterarPossuiBonificacoes()" />Não
+                  </label>
+                </div>
+                <div class="radio-inline">
+                  <label>
+                    <input type="radio" id="PossuiBonificacoes" name="PossuiBonificacoes" [value]="true" [(ngModel)]="contratoLocacao.PossuiBonificacoes"
+                      (change)="contratoLocacao.alterarPossuiBonificacoes()" />Sim
+                  </label>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+
+
+
+          <div *ngIf="contratoLocacao.PossuiBonificacoes" class="box-multiple">
+
+
+
+            <div class="row">
+
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                <div class="alert alert-warning alert-small" role="alert">
+                  <i class="glyphicons glyphicons-alert icon"></i> Atenção: Os valores de bonificação cadastrados
+                  abaixo são apenas informativos para consultas futuras.
+                </div>
+
+              </div>
+
+
+            </div>
+
+            <fieldset *ngFor="let bonificacao of contratoLocacao.Bonificacoes; let indexBonificacao = index">
+
+
+
+
+              <div class="row">
+                <div class="col-md-3">
+                  <label for="DescricaoBonificacao">Descrição</label>
+                  <input required type="text" class="form-control" [name]="'DescricaoBonificacao_' + indexBonificacao"
+                    [id]="'DescricaoBonificacao_' + indexBonificacao" [(ngModel)]="bonificacao.Descricao"
+                    #DescricaoBonificacao="ngModel" />
+                  <div *ngIf="DescricaoBonificacao.invalid && (DescricaoBonificacao.dirty || DescricaoBonificacao.touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="DescricaoBonificacao.errors.required">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label [for]="'ValorBonificacao' + indexBonificacao">Valor</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">R$</div>
+                      <input required currencyMask type="text" class="form-control" [id]="'ValorBonificacao' + indexBonificacao"
+                        [name]="'ValorBonificacao' + indexBonificacao" [(ngModel)]="bonificacao.Valor"
+                        #ValorBonificacao="ngModel" [options]="{prefix: '', thousands: '.', decimal: ',' }" placeholder="0,00" />
+                    </div>
+                    <div *ngIf="ValorBonificacao.invalid && (ValorBonificacao.dirty || ValorBonificacao.touched)" class="alert alert-danger">
+                      <div *ngIf="ValorBonificacao.errors.required">
+                        Campo obrigatório.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="contratoLocacao.Bonificacoes.length > 1">
+                  <div class="col-md-2">
+                    <div class="form-group wrap-deletar">
+                      <button class="btn btn-danger" type="button" (click)="contratoLocacao.deleteBonificacao(indexBonificacao)"><i
+                          class="glyphicons glyphicons-bin"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="row">
+              <div class="col-md-12">
+                <button type="button" class="btn btn-link btn-add" (click)="contratoLocacao.addBonificacao()">
+                  <i class="glyphicons glyphicons-plus"></i> Adicionar bonificação
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group clearfix">
+        <label for="txtObservacao">Observações
+        </label>
+        <textarea class="form-control" id="txtObservacao" name="txtObservacao" [(ngModel)]="contratoLocacao.Observacao"
+          #Outros="ngModel" maxlength="200"></textarea>
+        <span class="count-caracter" *ngIf="contratoLocacao.Observacao">{{ contratoLocacao.Observacao?.length }}/200
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div role="group" class="form-btn-group">
+        <button type="button" class="btn btn-link pull-left" (click)="_voltar()">Voltar</button>
+        <button type="submit" class="btn btn-primary pull-right" id="continuar" [disabled]="cadastroForm.invalid">Salvar
+          e continuar</button>
+      </div>
+    </div>
+  </div>
+</form>

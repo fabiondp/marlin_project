@@ -1,0 +1,90 @@
+<fieldset class="field-fiador">
+  <legend>Caução</legend>
+  <div class="row">
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="caucao.Banco">Banco</label>
+        <input type="text" required id="caucao.Banco" name="caucao.Banco" [(ngModel)]="caucao.Banco"
+          #caucaoBanco="ngModel" class="form-control" />
+        <div *ngIf="caucaoBanco.errors && caucaoBanco.dirty" class="alert alert-danger">
+          <div *ngIf="caucaoBanco.errors.required">Campo obrigatório.</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group ">
+        <label for="caucao.Agencia">Agência</label>
+        <input type="text" class="form-control" id="caucao.Agencia" name="caucao.Agencia" [(ngModel)]="caucao.Agencia"
+          #caucaoAgencia="ngModel" required maxlength="10">
+
+        <div *ngIf="caucaoAgencia.invalid && caucaoAgencia.dirty">
+          <div *ngIf="caucaoAgencia.errors.required" class="alert alert-danger">
+            Campo obrigatório.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-1">
+      <div class="form-group">
+        <label for="caucao.DVAgencia">Dígito</label>
+        <input type="text" class="form-control" id="caucao.DVAgencia" name="caucao.DVAgencia"
+          [(ngModel)]="caucao.DVAgencia" #caucaoDvAgencia="ngModel" maxlength="3">
+        <!-- <div *ngIf="caucaoDvAgencia.invalid && caucaoDvAgencia.dirty">
+          <div *ngIf="caucaoDvAgencia.errors.required" class="alert alert-danger">
+            Campo obrigatório.
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="form-group ">
+        <label for="caucao.Conta">Conta</label>
+        <input type="text" class="form-control" id="caucao.Conta" name="caucao.Conta" [(ngModel)]="caucao.Conta"
+          #caucaoConta="ngModel" required maxlength="20">
+
+        <div *ngIf="caucaoConta.invalid && caucaoConta.dirty">
+          <div *ngIf="caucaoConta.errors.required" class="alert alert-danger">
+            Campo obrigatório.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-1">
+      <div class="form-group ">
+        <label for="caucao.DVConta">Dígito</label>
+        <input type="text" class="form-control" id="caucao.DVConta" name="caucao.DVConta" [(ngModel)]="caucao.DVConta"
+          #caucaoContaDv="ngModel" maxlength="3">
+
+        <!-- <div *ngIf="caucaoContaDv.invalid && (caucaoContaDv.dirty || caucaoContaDv.touched)">
+          <div *ngIf="caucaoContaDv.errors.required" class="alert alert-danger">
+            Campo obrigatório.
+          </div>
+        </div> -->
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="caucao.Valor">Valor</label>
+        <div class="input-group">
+          <div class="input-group-addon">R$</div>
+          <input currencyMask type="text" class="form-control" id="caucao.Valor" name="caucao.Valor"
+            [(ngModel)]="caucao.Valor" #caucaoValor="ngModel" [options]="{prefix: '', thousands: '.', decimal: ',' }"
+            required placeholder="0,00">
+        </div>
+        <div *ngIf="caucaoValor.errors && caucaoValor.dirty" class="alert alert-danger">
+          <div *ngIf="caucaoValor.errors.required">Campo obrigatório.</div>
+        </div>
+
+        <!-- <input type="text" required id="caucao.Valor" name="caucao.Valor" [(ngModel)]="caucao.Valor" #caucaoValor="ngModel" class="form-control"
+        /> -->
+
+      </div>
+    </div>
+  </div>
+</fieldset>

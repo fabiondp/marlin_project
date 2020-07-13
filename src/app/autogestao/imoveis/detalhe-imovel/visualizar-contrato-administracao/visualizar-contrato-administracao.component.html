@@ -1,0 +1,108 @@
+<div *ngIf="!contratoAdministracao.isEdicao()">
+  <div class="row">
+    <div class="col-md-12">
+      Imóvel sem contrato de administração até o momento.
+    </div>
+  </div>
+</div>
+
+<div *ngIf="contratoAdministracao.isEdicao()">
+  <div *ngIf="(imovel && (!imovel.Proprietario || !imovel.Proprietario.flagPreencherDadosComInformacoesCadastrais))">
+
+    <fieldset *ngIf="contratoAdministracao.RegistrarInformacoes">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="DiaRemessa" class="control-label">Dia para remessa: </label>
+            {{ contratoAdministracao.DiaRemessa | detailInfo }}
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="TaxaIntermediacao" class="control-label">Taxa de intermediação: </label>
+            {{ contratoAdministracao.TaxaIntermediacao | detailInfo: '%' }}
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="TaxaAdministracao" class="control-label">Taxa de administração</label>
+            {{ contratoAdministracao.TaxaAdministracao | detailInfo: '%' }}
+            ({{ contratoAdministracao.TipoTaxaAdministracao | detailOpcoes: opcoesTipoTaxaAdministracao : 'Id': 'Descricao' }})
+          </div>
+        </div>
+
+        <!-- <div class="col-md-4">
+          <div class="form-group form-group-radios-inline">
+            <div>
+              {{ contratoAdministracao.TipoTaxaAdministracao | detailOpcoes: opcoesTipoTaxaAdministracao : 'Id': 'Descricao' }}
+            </div>
+          </div>
+        </div> -->
+      </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <div>
+              <label for="">Cobrar ISS? </label>
+              {{ contratoAdministracao.ISS | detailInfo }}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <div>
+              <label for="">Gerar DARF/IR?</label>
+              {{ contratoAdministracao.DARFIR | detailInfo }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- <div id="accordion-aba-contrato-administracao" role="tablist" aria-multiselectable="true"
+      >
+      <div id="panelInfoBasicas" class="panel panel-form-group panel-detail">
+        <div class="panel-heading" role="tab" id="headingPanelInfoBasicas">
+          <h4 class="panel-title">
+            <button type="button" class="accordion-toggle"
+              [class.collapsed]="!contratoAdministracao.panelInfoBasicasIsOpen"
+              [attr.aria-expanded]="contratoAdministracao.panelInfoBasicasIsOpen"
+              (click)="contratoAdministracao.toggleCollapse('panelInfoBasicasIsOpen')"
+              aria-controls="collapsePanelInfoBasicas">
+              Informações básicas
+            </button>
+          </h4>
+        </div>
+        <div id="panelInfoBasicasIsOpen" class="panel-collapse collapse"
+          [class.in]="contratoAdministracao.panelInfoBasicasIsOpen" role="tabpanel"
+          aria-labelledby="headingPanelDadosPessoais">
+          <div class="panel-body">
+          
+
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+
+  <div class="row"
+    *ngIf="imovel && imovel.Proprietario && imovel.Proprietario.flagPreencherDadosComInformacoesCadastrais">
+    <div class="col-md-12">
+      <div class="alert alert-info">
+        <p>Por você ser o próprio proprietário deste imóvel não há contrato de administração.</p>
+      </div>
+
+    </div>
+  </div>
+</div>

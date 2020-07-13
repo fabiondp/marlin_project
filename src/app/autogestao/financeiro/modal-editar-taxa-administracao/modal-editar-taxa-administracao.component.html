@@ -1,0 +1,136 @@
+<app-modal #_modalEditarTaxaAdministracao size="modal-lg">
+  <form (ngSubmit)="salvarEdicaoTaxaAdministracao()" class="modal-edicao-taxa-administracao">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+        <span aria-hidden="true" (click)="close()">&times;</span>
+      </button>
+
+      <h4 class="modal-title text-center">Editar taxa de administração</h4>
+    </div>
+    <div class="modal-body" *ngIf="cobrancaEmAlteracaoDeTaxaAdministracao">
+
+      <div *ngIf="processandoEdicaoTaxaAdministracao">
+        <app-loading message="Salvando taxa de administração..."></app-loading>
+      </div>
+
+      <div *ngIf="!processandoEdicaoTaxaAdministracao">
+
+        <div class="row" *ngIf="messagesProcessandoEdicaoTaxaAdministracao">
+          <div class="col-md-12">
+            <div>
+              <div *ngFor="let msg of messagesProcessandoEdicaoTaxaAdministracao">
+                <app-alert [close]="true" color="danger">{{ msg }}</app-alert>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="box-identificador-competencia">
+          <div class="row">
+            <div class="col-md-12">
+              <label for="">Competência:</label> <strong> {{ cobrancaEmAlteracaoDeTaxaAdministracao.MesAno }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <label for="">Proprietário:</label>
+              <strong>{{ cobrancaEmAlteracaoDeTaxaAdministracao.Proprietario.Nome }} </strong>
+            </div>
+          </div>
+        </div>
+
+        <div id="box-alteracao-taxa-administracao">
+          <div class="row">
+            <div class="col-md-12">
+              <p class="descricao">Selecione apenas os itens que serão considerados no cálculo da Taxa de Administração:
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div *ngFor="let boleto of cobrancaEmAlteracaoDeTaxaAdministracao.BoletosPagos ; let indexBoleto = index">
+                <div>
+                  Boleto recebido em:
+                  <span class="Item_Num_Boleto">
+                    {{ boleto.DataPagamento | date: 'dd/MM/yyyy hh:mm' }}
+                  </span>
+                </div>
+
+                <table class="table table-striped table-bordered table-hover table-lancamentos">
+                  <tbody>
+                    <tr *ngFor="let lancamento of boleto.Lancamentos let indexLancamento=index"
+                      [class.selected]="lancamento.CalculoTaxaAdministracao">
+                      <td>
+                        <input type="checkbox" id="check_{{indexBoleto}}_{{indexLancamento}}"
+                          name="check_{{indexBoleto}}_{{indexLancamento}}"
+                          (change)="recalcularTaxaAdministracao(cobrancaEmAlteracaoDeTaxaAdministracao)"
+                          [(ngModel)]="lancamento.CalculoTaxaAdministracao" #Selected="ngModel" />
+                      </td>
+                      <td>
+                        <label for="check_{{indexBoleto}}_{{indexLancamento}}">
+                          {{ lancamento.DescricaoLancamento }}
+                        </label>
+                      </td>
+                      <td class="text-right">
+                        <label for="check_{{indexBoleto}}_{{indexLancamento}}">
+                          <span *ngIf="lancamento.TipoLancamento === 1">
+                            {{ lancamento.ValorLancamento | currency : 'R$' : '3.2' }}
+                          </span>
+
+                          <span *ngIf="lancamento.TipoLancamento === 2">
+                            {{ lancamento.ValorLancamento | currency : 'R$ -' : '3.2' }}
+                          </span>
+                        </label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table table-striped table-bordered table-hover">
+                <tbody>
+                  <tr>
+                    <td>
+                      Valor total de lançamentos
+                    </td>
+                    <td class="text-right">
+                      {{ cobrancaEmAlteracaoDeTaxaAdministracao.Totais.SimuladorValorTotalPagoCalculoTaxaAdministracao | currency : 'R$' : '3.2' }}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      Valor Taxa de administração
+                      <span>"{{ cobrancaEmAlteracaoDeTaxaAdministracao.Taxas.TaxaAdministracao.TipoTaxaAdministracaoDescricao }}"</span>
+                    </td>
+                    <td class="text-right col-valor-taxa-administracao">
+                      {{ cobrancaEmAlteracaoDeTaxaAdministracao.Taxas.TaxaAdministracao.SimuladorPago | currency : 'R$' : '3.2' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-link pull-left" (click)="close()">
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-primary">
+        Salvar
+      </button>
+    </div>
+  </form>
+</app-modal>

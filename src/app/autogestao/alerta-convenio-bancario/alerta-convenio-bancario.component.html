@@ -1,0 +1,62 @@
+<div class="row" *ngIf="exibirAlerta && !embreve">
+
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+    <div *ngFor="let msg of messages">
+      <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+    </div>
+
+    <!-- <div class="alert alert-warning" role="alert" *ngIf="exibirAlertaAtualizarCadastroConvenioBancario">
+      <button *ngIf="close" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+      </button>
+      <h4><span class="glyphicons glyphicons-alert"></span> Atenção</h4>
+      <p>
+        Sua conta precisa ser atualizada. Envie-nos novamente os dados da conta bancária para uma nova verificação.
+      </p>
+    </div> -->
+
+
+    <div class="alert alert-warning" role="alert" *ngIf="exibirAlertaCadastroConvenioBancario && !ocultarAlertaCadastro">
+      <button *ngIf="close" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+      </button>
+      <h4><span class="glyphicons glyphicons-alert"></span> Atenção</h4>
+
+      <p>
+        Informe uma conta bancária e comece a emitir boletos para os seus locatários.</p>
+      <p>Aconselhamos que você passe por essa etapa o quanto antes, pois o processo de validação requer alguns dias. <a
+          href="/autogestao/financeiro/informacoes-bancarias">Cadastre
+          agora!</a>
+      </p>
+
+
+      <!-- <p>
+        Para continuar com a Autogestão do seu imóvel, você precisará cadastrar uma conta bancária. </p>
+      <p>Aconselhamos cadastrar o quanto antes, pois o processo de validação requer alguns dias. <a href="/autogestao/financeiro/convenio-bancario/cadastrar">Cadastre
+          agora!</a>
+      </p> -->
+    </div>
+
+
+
+    <div class="alert alert-warning" role="alert" *ngIf="exibirAlertaVerifincandoConvenioBancario">
+      <button *ngIf="close" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+      </button>
+      <h4><span class="glyphicons glyphicons-alert"></span> Atenção</h4>
+      <p>
+        Por favor aguarde, estamos validando as informações da sua conta bancária. <br />
+        Esse processo de validação requer alguns dias após o cadastro/atualização dos dados bancários.</p>
+    </div>
+
+
+    <div class="alert alert-warning" role="alert" *ngIf="exibirAlertaReprovadoConvenioBancario">
+      <button *ngIf="close" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+      </button>
+      <h4><span class="glyphicons glyphicons-alert"></span> Atenção</h4>
+      <p>
+        Sua conta foi verificada porém não foi aprovada para receber pagamento.<br />Sugerimos que você entre em
+        contato com seu banco e/ou nos
+        envie os dados da conta bancária para uma nova verificação.</p>
+    </div>
+  </div>
+</div>

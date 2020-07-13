@@ -1,0 +1,300 @@
+<section class="wrap anuncios  com-submenu">
+  <div class="container">
+    <h1 class="title title-no-icon">
+      Detalhe do anúncio</h1>
+
+    <div class=" btn-group-actions row clearfix" *ngIf="!carregando && this.anuncio.Uid != null">
+
+      <div class=" col-xs-4 clearfix">
+        <button data-toggle="button" class="btn btn-primary btn-icon" [routerLink]="['/anuncios']" title="Voltar">
+          <i class="glyphicons glyphicons-chevron-left"></i>
+          <span>Voltar</span>
+
+        </button>
+      </div>
+
+
+      <div class=" col-xs-8 clearfix">
+
+
+        <button data-toggle="button" class="btn btn-primary btn-icon btn-remove pull-right" (click)="openModal(anuncio)"
+          title="Excluir este anúncio">
+          <span>Excluir</span>
+          <i class="glyphicons glyphicons-bin"></i>
+        </button>
+
+        <button data-toggle="button" class="btn btn-primary btn-icon pull-right"
+          [routerLink]="['/anuncios',this.anuncio.Uid,'editar']" title="Editar este anúncio">
+          <span>Editar</span>
+          <i class="glyphicons glyphicons-edit"></i>
+        </button>
+        <a class="btn btn-primary btn-icon pull-right" href="javascript:window.print()">
+          <span>Imprimir</span>
+          <i class="glyphicons glyphicons-print"></i>
+        </a>
+
+
+      </div>
+
+    </div>
+
+
+    <div class="row" *ngIf="message">
+      <div class="col-md-12" *ngFor="let msg of message">
+        <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+      </div>
+    </div>
+    <div *ngIf="carregando">
+      <app-loading></app-loading>
+    </div>
+  </div>
+  <div *ngIf="!carregando && this.anuncio.Uid != null">
+
+
+
+
+
+    <div class="slide-detalhe clearfix" *ngIf="this.anuncio.Fotos != null">
+      <ngx-slick class="carousel" #slickModal="slick-modal" [config]="slideConfig" (afterChange)="afterChange($event)">
+        <div ngxSlickItem="ngxSlickItem" *ngFor="let foto of anuncio.Fotos" class="slide">
+          <img [alt]="foto.NomeArquivo" class="img-responsive " [src]="'data:image/jpg;base64,'+ foto.ArquivoB64">
+        </div>
+      </ngx-slick>
+    </div>
+    <div class="apsa-box-detalhe-imovel" [ngClass]="{'imovel-sem-foto': !this.anuncio.Fotos}">
+      <div class="container">
+        <div class="apsa-row-descricao-imovel">
+          <div class="row ">
+            <div class="col-sm-12 col-md-8">
+              <div class="apsa-row-descricao-endereco">
+                <h3 *ngIf="anuncio.TipoImovel != 0">{{ anuncio.DescricaoTipoImovel }}</h3>
+                <h4>
+                  {{ anuncio.Bairro }}</h4>
+                <p *ngIf="anuncio.Logradouro">
+                  {{ anuncio.Numero?anuncio.Logradouro + ', ' :anuncio.Logradouro }} {{ anuncio.Bloco
+                  ||anuncio.Complemento ? anuncio.Numero
+                  + ', ' :anuncio.Numero }} {{ anuncio.Bloco ? anuncio.Bloco + ', ':anuncio.Bloco }} {{
+                  anuncio.Complemento
+                  }}
+                  <br /> {{ anuncio.Estado?anuncio.Cidade + ' - ':anuncio.Cidade }} {{ anuncio.Estado }}
+                  <br /> {{ anuncio.CEP | slice:0:5 }} {{ anuncio.CEP | slice:5 }} </p>
+              </div>
+
+              <div class="apsa-row-descricao-info">
+
+                <table class="table-info">
+                  <tbody>
+                    <tr>
+                      <td>
+                        Quarto(s)
+                        <br />
+                        <strong>
+                          {{ anuncio.Quartos?anuncio.Quartos:'-' }}
+                        </strong>
+                      </td>
+                      <td>
+                        Área
+                        <br />
+                        <strong>
+                          {{ anuncio.AreaConstruida?anuncio.AreaConstruida + 'm²':'-' }}
+                        </strong>
+                      </td>
+                      <td>
+                        Banheiro(s)
+                        <br />
+                        <strong>
+                          {{ anuncio.Banheiros?anuncio.Banheiros:'-' }}
+                        </strong>
+                      </td>
+                      <td>
+                        Suíte(s)
+                        <br />
+                        <strong>
+                          {{ anuncio.Suites?anuncio.Suites:'-' }}
+                        </strong>
+                      </td>
+                      <td>
+                        Vaga(s)
+                        <br />
+                        <strong>{{ anuncio.Vagas?anuncio.Vagas:'-' }}
+                        </strong>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- <div class="col-sm-12 col-md-4">
+                            <div class="apsa-row-descricao-info">
+
+                                <table class="table-info">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                Quarto(s)
+                                                <br/>
+                                                <strong>
+                                                    {{ anuncio.Quartos?anuncio.Quartos:'-' }}
+                                                </strong>
+                                            </td>
+                                            <td>
+                                                Área
+                                                <br/>
+                                                <strong>
+                                                    {{ anuncio.AreaConstruida?anuncio.AreaConstruida + 'm²':'-' }}
+                                                </strong>
+                                            </td>
+                                            <td>
+                                                Banheiro(s)
+                                                <br/>
+                                                <strong>
+                                                    {{ anuncio.Banheiros?anuncio.Banheiros:'-' }}
+                                                </strong>
+                                            </td>
+                                            <td>
+                                                Suite(s)
+                                                <br/>
+                                                <strong>
+                                                    {{ anuncio.Suites?anuncio.Suites:'-' }}
+                                                </strong>
+                                            </td>
+                                            <td>
+                                                Vaga(s)
+                                                <br/>
+                                                <strong>{{ anuncio.Vagas?anuncio.Vagas:'-' }}
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> -->
+            <div class="col-sm-12 col-md-4">
+              <div class="col-box-valor">
+                <div class="valor-destaque">
+                  Valor:
+                  <span>{{ anuncio.ValorLocacao | currency : 'BRL' }}</span>
+                </div>
+                <div class="valor-condominio-iptu">
+                  <p *ngIf="anuncio.ValorCondominio != null && anuncio.ValorCondominio != 0">
+                    Condomínio:
+                    <strong>{{ anuncio.ValorCondominio | currency : 'BRL' }} *</strong>
+                  </p>
+
+                  <p *ngIf="anuncio.ValorIPTU != null && anuncio.ValorIPTU != 0">
+                    IPTU:
+                    <strong>{{ anuncio.ValorIPTU | currency : 'BRL' }} *</strong>
+                  </p>
+
+                </div>
+
+                <div class="valor-total">
+                  <p>
+                    <strong>Valor total: {{ anuncio.ValorTotal | currency : 'BRL' }}</strong>
+                  </p>
+                  <p>
+                    <span>* Valores sujeitos à confirmação</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="apsa-box-descricao container-fluid">
+
+      <div class="row">
+        <div class="col-md-6">
+
+          <div class="texto-descricao">
+            <h2>Descrição</h2>
+            <p>{{ anuncio.Descricao }}</p>
+
+            <hr />
+
+            <div *ngIf="(anuncio.TelefoneFixo || anuncio.TelefoneCelular)">
+              <!-- <h3>Contatos</h3> -->
+              <p *ngIf="anuncio.TelefoneFixo">
+                <label>Telefone Fixo:</label> ({{ anuncio.TelefoneFixo | slice:0:2 }}) {{anuncio.TelefoneFixo |
+                slice:2:6}}-{{anuncio.TelefoneFixo
+                | slice:6:11}}
+              </p>
+
+              <p *ngIf="anuncio.TelefoneCelular">
+                <label>Telefone Móvel:</label> ({{ anuncio.TelefoneCelular | slice:0:2 }}) {{anuncio.TelefoneCelular |
+                slice:2:7}}-{{anuncio.TelefoneCelular
+                | slice:7:12}}</p>
+            </div>
+            <!-- <div>
+              <p>
+                <label>Tem seguro fiança:</label> {{anuncio.TemSeguroFianca ? " sim" : " não"}}</p>
+            </div> -->
+            <div>
+              <p>
+                <label>Plano:</label> {{anuncio.TituloPlano}}</p>
+            </div>
+            <div>
+              <p>
+                <label>Código:</label> {{anuncio.CodigoImovel}}</p>
+            </div>
+            <div class="box-info-publicado">
+              <p *ngIf="anuncio.PublicarAnuncio">
+                <label>Publicado</label>
+              </p>
+              <p *ngIf="!anuncio.PublicarAnuncio">
+                <label>Não publicado</label>
+              </p>
+            </div>
+          </div>
+
+        </div>
+        <div *ngIf="this.anuncio != null" class="col-md-6 apsa-box-mapa">
+
+
+          <h2>Localização</h2>
+          <!-- <h3 *ngIf="anuncio.Logradouro">
+                        {{ anuncio.Numero?anuncio.Logradouro + ', ' :anuncio.Logradouro }} {{ anuncio.Bloco ||anuncio.Complemento ? anuncio.Numero + ', ' :anuncio.Numero }} {{ anuncio.Bloco ? anuncio.Bloco + ', ':anuncio.Bloco }} {{ anuncio.Complemento }} {{ anuncio.Estado?anuncio.Cidade
+                        + ' - ':anuncio.Cidade }} {{ anuncio.Estado }}
+                    </h3> -->
+
+          <agm-map [latitude]="anuncio.Latitude" [longitude]="anuncio.Longitude" [zoom]="15">
+            <agm-marker [latitude]="anuncio.Latitude" [longitude]="anuncio.Longitude">
+              <agm-info-window>{{ anuncio.DescricaoTipoImovel }}</agm-info-window>
+
+            </agm-marker>
+          </agm-map>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+  <!-- fim carregando -->
+
+</section>
+
+<app-modal>
+  <div class="modal-header modal-warning">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title text-center">Atenção!</h4>
+  </div>
+  <div class="modal-body" *ngIf="anuncioToDelete">
+    <p>Deseja realmente excluir este anúncio ?</p>
+    <p class="truncate">
+      <strong>[ {{anuncioToDelete.Descricao}} ]</strong>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-link pull-left" data-dismiss="modal">Não</button>
+    <button type="button" class="btn btn-primary" (click)="remove()">Sim</button>
+  </div>
+</app-modal>

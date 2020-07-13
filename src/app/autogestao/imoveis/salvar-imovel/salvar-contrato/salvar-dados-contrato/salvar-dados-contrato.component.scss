@@ -1,0 +1,38 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+@media(max-width: 375px) {
+  .salvar-dadosImovel .form-btn-group button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+
+@media(max-width: 375px) {
+  .salvar-dadosLocatario .form-btn-group button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+
+
+.btn-dias {
+  font-size: 13px;
+  padding: 5px 9px;
+
+  &.active {
+    background: $color-gradient;
+    color: #fff;
+  }
+}
+
+
+.btn-group-actions.position-top {
+  top: -67px;
+}
+
+
+.alert {
+  margin-bottom: 15px;
+}

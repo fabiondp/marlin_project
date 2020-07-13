@@ -1,0 +1,65 @@
+<div class="container">
+  <section class="wrap imoveis com-submenu">
+    <h1 class="title title-no-icon" *ngIf="!isEdicao()">Cadastro de imóvel</h1>
+    <h1 class="title title-no-icon" *ngIf="isEdicao()">Editar imóvel</h1>
+    <div class="btn-group-actions row clearfix" *ngIf="!carregando">
+      <div class="col-xs-1 clearfix">
+        <button class="btn btn-primary btn-icon" (click)="voltar()" title="Voltar">
+          <i class="glyphicons glyphicons-chevron-left"></i>
+          <span>Voltar</span>
+        </button>
+      </div>
+
+      <div class="col-xs-11 clearfix col-modelo-contrato">
+        <app-modelo-contrato></app-modelo-contrato>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12" *ngIf="imovel.messages">
+        <div *ngFor="let msg of imovel.messages">
+          <app-alert [close]="true" [timeout]="imovel.timeMessage" [color]="imovel.typeMessage">{{msg}}</app-alert>
+        </div>
+      </div>
+    </div>
+
+    <div class="clearfix">
+      <select class="form-control" name="" [(ngModel)]="tabCorrent" id="tabImovelSelect"
+        (change)="selectTab($event.target.value)">
+        <option value="tabDadosImovel">1 - Imóvel</option>
+        <option value="tabDadosProprietario">2 - Proprietário</option>
+        <option value="tabContratoAdministracao">3 - Contrato de administração</option>
+        <option value="tabContratoLocacao">4 - Contrato de locação</option>
+      </select>
+    </div>
+
+    <div *ngIf="carregando">
+      <app-loading></app-loading>
+    </div>
+
+    <div [hidden]="carregando">
+      <!-- <pre>{{imovel | json}}</pre> -->
+      <tabset class="tabPadrao" #tabImovel id="tabImovelTabset">
+        <tab customClass="tab-1" heading="Imóvel" id="tabDadosImovel" (select)="updateTabCurrent($event)">
+          <app-salvar-dados-imovel [(imovelCompleto)]="imovel" [(dadosTaxas)]="dadosTaxas" (continuar)="continuar()" (voltar)="voltar()">
+          </app-salvar-dados-imovel>
+        </tab>
+        <tab customClass="tab-2" heading="Proprietário" id="tabDadosProprietario" (select)="updateTabCurrent($event)"
+          [disabled]="!habilitarOutros()">
+          <app-salvar-dados-proprietario [(imovel)]="imovel" #SalvarDadosProprietarioComponent (continuar)="continuar()"
+            (voltar)="voltar()"></app-salvar-dados-proprietario>
+        </tab>
+        <tab customClass="tab-3" heading="Contrato de administração" id="tabContratoAdministracao"
+          (select)="updateTabCurrent($event)" [disabled]="!habilitarContratos()">
+          <app-salvar-contrato-administracao [(imovel)]="imovel" #SalvarContratoAdministracaoComponent
+            (continuar)="continuar()" (voltar)=" voltar()"></app-salvar-contrato-administracao>
+        </tab>
+        <tab customClass="tab-4" heading="Contrato de locação" id="tabContratoLocacao"
+          (select)="updateTabCurrent($event)" [disabled]="!habilitarContratos()">
+          <app-salvar-contrato [(imovel)]="imovel" #SalvarContratoLocacaoComponent (voltarP)="voltar()">
+          </app-salvar-contrato>
+        </tab>
+      </tabset>
+    </div>
+  </section>
+</div>

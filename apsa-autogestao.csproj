@@ -1,0 +1,809 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProjectGuid>{D0F1FEC1-36CC-430A-BB90-C929D0EC8CC8}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin</OutputPath>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <TypeScriptToolsVersion>2.6</TypeScriptToolsVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <TypeScriptExperimentalDecorators>true</TypeScriptExperimentalDecorators>
+    <TypeScriptEmitDecoratorMetadata>true</TypeScriptEmitDecoratorMetadata>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include="karma.conf.js" />
+    <Content Include="protractor.conf.js" />
+    <Content Include="src\app\analise-credito\analise-completa\analise-completa.component.html" />
+    <Content Include="src\app\anuncio\anuncios\anuncios.component.html" />
+    <Content Include="src\app\anuncio\relatorio-anuncio\relatorio-anuncio.component.html" />
+    <Content Include="src\app\anuncio\salvar-anuncio\salvar-anuncio.component.html" />
+    <Content Include="src\app\anuncio\detalhe-anuncio\detalhe-anuncio.component.html" />
+    <Content Include="src\app\app.component.html" />
+    <Content Include="src\app\autenticacao\lembrar-senha\lembrar-senha.component.html" />
+    <Content Include="src\app\autenticacao\login-area-exclusiva\login-area-exclusiva.component.html" />
+    <Content Include="src\app\autenticacao\login\login.component.html" />
+    <Content Include="src\app\autenticacao\modal-token-expirado\modal-token-expirado.component.html" />
+    <Content Include="src\app\autenticacao\redefinir-senha\redefinir-senha.component.html" />
+    <Content Include="src\app\autogestao\administracao\administracao.component.html" />
+    <Content Include="src\app\autogestao\alerta-convenio-bancario\alerta-convenio-bancario.component.html" />
+    <Content Include="src\app\autogestao\boleto\boleto-por-imovel\boleto-por-imovel.component.html" />
+    <Content Include="src\app\autogestao\boleto\boleto.component.html" />
+    <Content Include="src\app\autogestao\boleto\boletos-gerados\boletos-gerados.component.html" />
+    <Content Include="src\app\autogestao\boleto\historico-boletos\historico-boletos.component.html" />
+    <Content Include="src\app\autogestao\cobrancas\cobrancas.component.html" />
+    <Content Include="src\app\autogestao\cobrancas\detalhe-cobranca\detalhe-cobranca.component.html" />
+    <Content Include="src\app\autogestao\cobrancas\historico-cobrancas\historico-cobrancas.component.html" />
+    <Content Include="src\app\autogestao\cobrancas\lancamento\lancamento.component.html" />
+    <Content Include="src\app\autogestao\financeiro\convenio-bancario\salvar-convenio\salvar-convenio.component.html" />
+    <Content Include="src\app\autogestao\financeiro\detalhe-prestacao-contas\detalhe-prestacao-contas.component.html" />
+    <Content Include="src\app\autogestao\financeiro\financeiro.component.html" />
+    <Content Include="src\app\autogestao\financeiro\imprimir-prestacao-contas\imprimir-prestacao-contas.component.html" />
+    <Content Include="src\app\autogestao\financeiro\informacoes-bancarias\informacoes-bancarias.component.html" />
+    <Content Include="src\app\autogestao\financeiro\lancamento-financeiro\lancamento-financeiro.component.html" />
+    <Content Include="src\app\autogestao\financeiro\lancamento-financeiro\lancamento-financeiro.component.scss" />
+    <Content Include="src\app\autogestao\financeiro\modal-editar-taxa-administracao\modal-editar-taxa-administracao.component.html" />
+    <Content Include="src\app\autogestao\financeiro\prestacao-contas-proprietario\prestacao-contas-proprietarios.component.html" />
+    <Content Include="src\app\autogestao\financeiro\prestacao-contas\lancamento-prestacao-contas\lancamento-prestacao-contas.component.html" />
+    <Content Include="src\app\autogestao\financeiro\prestacao-contas\prestacao-contas.component.html" />
+    <Content Include="src\app\autogestao\imoveis\detalhe-imovel\detalhe-imovel.component.html" />
+    <Content Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-contrato-administracao\visualizar-contrato-administracao.component.html" />
+    <Content Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-contrato\visualizar-dados-contrato.component.html" />
+    <Content Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-imovel\visualizar-dados-imovel.component.html" />
+    <Content Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-locatario\visualizar-dados-locatario.component.html" />
+    <Content Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-proprietario\visualizar-dados-proprietario.component.html" />
+    <Content Include="src\app\autogestao\imoveis\historico-contrato\historico-contrato.component.html" />
+    <Content Include="src\app\autogestao\imoveis\historico-proprietario\detalhe-proprietario\detalhe-proprietario.component.html" />
+    <Content Include="src\app\autogestao\imoveis\historico-proprietario\historico-proprietario.component.html" />
+    <Content Include="src\app\autogestao\imoveis\imoveis.component.html" />
+    <Content Include="src\app\autogestao\imoveis\modelo-contrato\modelo-contrato.component.html" />
+    <Content Include="src\app\autogestao\imoveis\relatorio-contrato\relatorio-contrato.component.html" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato-administracao\salvar-contrato-administracao.component.html" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-contrato.component.html" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-dados-contrato\salvar-dados-contrato.component.html" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\carta-fianca\carta-fianca.component.html" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\caucao\caucao.component.html" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\garantia-outros\garantia-outros.component.html" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\salvar-locatario-fiador-garantia.component.html" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\seguro-fianca\seguro-fianca.component.html" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\titulo-capitalizacao\titulo-capitalizacao.component.html" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-imovel\salvar-dados-imovel.component.html" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-proprietario\salvar-dados-proprietario.component.html" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-imovel.component.html" />
+    <Content Include="src\app\autogestao\reajuste-aluguel\reajuste-aluguel.component.html" />
+    <Content Include="src\app\bootstrap\alert\alert.component.css" />
+    <Content Include="src\app\bootstrap\alert\alert.component.html" />
+    <Content Include="src\app\bootstrap\button\button.component.css" />
+    <Content Include="src\app\bootstrap\button\button.component.html" />
+    <Content Include="src\app\bootstrap\footer\footer.component.html" />
+    <Content Include="src\app\bootstrap\glyph\glyph.component.css" />
+    <Content Include="src\app\bootstrap\glyph\glyph.component.html" />
+    <Content Include="src\app\bootstrap\loading\loading.component.html" />
+    <Content Include="src\app\bootstrap\modal\modal.component.css" />
+    <Content Include="src\app\bootstrap\modal\modal.component.html" />
+    <Content Include="src\app\bootstrap\navbar\navbar.component.html" />
+    <Content Include="src\app\carrinho\carrinho\carrinho.component.html" />
+    <Content Include="src\app\carrinho\finalizacao\finalizacao.component.html" />
+    <Content Include="src\app\carrinho\pagamento\pagamento.component.html" />
+    <Content Include="src\app\carrinho\verificar-dados\verificar-dados.component.html" />
+    <Content Include="src\app\dashboard\dashboard.component.html" />
+    <Content Include="src\app\dicas-seguranca\dicas-seguranca.component.html" />
+    <Content Include="src\app\faleconosco\faleconosco.component.html" />
+    <Content Include="src\app\faq\faq.component.html" />
+    <Content Include="src\app\home\home.component.html" />
+    <Content Include="src\app\logout\logout.component.html" />
+    <Content Include="src\app\meus-planos\alterar-plano-autogestao\alterar-plano-autogestao.component.html" />
+    <Content Include="src\app\meus-planos\desativar-imoveis-autogestao\desativar-imoveis-autogestao.component.html" />
+    <Content Include="src\app\meus-planos\meus-planos.component.html" />
+    <Content Include="src\app\modules\image-upload\image-upload.component.css" />
+    <Content Include="src\app\modules\image-upload\image-upload.component.html" />
+    <Content Include="src\app\page-not-found\page-not-found.component.html" />
+    <Content Include="src\app\politica-privacidade\politica-privacidade.component.html" />
+    <Content Include="src\app\politica-qualidade\politica-qualidade.component.html" />
+    <Content Include="src\app\shared\input-busca-cep\input-busca-cep.component.html" />
+    <Content Include="src\app\shared\input-telefone\input-telefone.component.html" />
+    <Content Include="src\app\shared\paginacao\paginacao.component.html" />
+    <Content Include="src\app\simulacao-valor-plano\simulacao-valor-plano.component.html" />
+    <Content Include="src\app\termo-contrato-analise\termo-contrato-analise.component.html" />
+    <Content Include="src\app\termo-contrato-anuncio\termo-contrato-anuncio.component.html" />
+    <Content Include="src\app\termo-contrato-autogestao\termo-contrato-autogestao.component.html" />
+    <Content Include="src\app\termos-condicoes-uso-texto\termos-condicoes-uso-texto.component.html" />
+    <Content Include="src\app\termos-condicoes-uso\termos-condicoes-uso.component.html" />
+    <Content Include="src\app\usuario\salvar-usuario\salvar-usuario.component.html" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\glyphicons-regular.svg" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\Swiss721BT-Roman.svg" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\Swiss721BT-Thin.svg" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\Swiss721BT-ThinItalic.svg" />
+    <Content Include="src\assets\fonts\glyphicons-regular.svg" />
+    <Content Include="src\assets\fonts\Swiss721BT-Roman.svg" />
+    <Content Include="src\assets\fonts\Swiss721BT-Thin.svg" />
+    <Content Include="src\assets\fonts\Swiss721BT-ThinItalic.svg" />
+    <Content Include="src\assets\images\animated-loading.gif" />
+    <Content Include="src\assets\images\anuncios-beneficios-img.png" />
+    <Content Include="src\assets\images\anuncios-beneficios-item-ico.png" />
+    <Content Include="src\assets\images\anuncios-cta-bg.png" />
+    <Content Include="src\assets\images\anuncios-cta-setas-direita.png" />
+    <Content Include="src\assets\images\anuncios-cta-setas-esquerda.png" />
+    <Content Include="src\assets\images\banner-clique-alugue.jpg" />
+    <Content Include="src\assets\images\banner-clique-alugue.png" />
+    <Content Include="src\assets\images\fone.png" />
+    <Content Include="src\assets\images\ico-print.png" />
+    <Content Include="src\assets\images\icone-alugue-temporada.png" />
+    <Content Include="src\assets\images\icone-aluguel-temporada.png" />
+    <Content Include="src\assets\images\icone-analise-credito.png" />
+    <Content Include="src\assets\images\icone-anuncios.png" />
+    <Content Include="src\assets\images\icone-autogestao.png" />
+    <Content Include="src\assets\images\icone-btn-fale-conosco.png" />
+    <Content Include="src\assets\images\icone-btn-faq.png" />
+    <Content Include="src\assets\images\icone-facebook.png" />
+    <Content Include="src\assets\images\icone-faq.png" />
+    <Content Include="src\assets\images\icone-linkedin.png" />
+    <Content Include="src\assets\images\icone-logout.png" />
+    <Content Include="src\assets\images\icone-notification-bell.png" />
+    <Content Include="src\assets\images\icone-sacola-pedido.png" />
+    <Content Include="src\assets\images\icone-sacola.png" />
+    <Content Include="src\assets\images\icone-twitter.png" />
+    <Content Include="src\assets\images\icone-user-login-pq.png" />
+    <Content Include="src\assets\images\icone-user-login.png" />
+    <Content Include="src\assets\images\icone-youtube.png" />
+    <Content Include="src\assets\images\irem-certificado.jpg" />
+    <Content Include="src\assets\images\loading.gif" />
+    <Content Include="src\assets\images\logo-apsa-footer.png" />
+    <Content Include="src\assets\images\logo-apsa-header.png" />
+    <Content Include="src\assets\images\logo-clique-alugue.png" />
+    <Content Include="src\assets\images\navbar-icones.png" />
+    <Content Include="src\assets\images\procondo-certificado.png" />
+    <Content Include="src\assets\images\resumooperacao_sprite_icones.png" />
+    <Content Include="src\assets\images\sem-foto.png" />
+    <Content Include="src\assets\images\tour-step-1.jpg" />
+    <Content Include="src\assets\images\tour-step-2.jpg" />
+    <Content Include="src\assets\images\tour-step-3.jpg" />
+    <Content Include="src\assets\images\tour-step-4.jpg" />
+    <Content Include="src\assets\images\tour-step-5.jpg" />
+    <Content Include="src\assets\images\whatsapp.png" />
+    <Content Include="src\assets\js\formatter.min.js" />
+    <Content Include="src\assets\js\iugu.js" />
+    <Content Include="src\assets\js\ppplusdcc.min.js" />
+    <Content Include="src\assets\js\scripts.js" />
+    <Content Include="src\assets\styles\slick-theme.css" />
+    <Content Include="src\favicon.ico" />
+    <Content Include="src\favicon.png" />
+    <Content Include="src\index.html" />
+    <Content Include="tsconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="e2e\tsconfig.e2e.json" />
+    <Content Include="src\app\home\home.component.scss" />
+    <Content Include="src\assets\.gitkeep" />
+    <Content Include="src\styles.scss" />
+    <Content Include="src\tsconfig.app.json" />
+    <Content Include="src\tsconfig.spec.json" />
+    <Content Include=".editorconfig" />
+    <Content Include="package-lock.json" />
+    <Content Include="package.json" />
+    <Content Include="README.md" />
+    <Content Include="tslint.json" />
+    <Content Include="src\assets\styles\variables.scss" />
+    <Content Include="src\app\bootstrap\navbar\navbar.component.scss" />
+    <Content Include="src\app\app.component.scss" />
+    <Content Include="src\app\bootstrap\footer\footer.component.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_alerts.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_background-variant.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_border-radius.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_buttons.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_center-block.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_clearfix.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_forms.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_gradients.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_grid-framework.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_grid.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_hide-text.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_image.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_labels.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_list-group.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_nav-divider.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_nav-vertical-align.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_opacity.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_pagination.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_panels.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_progress-bar.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_reset-filter.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_reset-text.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_resize.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_responsive-visibility.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_size.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_tab-focus.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_table-row.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_text-emphasis.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_text-overflow.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\mixins\_vendor-prefixes.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_alerts.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_badges.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_breadcrumbs.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_button-groups.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_buttons.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_carousel.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_close.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_code.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_component-animations.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_dropdowns.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_forms.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_glyphicons.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_grid.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_input-groups.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_jumbotron.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_labels.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_list-group.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_media.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_mixins.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_modals.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_navbar.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_navs.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_normalize.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_pager.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_pagination.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_panels.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_popovers.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_print.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_progress-bars.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_responsive-embed.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_responsive-utilities.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_scaffolding.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_tables.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_theme.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_thumbnails.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_tooltip.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_type.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_utilities.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_variables.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\_wells.scss" />
+    <Content Include="src\assets\bootstrap-sass\_bootstrap-theme.scss" />
+    <Content Include="src\app\anuncio\anuncios\anuncios.component.scss" />
+    <Content Include="src\app\bootstrap\loading\loading.component.scss" />
+    <Content Include="src\app\anuncio\salvar-anuncio\salvar-anuncio.component.scss" />
+    <Content Include="src\app\page-not-found\page-not-found.component.scss" />
+    <Content Include="src\app\dashboard\dashboard.component.scss" />
+    <Content Include="proxy.conf.json" />
+    <Content Include="src\app\shared\input-telefone\input-telefone.component.scss" />
+    <Content Include="src\app\autenticacao\login\login.component.scss" />
+    <Content Include="src\app\autenticacao\redefinir-senha\redefinir-senha.component.scss" />
+    <Content Include="src\app\anuncio\detalhe-anuncio\detalhe-anuncio.component.scss" />
+    <Content Include="src\app\usuario\salvar-usuario\salvar-usuario.component.scss" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\glyphicons-regular.eot" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\glyphicons-regular.ttf" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\glyphicons-regular.woff" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\glyphicons-regular.woff2" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\Swiss721BT-Roman.woff" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\Swiss721BT-Roman.woff2" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\Swiss721BT-Thin.woff" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\Swiss721BT-Thin.woff2" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\Swiss721BT-ThinItalic.woff" />
+    <Content Include="src\assets\bootstrap-sass\bootstrap\fonts\Swiss721BT-ThinItalic.woff2" />
+    <Content Include="src\assets\fonts\glyphicons-regular.eot" />
+    <Content Include="src\assets\fonts\glyphicons-regular.ttf" />
+    <Content Include="src\assets\fonts\glyphicons-regular.woff" />
+    <Content Include="src\assets\fonts\glyphicons-regular.woff2" />
+    <Content Include="src\assets\fonts\Swiss721BT-Roman.woff" />
+    <Content Include="src\assets\fonts\Swiss721BT-Roman.woff2" />
+    <Content Include="src\assets\fonts\Swiss721BT-Thin.woff" />
+    <Content Include="src\assets\fonts\Swiss721BT-Thin.woff2" />
+    <Content Include="src\assets\fonts\Swiss721BT-ThinItalic.woff" />
+    <Content Include="src\assets\fonts\Swiss721BT-ThinItalic.woff2" />
+    <Content Include="src\app\carrinho\carrinho\carrinho.component.scss" />
+    <Content Include="src\app\meus-planos\meus-planos.component.scss" />
+    <Content Include="src\app\shared\input-busca-cep\input-busca-cep.component.scss" />
+    <Content Include="src\app\anuncio\relatorio-anuncio\relatorio-anuncio.component.scss" />
+    <Content Include="angular.json" />
+    <Content Include="src\app\analise-credito\analise-completa\analise-completa.component.scss" />
+    <Content Include="src\app\politica-privacidade\politica-privacidade.component.scss" />
+    <Content Include="src\app\termos-condicoes-uso\termos-condicoes-uso.component.scss" />
+    <Content Include="src\app\dicas-seguranca\dicas-seguranca.component.scss" />
+    <Content Include="src\app\faq\faq.component.scss" />
+    <Content Include="src\app\simulacao-valor-plano\simulacao-valor-plano.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\imoveis.component.scss" />
+    <Content Include="src\app\autenticacao\modal-token-expirado\modal-token-expirado.component.scss" />
+    <Content Include="src\app\autogestao\boleto\boleto.component.scss" />
+    <Content Include="src\app\autogestao\financeiro\financeiro.component.scss" />
+    <Content Include="src\app\carrinho\finalizacao\finalizacao.component.scss" />
+    <Content Include="src\app\carrinho\pagamento\pagamento.component.scss" />
+    <Content Include="src\app\autogestao\boleto\boletos-gerados\boletos-gerados.component.scss" />
+    <Content Include="src\app\autogestao\boleto\historico-boletos\historico-boletos.component.scss" />
+    <Content Include="src\app\autogestao\boleto\boleto-por-imovel\boleto-por-imovel.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\detalhe-imovel\detalhe-imovel.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-contrato\visualizar-dados-contrato.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-imovel\visualizar-dados-imovel.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-locatario\visualizar-dados-locatario.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-proprietario\visualizar-dados-proprietario.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\modelo-contrato\modelo-contrato.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-contrato.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-dados-contrato\salvar-dados-contrato.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\carta-fianca\carta-fianca.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\caucao\caucao.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\salvar-locatario-fiador-garantia.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\seguro-fianca\seguro-fianca.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\titulo-capitalizacao\titulo-capitalizacao.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-imovel\salvar-dados-imovel.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-proprietario\salvar-dados-proprietario.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-imovel.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\historico-proprietario\detalhe-proprietario\detalhe-proprietario.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\historico-proprietario\historico-proprietario.component.scss" />
+    <Content Include="src\app\autogestao\reajuste-aluguel\reajuste-aluguel.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\historico-contrato\historico-contrato.component.scss" />
+    <Content Include="src\app\autogestao\imoveis\relatorio-contrato\relatorio-contrato.component.scss" />
+    <Content Include="src\app\politica-qualidade\politica-qualidade.component.scss" />
+    <Content Include="src\app\termo-contrato-anuncio\termo-contrato-anuncio.component.scss" />
+    <Content Include="src\app\termo-contrato-analise\termo-contrato-analise.component.scss" />
+    <Content Include="src\app\termo-contrato-autogestao\termo-contrato-autogestao.component.scss" />
+    <Content Include="src\app\carrinho\verificar-dados\verificar-dados.component.scss" />
+    <Content Include="src\app\faleconosco\faleconosco.component.scss" />
+    <Content Include="src\app\autenticacao\login-area-exclusiva\login-area-exclusiva.component.scss" />
+    <Content Include="src\app\autogestao\alerta-convenio-bancario\alerta-convenio-bancario.component.scss" />
+    <Content Include="src\app\autogestao\cobrancas\cobrancas.component.scss" />
+    <Content Include="src\app\autogestao\cobrancas\historico-cobrancas\historico-cobrancas.component.scss" />
+    <Content Include="src\app\autogestao\cobrancas\detalhe-cobranca\detalhe-cobranca.component.scss" />
+    <Content Include="src\app\autogestao\cobrancas\lancamento\lancamento.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="e2e\Dashboard\Dashboard.e2e-spec.ts" />
+    <TypeScriptCompile Include="e2e\Dashboard\Dashboard.po.ts" />
+    <TypeScriptCompile Include="e2e\HomeLogada\HomeLogada.e2e-spec.ts" />
+    <TypeScriptCompile Include="e2e\HomeLogada\HomeLogada.po.ts" />
+    <TypeScriptCompile Include="e2e\Home\Home.e2e-spec.ts" />
+    <TypeScriptCompile Include="e2e\Home\Home.po.ts" />
+    <TypeScriptCompile Include="e2e\Login\Login.e2e-spec.ts" />
+    <TypeScriptCompile Include="e2e\Login\Login.po.ts" />
+    <TypeScriptCompile Include="e2e\MeusImóveis\MeusImoveis.e2e-spec.ts" />
+    <TypeScriptCompile Include="e2e\MeusImóveis\MeusImoveis.po.ts" />
+    <TypeScriptCompile Include="e2e\Shared\Pagina.ts" />
+    <TypeScriptCompile Include="e2e\Shared\Window.ts" />
+    <TypeScriptCompile Include="src\app\analise-credito\analise-completa\analise-completa.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\analise-credito\analise-completa\analise-completa.component.ts" />
+    <TypeScriptCompile Include="src\app\analise-credito\analise-completa\ficha-credito.ts" />
+    <TypeScriptCompile Include="src\app\analise-credito\analise-credito.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\analise-credito\analise-credito.service.ts" />
+    <TypeScriptCompile Include="src\app\anuncio\anuncios\anuncios.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\anuncio\anuncios\anuncios.component.ts" />
+    <TypeScriptCompile Include="src\app\anuncio\relatorio-anuncio\relatorio-anuncio.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\anuncio\relatorio-anuncio\relatorio-anuncio.component.ts" />
+    <TypeScriptCompile Include="src\app\anuncio\salvar-anuncio\salvar-anuncio.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\anuncio\salvar-anuncio\salvar-anuncio.component.ts" />
+    <TypeScriptCompile Include="src\app\anuncio\detalhe-anuncio\detalhe-anuncio.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\anuncio\detalhe-anuncio\detalhe-anuncio.component.ts" />
+    <TypeScriptCompile Include="src\app\app-routing.module.ts" />
+    <TypeScriptCompile Include="src\app\app.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\app.component.ts" />
+    <TypeScriptCompile Include="src\app\app.module.ts" />
+    <TypeScriptCompile Include="src\app\autenticacao\lembrar-senha\lembrar-senha.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autenticacao\lembrar-senha\lembrar-senha.component.ts" />
+    <TypeScriptCompile Include="src\app\autenticacao\login-area-exclusiva\login-area-exclusiva.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autenticacao\login-area-exclusiva\login-area-exclusiva.component.ts" />
+    <TypeScriptCompile Include="src\app\autenticacao\login\login.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autenticacao\login\login.component.ts" />
+    <TypeScriptCompile Include="src\app\autenticacao\modal-token-expirado\modal-token-expirado.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autenticacao\modal-token-expirado\modal-token-expirado.component.ts" />
+    <TypeScriptCompile Include="src\app\autenticacao\redefinir-senha\redefinir-senha.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autenticacao\redefinir-senha\redefinir-senha.component.ts" />
+    <TypeScriptCompile Include="src\app\autenticacao\token.interceptor.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\administracao\administracao.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\administracao\administracao.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\administracao\admnistracao.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\administracao\admnistracao.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\alerta-convenio-bancario\alerta-convenio-bancario.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\alerta-convenio-bancario\alerta-convenio-bancario.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\alerta-convenio-bancario\alerta-convenio-bancario.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\alerta-convenio-bancario\alerta-convenio-bancario.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\boleto\boleto-por-imovel\boleto-por-imovel.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\boleto\boleto-por-imovel\boleto-por-imovel.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\boleto\boleto.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\boleto\boleto.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\boleto\boletos-gerados\boletos-gerados.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\boleto\boletos-gerados\boletos-gerados.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\boleto\boletos.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\boleto\boletos.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\boleto\historico-boletos\historico-boletos.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\boleto\historico-boletos\historico-boletos.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\cobranca.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\cobrancas.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\cobrancas.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\cobrancas.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\cobrancas.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\detalhe-cobranca\detalhe-cobranca.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\detalhe-cobranca\detalhe-cobranca.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\historico-cobrancas\historico-cobrancas-filter.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\historico-cobrancas\historico-cobrancas-filter.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\historico-cobrancas\historico-cobrancas.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\historico-cobrancas\historico-cobrancas.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\lancamento\lancamento.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\cobrancas\lancamento\lancamento.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\convenio-bancario\convenio-bancario.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\convenio-bancario\convenio-bancario.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\convenio-bancario\convenio-bancario.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\convenio-bancario\salvar-convenio\salvar-convenio.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\convenio-bancario\salvar-convenio\salvar-convenio.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\detalhe-prestacao-contas\detalhe-prestacao-contas.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\detalhe-prestacao-contas\detalhe-prestacao-contas.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\financeiro.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\financeiro.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\financeiro.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\financeiro.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\imprimir-prestacao-contas\imprimir-prestacao-contas.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\imprimir-prestacao-contas\imprimir-prestacao-contas.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\informacoes-bancarias\informacoes-bancarias.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\informacoes-bancarias\informacoes-bancarias.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\informacoes-bancarias\informacoes-bancarias.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\informacoes-bancarias\informacoes-bancarias.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\informacoes-bancarias\informacoes-bancarias.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\lancamento-financeiro\lancamento-financeiro.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\lancamento-financeiro\lancamento-financeiro.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\modal-editar-taxa-administracao\modal-editar-taxa-administracao.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\modal-editar-taxa-administracao\modal-editar-taxa-administracao.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas-proprietario\prestacao-contas-proprietarios-filter.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas-proprietario\prestacao-contas-proprietarios-filter.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas-proprietario\prestacao-contas-proprietarios.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas-proprietario\prestacao-contas-proprietarios.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas-proprietario\prestacao-contas-proprietarios.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas-proprietario\prestacao-contas-proprietarios.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas\lancamento-prestacao-contas\lancamento-prestacao-contas.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas\lancamento-prestacao-contas\lancamento-prestacao-contas.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas\prestacao-contas-filter.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas\prestacao-contas-filter.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas\prestacao-contas.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas\prestacao-contas.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas\prestacao-contas.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\financeiro\prestacao-contas\prestacao-contas.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\detalhe-imovel.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\detalhe-imovel.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\detalhe-imovel.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\detalhe-imovel.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-contrato-administracao\visualizar-contrato-administracao.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-contrato-administracao\visualizar-contrato-administracao.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-contrato\visualizar-dados-contrato.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-contrato\visualizar-dados-contrato.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-imovel\visualizar-dados-imovel.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-imovel\visualizar-dados-imovel.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-locatario\visualizar-dados-locatario.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-locatario\visualizar-dados-locatario.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-proprietario\visualizar-dados-proprietario.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-dados-proprietario\visualizar-dados-proprietario.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\historico-contrato\historico-contrato.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\historico-contrato\historico-contrato.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\historico-contrato\historico-contrato.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\historico-contrato\historico-contrato.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\historico-proprietario\detalhe-proprietario\detalhe-proprietario.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\historico-proprietario\detalhe-proprietario\detalhe-proprietario.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\historico-proprietario\historico-proprietario.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\historico-proprietario\historico-proprietario.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\historico-proprietario\historico-proprietario.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\historico-proprietario\historico-proprietario.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\imoveis.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\imoveis.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\imoveis.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\imoveis.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\modelo-contrato\modelo-contrato.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\modelo-contrato\modelo-contrato.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\modelo-contrato\modelo-contrato.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\modelo-contrato\modelo-contrato.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\modelo-contrato\modelo-contrato.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\relatorio-contrato\relatorio-contrato.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\relatorio-contrato\relatorio-contrato.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\relatorio-contrato\relatorio-contrato.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\relatorio-contrato\relatorio-contrato.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\relatorio-contrato\relatorio-contrato.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato-administracao\contrato-administracao.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato-administracao\contrato-administracao.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato-administracao\contrato-administracao.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato-administracao\salvar-contrato-administracao.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato-administracao\salvar-contrato-administracao.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-contrato.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-contrato.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-dados-contrato\dados-contrato-locacao.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-dados-contrato\salvar-dados-contrato.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-dados-contrato\salvar-dados-contrato.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-dados-contrato\salvar-dados-contrato.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-dados-contrato\salvar-dados-contrato.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\carta-fianca\carta-fianca.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\carta-fianca\carta-fianca.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\carta-fianca\carta-fianca.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\caucao\caucao.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\caucao\caucao.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\caucao\caucao.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\fiador.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\garantia-outros\garantia-outros.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\garantia-outros\garantia-outros.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\garantia-outros\garantia-outros.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\garantia.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\locatario-fiador-garantia.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\locatario.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\salvar-locatario-fiador-garantia.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\salvar-locatario-fiador-garantia.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\salvar-locatario-fiador-garantia.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\salvar-locatario-fiador-garantia.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\seguro-fianca\seguro-fianca.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\seguro-fianca\seguro-fianca.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\seguro-fianca\seguro-fianca.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\titulo-capitalizacao\titulo-capitalizacao.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\titulo-capitalizacao\titulo-capitalizacao.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\titulo-capitalizacao\titulo-capitalizacao.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-imovel\administradora-condominio.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-imovel\dados-cobranca-condominio.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-imovel\dados-cobranca-seguradora-fogo.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-imovel\dados-imovel.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-imovel\diversos-dados-imovel.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-imovel\salvar-dados-imovel.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-imovel\salvar-dados-imovel.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-imovel\seguradora-fogo.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-imovel\taxas-dados-imovel.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-proprietario\dados-proprietario.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-proprietario\proprietario-informacoes-bancarias.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-proprietario\representante-dados-proprietario.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-proprietario\salvar-dados-proprietario.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-proprietario\salvar-dados-proprietario.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-proprietario\salvar-dados-proprietario.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-dados-proprietario\salvar-dados-proprietario.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-imovel.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-imovel.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-imovel.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\imoveis\salvar-imovel\salvar-imovel.service.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\reajuste-aluguel\reajuste-aluguel.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\reajuste-aluguel\reajuste-aluguel.component.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\reajuste-aluguel\reajuste-aluguel.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\autogestao\reajuste-aluguel\reajuste-aluguel.service.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\alert\alert.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\alert\alert.component.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\button\button.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\button\button.component.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\footer\footer.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\footer\footer.component.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\glyph\glyph.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\glyph\glyph.component.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\loading\loading.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\loading\loading.component.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\modal\modal.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\modal\modal.component.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\navbar\navbar.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\bootstrap\navbar\navbar.component.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\carrinho\carrinho.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\carrinho\carrinho.component.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\carrinho\carrinho.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\carrinho\carrinho.service.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\finalizacao\finalizacao.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\finalizacao\finalizacao.component.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\pagamento\item.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\pagamento\message.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\pagamento\pagamento.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\pagamento\pagamento.component.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\pedido.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\pedido.service.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\verificar-dados\verificar-dados.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\verificar-dados\verificar-dados.component.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\verificar-dados\verificar-dados.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\carrinho\verificar-dados\verificar-dados.service.ts" />
+    <TypeScriptCompile Include="src\app\dashboard\dashboard.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\dashboard\dashboard.component.ts" />
+    <TypeScriptCompile Include="src\app\dicas-seguranca\dicas-seguranca.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\dicas-seguranca\dicas-seguranca.component.ts" />
+    <TypeScriptCompile Include="src\app\faleconosco\faleconosco.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\faleconosco\faleconosco.component.ts" />
+    <TypeScriptCompile Include="src\app\faq\faq.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\faq\faq.component.ts" />
+    <TypeScriptCompile Include="src\app\home\home.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\home\home.component.ts" />
+    <TypeScriptCompile Include="src\app\logout\logout.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\logout\logout.component.ts" />
+    <TypeScriptCompile Include="src\app\meus-planos\alterar-plano-autogestao\alterar-plano-autogestao.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\meus-planos\alterar-plano-autogestao\alterar-plano-autogestao.component.ts" />
+    <TypeScriptCompile Include="src\app\meus-planos\alterar-plano.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\meus-planos\alterar-plano.service.ts" />
+    <TypeScriptCompile Include="src\app\meus-planos\desativar-imoveis-autogestao\desativar-imoveis-autogestao.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\meus-planos\desativar-imoveis-autogestao\desativar-imoveis-autogestao.component.ts" />
+    <TypeScriptCompile Include="src\app\meus-planos\desativar-imoveis-autogestao\desativar-imoveis-autogestao.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\meus-planos\desativar-imoveis-autogestao\desativar-imoveis-autogestao.service.ts" />
+    <TypeScriptCompile Include="src\app\meus-planos\meus-planos.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\meus-planos\meus-planos.component.ts" />
+    <TypeScriptCompile Include="src\app\modules\image-upload\before-upload.interface.ts" />
+    <TypeScriptCompile Include="src\app\modules\image-upload\file-drop.directive.ts" />
+    <TypeScriptCompile Include="src\app\modules\image-upload\image-upload.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\modules\image-upload\image-upload.component.ts" />
+    <TypeScriptCompile Include="src\app\modules\image-upload\image-upload.module.ts" />
+    <TypeScriptCompile Include="src\app\modules\image-upload\image.service.ts" />
+    <TypeScriptCompile Include="src\app\modules\image-upload\style.ts" />
+    <TypeScriptCompile Include="src\app\modules\scrollstore\scrollstore.module.ts" />
+    <TypeScriptCompile Include="src\app\page-not-found\page-not-found.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\page-not-found\page-not-found.component.ts" />
+    <TypeScriptCompile Include="src\app\politica-privacidade\politica-privacidade.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\politica-privacidade\politica-privacidade.component.ts" />
+    <TypeScriptCompile Include="src\app\politica-qualidade\politica-qualidade.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\politica-qualidade\politica-qualidade.component.ts" />
+    <TypeScriptCompile Include="src\app\services\analise-completa.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\services\analise-completa.service.ts" />
+    <TypeScriptCompile Include="src\app\services\anuncio.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\services\anuncio.service.ts" />
+    <TypeScriptCompile Include="src\app\services\auth-guard-router.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\services\auth-guard-router.service.ts" />
+    <TypeScriptCompile Include="src\app\services\auth.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\services\auth.service.ts" />
+    <TypeScriptCompile Include="src\app\services\default-request-options.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\services\default-request-options.service.ts" />
+    <TypeScriptCompile Include="src\app\services\jwt-token.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\services\jwt-token.service.ts" />
+    <TypeScriptCompile Include="src\app\services\locacao.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\services\locacao.service.ts" />
+    <TypeScriptCompile Include="src\app\services\local-storage.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\services\local-storage.service.ts" />
+    <TypeScriptCompile Include="src\app\services\message.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\services\message.service.ts" />
+    <TypeScriptCompile Include="src\app\services\produto.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\services\produto.service.ts" />
+    <TypeScriptCompile Include="src\app\services\session-storage.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\services\session-storage.service.ts" />
+    <TypeScriptCompile Include="src\app\services\usuario.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\services\usuario.service.ts" />
+    <TypeScriptCompile Include="src\app\shared\base-view-model.ts" />
+    <TypeScriptCompile Include="src\app\shared\contador-caracteres.pipe.spec.ts" />
+    <TypeScriptCompile Include="src\app\shared\contador-caracteres.pipe.ts" />
+    <TypeScriptCompile Include="src\app\shared\contato.ts" />
+    <TypeScriptCompile Include="src\app\shared\cpfcnpj.pipe.ts" />
+    <TypeScriptCompile Include="src\app\shared\descricao-mes.pipe.ts" />
+    <TypeScriptCompile Include="src\app\shared\detail-contato.pipe.ts" />
+    <TypeScriptCompile Include="src\app\shared\detail-info.pipe.ts" />
+    <TypeScriptCompile Include="src\app\shared\detail-opcoes.pipe.ts" />
+    <TypeScriptCompile Include="src\app\shared\input-busca-cep\endereco.ts" />
+    <TypeScriptCompile Include="src\app\shared\input-busca-cep\input-busca-cep.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\shared\input-busca-cep\input-busca-cep.component.ts" />
+    <TypeScriptCompile Include="src\app\shared\input-busca-cep\input-busca-cep.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\shared\input-busca-cep\input-busca-cep.service.ts" />
+    <TypeScriptCompile Include="src\app\shared\input-telefone\input-telefone.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\shared\input-telefone\input-telefone.component.ts" />
+    <TypeScriptCompile Include="src\app\shared\menssage.error.ts" />
+    <TypeScriptCompile Include="src\app\shared\opcao-view-model.ts" />
+    <TypeScriptCompile Include="src\app\shared\paginacao\paginacao.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\shared\paginacao\paginacao.component.ts" />
+    <TypeScriptCompile Include="src\app\shared\paginacao\paginacao.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\shared\paginacao\paginacao.service.ts" />
+    <TypeScriptCompile Include="src\app\shared\remove-currency-symbol.pipe.spec.ts" />
+    <TypeScriptCompile Include="src\app\shared\remove-currency-symbol.pipe.ts" />
+    <TypeScriptCompile Include="src\app\shared\safe-html.pipe.ts" />
+    <TypeScriptCompile Include="src\app\shared\status-boleto.pipe.spec.ts" />
+    <TypeScriptCompile Include="src\app\shared\status-boleto.pipe.ts" />
+    <TypeScriptCompile Include="src\app\shared\status-cobranca.pipe.spec.ts" />
+    <TypeScriptCompile Include="src\app\shared\status-cobranca.pipe.ts" />
+    <TypeScriptCompile Include="src\app\simulacao-valor-plano\simulacao-valor-plano.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\simulacao-valor-plano\simulacao-valor-plano.component.ts" />
+    <TypeScriptCompile Include="src\app\simulacao-valor-plano\simulacao.service.spec.ts" />
+    <TypeScriptCompile Include="src\app\simulacao-valor-plano\simulacao.service.ts" />
+    <TypeScriptCompile Include="src\app\termo-contrato-analise\termo-contrato-analise.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\termo-contrato-analise\termo-contrato-analise.component.ts" />
+    <TypeScriptCompile Include="src\app\termo-contrato-anuncio\termo-contrato-anuncio.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\termo-contrato-anuncio\termo-contrato-anuncio.component.ts" />
+    <TypeScriptCompile Include="src\app\termo-contrato-autogestao\termo-contrato-autogestao.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\termo-contrato-autogestao\termo-contrato-autogestao.component.ts" />
+    <TypeScriptCompile Include="src\app\termos-condicoes-uso-texto\termos-condicoes-uso-texto.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\termos-condicoes-uso-texto\termos-condicoes-uso-texto.component.ts" />
+    <TypeScriptCompile Include="src\app\termos-condicoes-uso\termos-condicoes-uso.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\termos-condicoes-uso\termos-condicoes-uso.component.ts" />
+    <TypeScriptCompile Include="src\app\usuario\endereco.ts" />
+    <TypeScriptCompile Include="src\app\usuario\salvar-usuario\salvar-usuario.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\usuario\salvar-usuario\salvar-usuario.component.ts" />
+    <TypeScriptCompile Include="src\app\usuario\usuario-dto.ts" />
+    <TypeScriptCompile Include="src\app\usuario\usuario.ts" />
+    <TypeScriptCompile Include="src\environments\environment.dev.ts" />
+    <TypeScriptCompile Include="src\environments\environment.hmg.ts" />
+    <TypeScriptCompile Include="src\environments\environment.local.ts" />
+    <TypeScriptCompile Include="src\environments\environment.prod.ts" />
+    <TypeScriptCompile Include="src\environments\environment.ts" />
+    <TypeScriptCompile Include="src\main.ts" />
+    <TypeScriptCompile Include="src\polyfills.ts" />
+    <TypeScriptCompile Include="src\test.ts" />
+    <TypeScriptCompile Include="src\typings.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\.htaccess" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\autogestao\financeiro\convenio-bancario\salvar-convenio\salvar-convenio.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\autogestao\financeiro\prestacao-contas-proprietario\prestacao-contas-proprietarios.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\shared\paginacao\paginacao.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\autogestao\financeiro\prestacao-contas\lancamento-prestacao-contas\lancamento-prestacao-contas.component.scss" />
+    <Content Include="src\app\autogestao\financeiro\prestacao-contas\prestacao-contas.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\meus-planos\alterar-plano-autogestao\alterar-plano-autogestao.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\autogestao\financeiro\informacoes-bancarias\informacoes-bancarias.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\autogestao\administracao\administracao.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\assets\administradorasMock.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\autogestao\imoveis\detalhe-imovel\visualizar-contrato-administracao\visualizar-contrato-administracao.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato-administracao\salvar-contrato-administracao.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\autogestao\imoveis\salvar-imovel\salvar-contrato\salvar-locatario-fiador-garantia\garantia-outros\garantia-outros.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\autogestao\financeiro\detalhe-prestacao-contas\detalhe-prestacao-contas.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\autogestao\financeiro\modal-editar-taxa-administracao\modal-editar-taxa-administracao.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\autogestao\financeiro\imprimir-prestacao-contas\imprimir-prestacao-contas.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\logout\logout.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\meus-planos\desativar-imoveis-autogestao\desativar-imoveis-autogestao.component.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\app\termos-condicoes-uso-texto\termos-condicoes-uso-texto.component.scss" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>auto_gestao</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets')" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>38352</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:38352/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>http://localhost:4200</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+</Project>

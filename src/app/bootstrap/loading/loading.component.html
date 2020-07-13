@@ -1,0 +1,12 @@
+<!-- <div class="loading">
+    Carregando<span class="d">.</span><span class="d d-2">.</span><span class="d d-3">.</span>
+</div> -->
+
+
+<div class="box-loading-result" [ngClass]="{'overlayInside': overlayInside}">
+  <p *ngIf="message">{{message}}</p>
+  <p *ngIf="!message">Carregando...</p>
+  <p>
+    <img src="assets/images/animated-loading.gif" alt="carregando">
+  </p>
+</div>

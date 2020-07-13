@@ -1,0 +1,106 @@
+<div class="container">
+    <section *ngIf="!enviado" class="wrap login">
+
+        <div class="login-head">
+            <h1 class="title title-glyph title-senha">Redefinir Senha</h1>
+        </div>
+        <div class="row" *ngIf="message">
+            <div class="col-md-12" *ngFor="let msg of message">
+                <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+            </div>
+        </div>
+        <app-loading *ngIf="carregandoForm"></app-loading>
+        <div *ngIf="!carregandoForm" class="row login-body">
+
+            <div class="col-xs-10 col-sm-8 col-md-6 col-lg-6 col-xs-offset-1 col-sm-offset-2 col-md-offset-3 col-lg-offset-3 box-center">
+                <div class="box-round clearfix">
+
+                    <div class="box-round-body">
+
+                        <form #redefinirForm="ngForm" (ngSubmit)="onSubmitRedefinir(redefinirForm)">
+
+                            <div class="wrap-group">
+                                <div class="form-group">
+                                    <label for="senhaAtual">Senha atual</label>
+                                    <input type="password" class="form-control" id="senhaAtual" name="senhaAtual" [(ngModel)]="senhaAtual" #atual="ngModel" required>
+                                </div>
+                                <div *ngIf="atual.invalid && atual.dirty" class="alert alert-danger">
+                                    <div *ngIf="atual.errors.required">
+                                        Campo obrigatório.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wrap-group">
+                                <div class="form-group">
+                                    <label for="novaSenha">Nova senha</label>
+                                    <input type="password" class="form-control" id="senha" name="senha" [(ngModel)]="redefinir.senha" #senha="ngModel" required
+                                        minlength="6">
+                                    <span class="pattern-error" *ngIf="senha.errors?.minlength && !senha.pristine">
+                                        <i class="glyphicons glyphicons-remove"></i>
+                                    </span>
+                                    <span class="pattern-ok" *ngIf="!senha.errors?.minlength && !senha.invalid">
+                                        <i class="glyphicons glyphicons-ok"></i>
+                                    </span>
+                                </div>
+                                <div *ngIf="senha.invalid && (senha.dirty || senha.touched)">
+                                    <div *ngIf="senha.errors.required" class="alert alert-danger">
+                                        Campo obrigatório.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wrap-group">
+                                <div class="form-group">
+                                    <label for="confirmaSenha">Confirmar nova senha</label>
+                                    <input type="password" class="form-control" id="confirmaSenha" name="confirmaSenha" [(ngModel)]="redefinir.confirmaSenha"
+                                        #confirmaSenha="ngModel" required minlength="6" required>
+                                    <span class="pattern-error" *ngIf="redefinir.confirmaSenha != redefinir.senha && !confirmaSenha.pristine">
+                                        <i class="glyphicons glyphicons-remove"></i>
+                                    </span>
+                                    <span class="pattern-ok" *ngIf="(redefinir.confirmaSenha == redefinir.senha && !confirmaSenha.invalid) && !senha.pristine">
+                                        <i class="glyphicons glyphicons-ok"></i>
+                                    </span>
+                                </div>
+                                <small>A nova senha deve ter pelo menos 6 caracteres e pode conter símbolos.</small>
+
+                                <div *ngIf="confirmaSenha.invalid && (confirmaSenha.dirty || confirmaSenha.touched)">
+                                    <div *ngIf="confirmaSenha.errors.required" class="alert alert-danger">
+                                        Campo obrigatório.
+                                    </div>
+                                </div>
+                                <div *ngIf="redefinir.confirmaSenha != redefinir.senha && !confirmaSenha.invalid" class="alert alert-danger">
+                                    Senhas não conferem.
+                                </div>
+                            </div>
+
+                            <div class="button-wrapper">
+                                <button type="submit" class="btn btn-primary" [disabled]="redefinirForm.invalid" id="redefinir">Redefinir</button>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- <app-modal>
+    <div class="modal-header modal-success">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+        <span aria-hidden="true" (click)="closeModal()">&times;</span>
+      </button>      
+    </div>
+    <div class="modal-body" *ngIf="message">
+      <div class="alert alert-success">
+        {{message}}
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="closeModal()">Ok</button>
+    </div>
+  </app-modal> -->
+</div>

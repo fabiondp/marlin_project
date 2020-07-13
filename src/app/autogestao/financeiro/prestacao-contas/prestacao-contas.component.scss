@@ -1,0 +1,2116 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+
+// @import url('https://fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,500,500i,700,700i');
+// @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i');
+
+.PrestacaoDeContas {
+  position: relative;
+  width: 100%;
+  // max-width: 1080px;
+  margin: 0 auto;
+
+  .btn-imprimir {
+    position: relative;
+    z-index: 2;
+  }
+
+  .PrestacaoDeContas_Titulo {
+    font-family: 'Ubuntu', 'Open Sans', sans-serif;
+    font-size: 40px;
+    line-height: 40px;
+    color: #333;
+    font-weight: 800;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .PrestacaoDeContas_Lista {
+    position: relative;
+    margin-top: 15px;
+
+    .PrestacaoDeContas_Lista_Ocorrencia {
+      position: relative;
+      margin-bottom: 50px;
+
+      .Lista_Ocorrencia_InfoProprietario {
+        // display: flex;
+        display: block;
+
+        .Ocorrencia_InfoProprietario_Tag {
+          padding: 16px;
+          background: #f5f5f5;
+          border-radius: 30px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-right: 16px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          &.Ocorrencia_InfoProprietario_NomeProprietario {
+            border: 1px solid #a10358;
+            background: #fff;
+
+            .InfoProprietario_Tag_Icone {
+              i {
+                color: #a10358;
+              }
+            }
+
+            .InfoProprietario_Tag_Nome {
+              color: #a10358;
+            }
+          }
+
+          .InfoProprietario_Tag_Icone {
+            position: relative;
+
+            i {
+              font-size: 18px;
+              color: #a10358;
+            }
+          }
+
+          .InfoProprietario_Tag_Nome {
+            position: relative;
+            font-size: 14px;
+            color: #696967;
+            font-family: 'Ubuntu', 'Open Sans', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 8px;
+          }
+        }
+      }
+
+      .Lista_Ocorrencia_ListaCompetencias {
+        position: relative;
+        margin-top: 24px;
+
+        .Ocorrencia_ListaCompetencias_Item {
+          width: 100%;
+          box-sizing: border-box;
+          border: 1px solid #cccccc;
+          border-radius: 5px;
+          transition: all .2s ease-in-out;
+          margin-bottom: 24px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          &:hover,
+          &.__is-open {
+            border-color: #a10358;
+
+            .ListaCompetencias_Item_ResumoCompetencia {
+              .Item_ResumoCompetencia_MesReferente {
+                background: #a10358;
+                color: #fff;
+
+                &:after {
+                  border-left-color: #a10358;
+                }
+              }
+
+              .Item_ResumoCompetencia_VerDetalhamento {
+                .ResumoCompetencia_VerDetalhamento_Txt {
+                  color: #a10358;
+                }
+
+                .ResumoCompetencia_VerDetalhamento_Icone {
+                  i {
+                    color: #a10358;
+                  }
+                }
+              }
+            }
+          }
+
+          &.__is-open {
+            .ListaCompetencias_Item_DetalhamentoCompetencia {
+              display: block;
+            }
+
+            .ListaCompetencias_Item_ResumoCompetencia {
+              .Item_ResumoCompetencia_VerDetalhamento {
+                .ResumoCompetencia_VerDetalhamento_Icone {
+                  i {
+                    transform: rotate(90deg);
+                  }
+                }
+              }
+            }
+          }
+
+          .ListaCompetencias_Item_ResumoCompetencia {
+            display: flex;
+            justify-content: space-between;
+
+            .Item_ResumoCompetencia_MesReferente {
+              position: relative;
+              width: 139px;
+              height: 70px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              color: #999999;
+              background: #f1f1f1;
+              font-size: 24px;
+              font-family: 'Ubuntu', 'Open Sans', sans-serif;
+              font-weight: 700;
+              flex-shrink: 0;
+
+              &:after {
+                content: ' ';
+                display: block;
+                position: absolute;
+                top: 0;
+                right: -15px;
+                width: 0;
+                height: 0;
+                border-top: 35px solid transparent;
+                border-bottom: 35px solid transparent;
+                border-left: 15px solid #f1f1f1;
+              }
+            }
+
+            .Item_ResumoCompetencia_ResumoDados {
+              margin-left: 36px;
+              display: flex;
+              justify-content: space-around;
+              align-items: center;
+              width: 100%;
+              margin-right: 24px;
+
+              .ResumoCompetencia_ResumoDados_Item {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-right: 24px;
+
+                &:last-child {
+                  margin-right: 0px;
+                }
+
+                .ResumoDados_Item_Label {
+                  font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                  font-size: 12px;
+                  font-weight: 500;
+                  text-transform: uppercase;
+                  color: #999999;
+                  margin-right: 5px;
+                }
+
+                .ResumoDados_Item_Valor {
+                  font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                  font-size: 16px;
+                  font-weight: 700;
+                  text-transform: uppercase;
+                  color: #999999;
+                }
+              }
+
+              .ResumoCompetencia_ResumoDados_ValorTotalPago {
+                .ResumoDados_Item_Valor {
+                  color: #53c053;
+                }
+              }
+
+              .ResumoCompetencia_ResumoDados_TotalLançamentos {
+                .ResumoDados_Item_Valor {
+                  color: #d15a5a;
+                }
+              }
+
+              .ResumoCompetencia_ResumoDados_SaldoLiquido {
+                .ResumoDados_Item_Valor {
+                  color: #4b71ba;
+                }
+              }
+            }
+
+            .Item_ResumoCompetencia_VerDetalhamento {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 70px;
+              padding: 0 24px 0 16px;
+              flex-shrink: 0;
+              cursor: pointer;
+              transition: all .2s ease-in-out;
+
+              &:hover {
+                .ResumoCompetencia_VerDetalhamento_Txt {
+                  color: #a10358;
+                }
+
+                .ResumoCompetencia_VerDetalhamento_Icone {
+                  i {
+                    color: #a10358;
+                  }
+                }
+              }
+
+              .ResumoCompetencia_VerDetalhamento_Txt {
+                font-family: 'Open Sans', sans-serif;
+                font-size: 12px;
+                color: #888888;
+                font-weight: 700;
+                text-transform: uppercase;
+              }
+
+              .ResumoCompetencia_VerDetalhamento_Icone {
+                i {
+                  font-size: 17px;
+                  color: #888;
+                  margin-left: 8px;
+                  transition: all .2s ease-in-out;
+                }
+              }
+            }
+          }
+
+          .ListaCompetencias_Item_DetalhamentoCompetencia {
+            border-top: 1px solid #cccccc;
+            padding: 30px;
+            position: relative;
+            display: none;
+
+            .Item_DetalhamentoCompetencia {
+              position: relative;
+              margin-bottom: 40px;
+
+              .Item_DetalhamentoCompetencia_Titulo {
+                font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                font-size: 20px;
+                line-height: 20px;
+                color: #333;
+                font-weight: 800;
+                margin: 0 auto;
+                text-transform: uppercase;
+              }
+            }
+
+            .Item_DetalhamentoCompetencia_Proprietario {
+              position: relative;
+              margin-bottom: 40px;
+
+              .Item_DetalhamentoCompetencia_Titulo {
+                font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                font-size: 20px;
+                line-height: 20px;
+                color: #333;
+                font-weight: 800;
+                margin: 0 auto;
+                text-transform: uppercase;
+              }
+
+              .Item_DetalhamentoCompetencia_Valor {
+                margin: 10px 0 0 0;
+                font-size: 14px;
+                color: #333;
+                font-weight: 400;
+                text-transform: uppercase;
+                font-family: 'Open Sans', sans-serif;
+
+                &:first-child {
+                  margin-top: 16px;
+                }
+
+                label {
+                  margin-bottom: 0
+                }
+
+                span {
+                  font-weight: 700;
+                  font-size: 18px;
+                }
+              }
+
+              .DetalhamentoCompetencia_Proprietario_Painel {
+                position: relative;
+                margin-top: 16px;
+                display: flex;
+
+
+                .Proprietario_Painel_DadosBancarios {
+                  display: flex;
+                  justify-content: flex-start;
+                  width: 100%;
+
+                  .Painel_DadosBancarios_Icone {
+                    width: 54px;
+                    height: 54px;
+                    color: #cccccc;
+                    font-size: 40px;
+
+                    text-align: center;
+                  }
+
+                  .Painel_DadosBancarios_Titulo {
+                    font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                    font-size: 15px;
+                    color: #333;
+                    font-weight: 400;
+                    margin: 0 auto;
+                    text-transform: uppercase;
+                    text-align: center;
+                    margin-top: 8px;
+                    margin-bottom: 8px;
+
+                    span {
+                      font-weight: 700;
+                      color: #4b71ba;
+                    }
+                  }
+
+                  .Painel_DadosBancarios_Info {
+                    position: relative;
+                    border-radius: 5px;
+                    display: flex;
+                    flex-direction: column;
+                    padding: 15px;
+                    justify-content: flex-start;
+                    align-items: center;
+                    width: 100%;
+                    max-width: 33.3%;
+                    box-sizing: border-box;
+                    margin-left: 24px;
+
+                    &:first-child {
+                      margin-left: 0;
+                    }
+
+
+
+                    border: 1px solid #cccccc;
+
+                    transition: all .2s ease-in-out;
+
+
+                  }
+
+
+
+                  .Item_DadosBancarios_Dados {
+                    display: flex;
+                    justify-content: left;
+                    align-items: center;
+                    margin-right: 20px;
+                  }
+
+
+                  .Item_DadosBancarios_Dados_Conta {
+                    .Painel_DadosBancarios_Icone {
+                      font-size: 45px;
+                    }
+                  }
+
+                  .DadosBancarios_Dados_Label {
+                    font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                    font-size: 12px;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                    color: #999999;
+                    margin-right: 5px;
+                  }
+
+                  .DadosBancarios_Dados_Valor {
+                    font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                    font-size: 16px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    color: #999999;
+                  }
+                }
+              }
+
+
+            }
+
+            .Item_DetalhamentoCompetencia_BoletosPagos {
+              position: relative;
+              margin-bottom: 40px;
+
+              .Item_DetalhamentoCompetencia_Titulo {
+                font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                font-size: 20px;
+                line-height: 20px;
+                color: #333;
+                font-weight: 800;
+                margin: 0 auto;
+                text-transform: uppercase;
+              }
+
+              .DetalhamentoCompetencia_BoletosPagos_Lista {
+                position: relative;
+                margin-top: 16px;
+
+                .BoletosPagos_Lista_Item {
+                  width: 100%;
+                  box-sizing: border-box;
+                  border: 1px solid #cccccc;
+                  border-radius: 5px;
+                  transition: all .2s ease-in-out;
+                  margin-bottom: 16px;
+
+                  &:last-child {
+                    margin-bottom: 0px;
+                  }
+
+                  &.__is-open {
+                    .Lista_Item_Detalhamento {
+                      display: block;
+                    }
+
+                    .Lista_Item_ResumoBoleto {
+                      .Item_ResumoBoleto_VerDetalhamento {
+                        i {
+                          transform: rotate(90deg);
+                        }
+                      }
+                    }
+                  }
+
+                  &:hover,
+                  &.__is-open {
+                    border-color: #777;
+
+                    .Lista_Item_ResumoBoleto {
+                      .Item_ResumoBoleto_VerDetalhamento {
+                        .ResumoBoleto_VerDetalhamento_Txt {
+                          color: #a10358;
+                        }
+
+                        .ResumoBoleto_VerDetalhamento_Icone {
+                          i {
+                            color: #a10358;
+                          }
+                        }
+                      }
+                    }
+                  }
+
+                  .Lista_Item_ResumoBoleto {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0 16px;
+
+                    .Item_ResumoBoleto_Valor {
+                      font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                      font-size: 16px;
+                      font-weight: 700;
+                      text-transform: uppercase;
+                      color: #53c053;
+                    }
+
+                    .Item_ResumoBoleto_Dados {
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      margin-right: 20px;
+
+                      &:last-child {
+                        margin-right: 0px;
+                      }
+
+                      .ResumoBoleto_Dados_Label {
+                        font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                        font-size: 12px;
+                        font-weight: 500;
+                        text-transform: uppercase;
+                        color: #999999;
+                        margin-right: 5px;
+                      }
+
+                      .ResumoBoleto_Dados_Valor {
+                        font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                        font-size: 16px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        color: #999999;
+                      }
+
+                      &.Item_ResumoBoleto_Emissao {
+                        .ResumoBoleto_Dados_Valor {
+                          color: #999999;
+                        }
+                      }
+
+                      &.Item_ResumoBoleto_Vencimento {
+                        .ResumoBoleto_Dados_Valor {
+                          color: #d15a5a;
+                        }
+                      }
+
+                      &.Item_ResumoBoleto_PagoEm {
+                        .ResumoBoleto_Dados_Valor {
+                          color: #53c053;
+                        }
+                      }
+                    }
+
+                    .Item_ResumoBoleto_VerDetalhamento {
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      padding: 16px 0;
+                      flex-shrink: 0;
+                      cursor: pointer;
+                      transition: all .2s ease-in-out;
+
+                      &:hover {
+                        .ResumoBoleto_VerDetalhamento_Txt {
+                          color: #a10358;
+                        }
+
+                        .ResumoBoleto_VerDetalhamento_Icone {
+                          i {
+                            color: #a10358;
+                          }
+                        }
+                      }
+
+                      .ResumoBoleto_VerDetalhamento_Txt {
+                        font-family: 'Open Sans', sans-serif;
+                        font-size: 12px;
+                        color: #888888;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                      }
+
+                      .ResumoBoleto_VerDetalhamento_Icone {
+                        i {
+                          font-size: 17px;
+                          color: #888;
+                          margin-left: 8px;
+                          transition: all .2s ease-in-out;
+                        }
+                      }
+                    }
+                  }
+
+                  .Lista_Item_Detalhamento {
+                    border-top: 1px solid #cccccc;
+                    padding: 16px;
+                    position: relative;
+                    display: none;
+
+                    .Item_Detalhamento_Titulo {
+                      font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                      font-size: 12px;
+                      font-weight: 700;
+                      text-transform: uppercase;
+                      color: #a10358;
+                    }
+
+                    .Item_Detalhamento_Lista {
+                      font-family: 'Open Sans', sans-serif;
+                      font-size: 14px;
+                      font-weight: 400;
+                      color: #333;
+                      margin-top: 8px;
+
+                      ul {
+                        margin: 0;
+                        padding: 0;
+                        list-style: none;
+
+                        li {
+                          position: relative;
+                          margin-bottom: 5px;
+                          padding: 0;
+                          padding-left: 16px;
+
+                          &:last-child {
+                            margin-bottom: 0;
+                          }
+
+                          &:before {
+                            content: ' ';
+                            display: block;
+                            position: absolute;
+                            width: 5px;
+                            height: 5px;
+                            top: 8px;
+                            left: 2px;
+                            background: #ccc;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            .Item_DetalhamentoCompetencia_ResumoOperacao {
+              position: relative;
+              margin-bottom: 40px;
+
+              .Item_DetalhamentoCompetencia_Titulo {
+                font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                font-size: 20px;
+                line-height: 20px;
+                color: #333;
+                font-weight: 800;
+                margin: 0 auto;
+                text-transform: uppercase;
+              }
+
+              .DetalhamentoCompetencia_ResumoOperacao_Painel {
+                display: flex;
+                margin-top: 16px;
+                position: relative;
+                align-items: flex-start;
+
+                .ResumoOperacao_Painel_AnaliseRecebimento {
+                  position: relative;
+                  border-radius: 5px;
+                  border: 1px solid #ccc;
+                  box-sizing: border-box;
+
+                  &.__is-success {
+                    border: 1px solid #25ae88;
+
+                    .Painel_AnaliseRecebimento_StatusCompetencia {
+                      .AnaliseRecebimento_StatusCompetencia_Error {
+                        display: none;
+                      }
+
+                      .AnaliseRecebimento_StatusCompetencia_Sucesso {
+                        display: flex;
+                      }
+                    }
+
+                    .Painel_AnaliseRecebimento_BoxValores {
+                      .AnaliseRecebimento_BoxValores_ValorPago {
+                        .BoxValores_Item_Valor {
+                          color: #25ae88;
+                        }
+                      }
+                    }
+
+                    .Painel_AnaliseRecebimento_StatusCompetencia {
+                      background: #25ae88;
+                    }
+                  }
+
+                  &.__is-error {
+                    border: 1px solid #d15a5a;
+
+                    .Painel_AnaliseRecebimento_StatusCompetencia {
+                      .AnaliseRecebimento_StatusCompetencia_Error {
+                        display: flex;
+                      }
+
+                      .AnaliseRecebimento_StatusCompetencia_Sucesso {
+                        display: none;
+                      }
+                    }
+
+                    .Painel_AnaliseRecebimento_BoxValores {
+                      .AnaliseRecebimento_BoxValores_ValorPago {
+                        .BoxValores_Item_Valor {
+                          color: #d15a5a;
+                        }
+
+                        .BoxValores_Item_Label {
+                          color: #d15a5a;
+                        }
+                      }
+                    }
+
+                    .Painel_AnaliseRecebimento_StatusCompetencia {
+                      background: #d15a5a;
+                    }
+                  }
+
+                  .Painel_AnaliseRecebimento_BoxValores {
+                    display: flex;
+                    padding: 24px 32px;
+                    justify-content: center;
+                    align-items: center;
+
+                    .AnaliseRecebimento_BoxValores_Item {
+                      position: relative;
+
+                      &.AnaliseRecebimento_BoxValores_ValorPago {
+                        padding-right: 24px;
+                        border-right: 1px solid #ccc;
+
+                        .BoxValores_Item_Icone {
+                          background-position: 0px 0px;
+                        }
+                      }
+
+                      &.AnaliseRecebimento_BoxValores_ValorEsperado {
+                        margin-left: 24px;
+
+                        .BoxValores_Item_Icone {
+                          background-position: 0px -62px;
+                        }
+
+                        .BoxValores_Item_Valor {
+                          color: #e7a924;
+                        }
+                      }
+
+                      .BoxValores_Item_Icone {
+                        width: 57px;
+                        height: 52px;
+                        background: #ccc;
+                        margin: 0 auto;
+                        background: url('../../../../assets/images/resumooperacao_sprite_icones.png') no-repeat;
+                      }
+
+                      .BoxValores_Item_Valor {
+                        text-align: center;
+                        font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        display: flex;
+                        justify-content: center;
+                        align-items: flex-start;
+                        margin-top: 8px;
+
+                        .Item_Valor_Sifrao {
+                          font-size: 16px;
+                          line-height: 16px;
+                        }
+
+                        .Item_Valor_Real {
+                          font-size: 24px;
+                          line-height: 24px;
+                        }
+
+                        .Item_Valor_Centavos {
+                          font-size: 16px;
+                          line-height: 16px;
+                        }
+                      }
+
+                      .BoxValores_Item_Label {
+                        text-align: center;
+                        font-family: 'Open Sans', sans-serif;
+                        font-size: 13px;
+                        line-height: 14px;
+                        color: #333;
+                        font-weight: 700;
+                        margin: 0 auto;
+                        margin-top: 8px;
+                        text-transform: uppercase;
+                      }
+                    }
+                  }
+
+                  .Painel_AnaliseRecebimento_StatusCompetencia {
+                    padding: 24px;
+                    background: #ccc;
+
+                    .AnaliseRecebimento_StatusCompetencia_Item {
+                      display: none;
+                      justify-content: center;
+                      align-items: center;
+
+                      .StatusCompetencia_Item_Icone {
+                        margin-right: 5px;
+
+                        i {
+                          font-size: 14px;
+                          color: #fff;
+                        }
+                      }
+
+                      .StatusCompetencia_Item_Msg {
+                        font-family: 'Open Sans', sans-serif;
+                        font-size: 12px;
+                        color: #fff;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                      }
+                    }
+                  }
+                }
+
+                .ResumoOperacao_Painel_TaxaAdministracao {
+                  position: relative;
+                  border-radius: 5px;
+                  border: 1px solid #4b71ba;
+                  display: flex;
+                  flex-direction: column;
+                  padding: 15px;
+                  justify-content: center;
+                  align-items: center;
+                  margin-left: 24px;
+                  width: max-content;
+                  max-width: 330px;
+                  box-sizing: border-box;
+
+                  .Painel_TaxaAdministracao_GerenciarTaxaAdm {
+                    border-radius: 5px;
+                    padding: 15px 0 0;
+                    // background: #a10358;
+                    // color: #888888;
+                    color: #f36f1f;
+                    font-family: 'Open Sans', sans-serif;
+                    font-size: 12px;
+                    font-weight: 700;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-transform: uppercase;
+                    max-width: max-content;
+                    margin-top: 0;
+                    transition: .2s ease-in-out;
+                    cursor: pointer;
+
+                    outline: none;
+
+                    i {
+                      margin-right: 5px;
+                      top: -1px;
+                    }
+
+                    &:hover {
+                      color: #b60765;
+                    }
+
+                    &:focus{
+                      outline: none;
+                      border:0;
+                    }
+                  }
+
+                  .Item_Detalhamento_Lista {
+                    .Lista_CheckBox {
+                      margin: 0;
+                      padding: 0;
+                      list-style: none;
+
+                      input:disabled~label {
+                        color: #ccc;
+                      }
+
+                      input:checked~label {
+                        color: #000;
+                      }
+                    }
+                  }
+
+
+
+                  .Painel_TaxaAdministracao_Icone {
+                    width: 54px;
+                    height: 54px;
+                    background: url('../../../../assets/images/resumooperacao_sprite_icones.png') no-repeat;
+                    background-position: 0 -124px;
+                  }
+
+                  .Painel_TaxaAdministracao_Titulo {
+                    font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                    font-size: 15px;
+                    color: #333;
+                    font-weight: 400;
+                    margin: 0 auto;
+                    text-transform: uppercase;
+                    text-align: center;
+                    margin-top: 8px;
+
+                    span {
+                      font-weight: 700;
+                      color: #4b71ba;
+                    }
+                  }
+
+                  .Painel_TaxaAdministracao_Percentual {
+                    font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                    font-size: 11px;
+                    color: #999999;
+                    font-weight: 500;
+                    margin: 0 auto;
+                    text-transform: uppercase;
+                    font-style: italic;
+                    text-align: center;
+                    margin-top: 8px;
+                  }
+
+                  .Painel_TaxaAdministracao_BoxValores {
+                    display: flex;
+                    margin-top: 16px;
+                    justify-content: center;
+                    align-items: flex-start;
+
+                    .TaxaAdministracao_BoxValores_Item {
+                      text-align: center;
+
+                      &.TaxaAdministracao_BoxValores_ValorRecebido {
+
+
+                        .BoxValores_Item_Valor {
+                          color: #25ae88;
+                        }
+
+                        &.taxa-sobre-total{
+                          
+                          .BoxValores_Item_Valor {
+                            color: #e7a924;
+                          }
+                        }
+                      }
+
+                      &.TaxaAdministracao_BoxValores_ValorEsperado {
+                        margin-left: 16px;
+                        padding-left: 16px;
+                        border-left: 1px solid #ccc;
+
+                        .BoxValores_Item_Valor {
+                          color: #e7a924;
+                        }
+                      }
+
+                      .BoxValores_Item_Valor {
+                        display: flex;
+                        justify-content: center;
+                        align-items: flex-start;
+                        text-align: center;
+                        font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                        font-weight: 700;
+                        text-transform: uppercase;
+
+                        .Item_Valor_Sifrao {
+                          font-size: 16px;
+                          line-height: 16px;
+                        }
+
+                        .Item_Valor_Real {
+                          font-size: 24px;
+                          line-height: 24px;
+                        }
+
+                        .Item_Valor_Centavos {
+                          font-size: 16px;
+                          line-height: 16px;
+                        }
+                      }
+
+                      .BoxValores_Item_Msg {
+                        align-items: flex-start;
+                        text-align: center;
+                        font-family: 'Open Sans', sans-serif;
+                        font-weight: 400;
+                        font-size: 12px;
+                        color: #999;
+                      }
+                    }
+                  }
+                }
+
+                .ResumoOperacao_Painel_TaxaIntermediacao {
+                  position: relative;
+                  border-radius: 5px;
+                  border: 1px solid #4b71ba;
+                  display: flex;
+                  flex-direction: column;
+                  padding: 24px 32px;
+                  justify-content: center;
+                  align-items: center;
+                  margin-left: 24px;
+                  width: max-content;
+                  max-width: 330px;
+                  box-sizing: border-box;
+
+                  .Painel_TaxaIntermediacao_Icone {
+                    width: 64px;
+                    height: 54px;
+                    background: url('../../../../assets/images/resumooperacao_sprite_icones.png') no-repeat;
+                    background-position: 0 -191px;
+                  }
+
+                  .Painel_TaxaIntermediacao_Titulo {
+                    font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                    font-size: 15px;
+                    color: #333;
+                    font-weight: 400;
+                    margin: 0 auto;
+                    text-transform: uppercase;
+                    text-align: center;
+                    margin-top: 8px;
+
+                    span {
+                      font-weight: 700;
+                      color: #4b71ba;
+                    }
+                  }
+
+                  .Painel_TaxaIntermediacao_Percentual {
+                    font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                    font-size: 11px;
+                    color: #999999;
+                    font-weight: 500;
+                    margin: 0 auto;
+                    text-transform: uppercase;
+                    font-style: italic;
+                    text-align: center;
+                    margin-top: 8px;
+                  }
+
+                  .Painel_TaxaIntermediacao_BoxValores {
+                    display: flex;
+                    margin-top: 16px;
+                    justify-content: center;
+                    align-items: flex-start;
+
+                    .TaxaIntermediacao_BoxValores_Item {
+                      text-align: center;
+
+                      &.TaxaIntermediacao_BoxValores_ValorRecebido {
+                        padding-right: 16px;
+                        border-right: 1px solid #ccc;
+
+                        .BoxValores_Item_Valor {
+                          color: #25ae88;
+                        }
+                      }
+
+                      &.TaxaIntermediacao_BoxValores_ValorEsperado {
+                        margin-left: 16px;
+
+                        .BoxValores_Item_Valor {
+                          color: #e7a924;
+                        }
+                      }
+
+                      .BoxValores_Item_Valor {
+                        display: flex;
+                        justify-content: center;
+                        align-items: flex-start;
+                        text-align: center;
+                        font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                        font-weight: 700;
+                        text-transform: uppercase;
+
+                        .Item_Valor_Sifrao {
+                          font-size: 16px;
+                          line-height: 16px;
+                        }
+
+                        .Item_Valor_Real {
+                          font-size: 24px;
+                          line-height: 24px;
+                        }
+
+                        .Item_Valor_Centavos {
+                          font-size: 16px;
+                          line-height: 16px;
+                        }
+                      }
+
+                      .BoxValores_Item_Msg {
+                        align-items: flex-start;
+                        text-align: center;
+                        font-family: 'Open Sans', sans-serif;
+                        font-weight: 400;
+                        font-size: 12px;
+                        color: #999;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            .Item_DetalhamentoCompetencia_LancamentosAdicionais {
+              position: relative;
+              margin-bottom: 40px;
+
+              .Item_DetalhamentoCompetencia_Titulo {
+                font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                font-size: 20px;
+                line-height: 20px;
+                color: #333;
+                font-weight: 800;
+                margin: 0 auto;
+                text-transform: uppercase;
+              }
+
+
+
+              .DetalhamentoCompetencia_LancamentosAdicionais_Painel {
+                position: relative;
+                margin-top: 16px;
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+
+                .LancamentosAdicionais_Painel_ListaLancamentos {
+                  width: 100%;
+                  box-sizing: border-box;
+                  position: relative;
+                  border-top: 1px solid #ccc;
+
+                  .Painel_ListaLancamentos_Item {
+                    border-bottom: 1px solid #ccc;
+                    padding: 16px 0;
+                    display: flex;
+                    align-items: center;
+
+                    &.Painel_ListaLancamentos_Entrada {
+                      .ListaLancamentos_Item_Info {
+                        .Item_Info_Valor {
+                          color: #53c053;
+                        }
+                      }
+                    }
+
+                    &.Painel_ListaLancamentos_Saida {
+                      .ListaLancamentos_Item_Info {
+                        .Item_Info_Valor {
+                          color: #d15a5a;
+                        }
+                      }
+                    }
+
+                    .ListaLancamentos_Item_Excluir {
+                      width: 32px;
+                      height: 32px;
+                      background: #d15a5a;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+
+                      i {
+                        color: #fff;
+                        font-size: 16px;
+                      }
+                    }
+
+                    .ListaLancamentos_Item_Info {
+                      margin-left: 24px;
+
+                      .Item_Info_Label {
+                        font-family: 'Open Sans', sans-serif;
+                        font-size: 11px;
+                        color: #aaa;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                      }
+
+                      .Item_Info_Valor {
+                        font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                        font-size: 14px;
+                        color: #333;
+                        font-weight: 800;
+                      }
+                    }
+
+                    .ListaLancamentos_Item_Descricao {
+                      margin-left: 24px;
+                      font-family: 'Open Sans', sans-serif;
+                      font-size: 13px;
+                      color: #333;
+                      font-weight: 400;
+                      font-style: italic;
+                    }
+                  }
+
+                  .Painel_ListaLancamentos_CadastrarLancamento {
+                    border-radius: 5px;
+                    padding: 16px 16px;
+                    background: #a10358;
+                    color: #fff;
+                    font-family: 'Open Sans', sans-serif;
+                    font-size: 12px;
+                    font-weight: 700;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-transform: uppercase;
+                    max-width: max-content;
+                    margin-top: 16px;
+                    transition: .2s ease-in-out;
+                    cursor: pointer;
+
+                    &:hover {
+                      background: #b60765;
+                    }
+                  }
+                }
+
+                .LancamentosAdicionais_Painel_TotaisLancamentos {
+                  display: flex;
+                  justify-content: center;
+                  align-items: flex-start;
+                  width: fit-content;
+                  margin-left: 24px;
+
+                  .Painel_TotaisLancamentos_ItemTotal {
+                    width: 200px;
+                    border-radius: 5px;
+                    padding: 24px 24px;
+                    box-sizing: border-box;
+
+                    &.Painel_TotaisLancamentos_TotalReceber {
+                      margin-right: 8px;
+                      background: #25ae88;
+                    }
+
+                    &.Painel_TotaisLancamentos_TotalPagar {
+                      margin-left: 8px;
+                      background: #d15a59;
+                    }
+
+                    .TotaisLancamentos_ItemTotal_Titulo {
+                      font-family: 'Open Sans', sans-serif;
+                      font-size: 12px;
+                      font-weight: 500;
+                      text-align: center;
+                      text-transform: uppercase;
+                      color: #fff;
+
+                      span {
+                        display: block;
+                        font-weight: 700;
+                      }
+                    }
+
+                    .TotaisLancamentos_ItemTotal_Valor {
+                      display: flex;
+                      justify-content: center;
+                      align-items: flex-start;
+                      text-align: center;
+                      font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                      font-weight: 700;
+                      text-transform: uppercase;
+                      margin-top: 8px;
+                      color: #fff;
+
+                      .ItemTotal_Valor_Sifrao {
+                        font-size: 16px;
+                        line-height: 16px;
+                      }
+
+                      .ItemTotal_Valor_Real {
+                        font-size: 24px;
+                        line-height: 24px;
+                      }
+
+                      .ItemTotal_Valor_Centavos {
+                        font-size: 16px;
+                        line-height: 16px;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            .Item_DetalhamentoCompetencia_ResumoTotais {
+              border-top: 1px dashed #cccccc;
+              margin-top: 32px;
+              padding-top: 32px;
+              position: relative;
+              display: flex;
+              justify-content: center;
+              align-items: flex-end;
+
+              .DetalhamentoCompetencia_ResumoTotais_Item {
+                .ResumoTotais_Item_Titulo {
+                  font-family: 'Open Sans', sans-serif;
+                  font-size: 14px;
+                  color: #333;
+                  font-weight: 400;
+                  text-align: center;
+                  text-transform: uppercase;
+
+                  span {
+                    display: block;
+                    font-weight: 700;
+                  }
+                }
+
+                .ResumoTotais_Item_BoxValores {
+                  padding: 16px;
+                  border: 1px solid #ccc;
+                  border-radius: 5px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  margin-top: 8px;
+
+                  .Item_BoxValores_Valor {
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-start;
+                    text-align: center;
+                    font-family: 'Ubuntu', 'Open Sans', sans-serif;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    color: #333;
+                    position: relative;
+
+                    .BoxValores_Valor_Sifrao {
+                      font-size: 16px;
+                      line-height: 16px;
+                      margin-right: 3px;
+                    }
+
+                    .BoxValores_Valor_Real {
+                      font-size: 20px;
+                      line-height: 20px;
+                      margin-right: 1px;
+                    }
+
+                    .BoxValores_Valor_Centavos {
+                      font-size: 16px;
+                      line-height: 16px;
+                    }
+
+                    .BoxValores_Valor_Descricao {
+                      position: absolute;
+                      bottom: -24px;
+                      left: 50%;
+                      font-family: 'Open Sans', sans-serif;
+                      font-size: 8px;
+                      font-weight: 600;
+                      color: #333;
+                      background: #Aff;
+                      display: block;
+                      padding: 3px 8px 4px 8px;
+                      width: max-content;
+                      transform: translate(-50%, 0);
+                      ;
+                    }
+                  }
+
+                  .Item_BoxValores_SinalOperador {
+                    font-family: 'Open Sans', sans-serif;
+                    font-size: 24px;
+                    line-height: 24px;
+                    font-weight: 700;
+                    color: #ccc;
+                    margin: 0px 16px;
+                  }
+                }
+
+                &.DetalhamentoCompetencia_ResumoTotais_TotalBoletosPagos {
+                  .ResumoTotais_Item_BoxValores {
+                    .Item_BoxValores_Valor {
+                      color: #53c053;
+                    }
+                  }
+                }
+
+                &.DetalhamentoCompetencia_ResumoTotais_TotalLancamentos {
+                  .ResumoTotais_Item_BoxValores {
+                    .Item_BoxValores_APagar {
+                      color: #d15a59;
+
+                      .BoxValores_Valor_Descricao {
+                        background: #d15a59;
+                        color: #fff;
+                      }
+                    }
+
+                    .Item_BoxValores_AReceber {
+                      color: #53c053;
+
+                      .BoxValores_Valor_Descricao {
+                        background: #53c053;
+                        color: #fff;
+                      }
+                    }
+                  }
+                }
+
+                &.DetalhamentoCompetencia_ResumoTotais_TotalTaxas {
+                  .ResumoTotais_Item_BoxValores {
+                    .Item_BoxValores_Valor {
+                      color: #e7a924;
+
+                      .BoxValores_Valor_Descricao {
+                        background: #e7a924;
+                        color: #fff;
+                      }
+                    }
+                  }
+                }
+
+                &.DetalhamentoCompetencia_ResumoTotais_TotalSaldoLiquido {
+                  .ResumoTotais_Item_BoxValores {
+                    .Item_BoxValores_Valor {
+                      color: #4b71ba;
+                    }
+                  }
+                }
+              }
+
+              .DetalhamentoCompetencia_ResumoTotais_SinalOperador {
+                font-family: 'Open Sans', sans-serif;
+                font-size: 24px;
+                font-weight: 700;
+                color: #333;
+                margin: 0px 16px;
+                padding: 0 0 16px 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width:1068px) {
+    .PrestacaoDeContas_Lista {
+      .PrestacaoDeContas_Lista_Ocorrencia {
+        .Lista_Ocorrencia_ListaCompetencias {
+          .Ocorrencia_ListaCompetencias_Item {
+            .ListaCompetencias_Item_ResumoCompetencia {
+              .Item_ResumoCompetencia_ResumoDados {
+                .ResumoCompetencia_ResumoDados_Item {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                  margin: 0;
+
+                  .ResumoDados_Item_Label {
+                    font-weight: 400;
+                    text-align: center;
+                    margin: 0;
+                  }
+
+                  .ResumoDados_Item_Valor {
+                    margin-top: 4px;
+                    text-align: center;
+                  }
+                }
+              }
+            }
+
+            .ListaCompetencias_Item_DetalhamentoCompetencia {
+
+
+              .Item_DetalhamentoCompetencia_Proprietario {
+                .DetalhamentoCompetencia_Proprietario_Painel {
+                  .Proprietario_Painel_DadosBancarios {
+                    .Painel_DadosBancarios_Info {
+                      width: 50%;
+                      max-width: none;
+                      // margin: 0;
+                    }
+                  }
+                }
+              }
+
+              .Item_DetalhamentoCompetencia_ResumoOperacao {
+                .DetalhamentoCompetencia_ResumoOperacao_Painel {
+                  align-items: flex-start;
+                }
+              }
+
+              .Item_DetalhamentoCompetencia_ResumoTotais {
+                .DetalhamentoCompetencia_ResumoTotais_Item {
+                  .ResumoTotais_Item_BoxValores {
+                    padding: 16px 8px;
+
+                    .Item_BoxValores_Valor {
+                      .BoxValores_Valor_Sifrao {
+                        font-size: 12px;
+                        line-height: 12px;
+                      }
+
+                      .BoxValores_Valor_Real,
+                      .BoxValores_Valor_Centavos {
+                        font-size: 16px;
+                        line-height: 16px;
+                      }
+                    }
+
+                    .Item_BoxValores_SinalOperador {
+                      font-size: 16px;
+                      line-height: 16px;
+                    }
+                  }
+                }
+
+                .DetalhamentoCompetencia_ResumoTotais_SinalOperador {
+                  font-size: 24px;
+                  line-height: 24px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width:990px) {
+    .PrestacaoDeContas_Lista {
+      .PrestacaoDeContas_Lista_Ocorrencia {
+        .Lista_Ocorrencia_InfoProprietario {
+          .Ocorrencia_InfoProprietario_Tag {
+            padding: 12px 16px;
+
+            .InfoProprietario_Tag_Icone {
+              i {
+                font-size: 13px;
+              }
+            }
+
+            .InfoProprietario_Tag_Nome {
+              font-size: 13px;
+            }
+          }
+        }
+
+        .Lista_Ocorrencia_ListaCompetencias {
+          margin-top: 16px;
+
+          .Ocorrencia_ListaCompetencias_Item {
+            .ListaCompetencias_Item_DetalhamentoCompetencia {
+              padding: 32px 32px 40px 32px;
+
+              .Item_DetalhamentoCompetencia_ResumoOperacao {
+                .DetalhamentoCompetencia_ResumoOperacao_Painel {
+                  flex-wrap: wrap;
+                  justify-content: space-between;
+
+                  .ResumoOperacao_Painel_AnaliseRecebimento {
+                    width: 100%;
+                    margin-bottom: 24px;
+                  }
+
+                  .ResumoOperacao_Painel_TaxaAdministracao {
+                    width: calc(50% - 12px);
+                    max-width: none;
+                    margin: 0;
+                  }
+
+                  .ResumoOperacao_Painel_TaxaIntermediacao {
+                    width: calc(50% - 12px);
+                    max-width: none;
+                    margin: 0;
+                  }
+                }
+              }
+
+              .Item_DetalhamentoCompetencia_Proprietario {
+                .DetalhamentoCompetencia_Proprietario_Painel {
+                  .Proprietario_Painel_DadosBancarios {
+
+                    width: 100%;
+                    flex-wrap: wrap;
+
+                    .Painel_DadosBancarios_Info {
+                      width: 100%;
+
+                      max-width: none;
+                      margin-left: 0;
+                      margin-bottom: 24px;
+
+                    }
+                  }
+                }
+              }
+
+              .Item_DetalhamentoCompetencia_BoletosPagos {
+                .DetalhamentoCompetencia_BoletosPagos_Lista {
+                  .BoletosPagos_Lista_Item {
+                    .Lista_Item_ResumoBoleto {
+                      .Item_ResumoBoleto_Dados {
+                        flex-direction: column;
+
+                        .ResumoBoleto_Dados_Label {
+                          font-size: 10px;
+                        }
+
+                        .ResumoBoleto_Dados_Valor {
+                          font-size: 15px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
+              .Item_DetalhamentoCompetencia_LancamentosAdicionais {
+                .DetalhamentoCompetencia_LancamentosAdicionais_Painel {
+                  flex-direction: column;
+
+                  .LancamentosAdicionais_Painel_TotaisLancamentos {
+                    width: 100%;
+                    margin: 0;
+                    margin-top: 24px;
+
+                    .Painel_TotaisLancamentos_ItemTotal {
+                      width: 100%;
+                      max-width: none;
+
+                      .TotaisLancamentos_ItemTotal_Titulo {
+                        span {
+                          display: inline;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
+              .Item_DetalhamentoCompetencia_ResumoTotais {
+                .DetalhamentoCompetencia_ResumoTotais_SinalOperador {
+                  margin: 0 8px;
+                }
+
+                .DetalhamentoCompetencia_ResumoTotais_Item {
+                  .ResumoTotais_Item_BoxValores {
+                    .Item_BoxValores_SinalOperador {
+                      margin: 0 8px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width:768px) {
+    .PrestacaoDeContas_Lista {
+      .PrestacaoDeContas_Lista_Ocorrencia {
+        .Lista_Ocorrencia_ListaCompetencias {
+          .Ocorrencia_ListaCompetencias_Item {
+            margin-bottom: 16px;
+
+            .ListaCompetencias_Item_ResumoCompetencia {
+              .Item_ResumoCompetencia_ResumoDados {
+                margin-left: 25px;
+                margin-right: 10px;
+
+                .ResumoCompetencia_ResumoDados_Item {
+                  .ResumoDados_Item_Label {
+                    font-size: 10px;
+                    color: #555;
+                  }
+
+                  .ResumoDados_Item_Valor {
+                    font-size: 14px;
+                  }
+                }
+              }
+
+              .Item_ResumoCompetencia_MesReferente {
+                width: 120px;
+                height: 60px;
+                font-size: 20px;
+
+                &:after {
+                  border-top: 30px solid transparent;
+                  border-bottom: 30px solid transparent;
+                }
+              }
+
+              .Item_ResumoCompetencia_VerDetalhamento {
+                height: 60px;
+                padding: 0 16px 0 16px;
+                font-size: 11px;
+              }
+            }
+
+            .ListaCompetencias_Item_DetalhamentoCompetencia {
+              .Item_DetalhamentoCompetencia_Titulo {
+                font-size: 22px !important;
+              }
+
+              .Item_DetalhamentoCompetencia_BoletosPagos {
+                .DetalhamentoCompetencia_BoletosPagos_Lista {
+                  .BoletosPagos_Lista_Item {
+                    .Lista_Item_ResumoBoleto {
+                      .Item_ResumoBoleto_Dados {
+                        margin: 0;
+                      }
+
+                      .Item_ResumoBoleto_VerDetalhamento {
+                        right: -8px;
+                        position: relative;
+                        padding: 16px 8px;
+
+                        .ResumoBoleto_VerDetalhamento_Txt {
+                          display: none;
+                        }
+
+                        .ResumoBoleto_VerDetalhamento_Icone {
+                          margin-left: 0px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
+              .Item_DetalhamentoCompetencia_ResumoTotais {
+                align-items: flex-start;
+
+                .DetalhamentoCompetencia_ResumoTotais_Item {
+                  margin-right: 24px;
+
+                  &:last-child {
+                    margin-right: 0;
+                  }
+
+                  .ResumoTotais_Item_BoxValores {
+                    flex-direction: column;
+                    padding: 16px 24px;
+
+                    .Item_BoxValores_Valor {
+                      margin-bottom: 26px;
+                    }
+                  }
+                }
+
+                .DetalhamentoCompetencia_ResumoTotais_SinalOperador {
+                  display: none;
+                }
+
+                .DetalhamentoCompetencia_ResumoTotais_TotalBoletosPagos,
+                .DetalhamentoCompetencia_ResumoTotais_TotalSaldoLiquido {
+                  .ResumoTotais_Item_BoxValores {
+                    .Item_BoxValores_Valor {
+                      margin-bottom: 0;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width:660px) {
+    .PrestacaoDeContas_Lista {
+      .PrestacaoDeContas_Lista_Ocorrencia {
+        .Lista_Ocorrencia_ListaCompetencias {
+          .Ocorrencia_ListaCompetencias_Item {
+            .ListaCompetencias_Item_ResumoCompetencia {
+              .Item_ResumoCompetencia_MesReferente {
+                width: 100px;
+                // height: 48px;
+                font-size: 16px;
+                // &:after{
+                //     border-top: 24px solid transparent;
+                //     border-bottom: 24px solid transparent;
+                // }
+              }
+
+              .Item_ResumoCompetencia_ResumoDados {
+                .ResumoCompetencia_ResumoDados_Item {
+                  .ResumoDados_Item_Valor {
+                    margin-top: 2px;
+                  }
+                }
+              }
+
+              .Item_ResumoCompetencia_VerDetalhamento {
+                height: 48px;
+
+                .ResumoCompetencia_VerDetalhamento_Txt {
+                  display: none;
+                }
+              }
+            }
+
+            .ListaCompetencias_Item_DetalhamentoCompetencia {
+              .Item_DetalhamentoCompetencia_Titulo {
+                font-size: 20px !important;
+              }
+
+              .Item_DetalhamentoCompetencia_BoletosPagos {
+                .DetalhamentoCompetencia_BoletosPagos_Lista {
+                  .BoletosPagos_Lista_Item {
+                    .Lista_Item_ResumoBoleto {
+                      .Item_ResumoBoleto_Dados {
+                        .ResumoBoleto_Dados_Valor {
+                          font-size: 14px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
+              .Item_DetalhamentoCompetencia_ResumoTotais {
+                flex-direction: column;
+                align-items: center;
+
+                .DetalhamentoCompetencia_ResumoTotais_Item {
+                  display: flex;
+                  margin: 0;
+                  margin-bottom: 16px;
+
+                  &:last-child {
+                    margin-bottom: 0;
+                  }
+
+                  .ResumoTotais_Item_Titulo {
+                    width: 120px;
+                    text-align: right;
+                    margin-right: 16px;
+                  }
+
+                  .ResumoTotais_Item_BoxValores {
+                    margin-top: 0;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width:620px) {
+    .PrestacaoDeContas_Lista {
+      .PrestacaoDeContas_Lista_Ocorrencia {
+        .Lista_Ocorrencia_InfoProprietario {
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+
+          .Ocorrencia_InfoProprietario_Tag {
+            margin: 8px;
+
+            &:last-child {
+              margin: 8px;
+            }
+          }
+        }
+
+        .Lista_Ocorrencia_ListaCompetencias {
+          margin-top: 8px;
+
+          .Ocorrencia_ListaCompetencias_Item {
+            .ListaCompetencias_Item_DetalhamentoCompetencia {
+              .Item_DetalhamentoCompetencia_ResumoOperacao {
+                .DetalhamentoCompetencia_ResumoOperacao_Painel {
+                  .ResumoOperacao_Painel_AnaliseRecebimento {
+                    margin-bottom: 16px;
+                  }
+
+                  .ResumoOperacao_Painel_TaxaAdministracao {
+                    width: 100%;
+                  }
+
+                  .ResumoOperacao_Painel_TaxaIntermediacao {
+                    width: 100%;
+                    margin-top: 16px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width:540px) {
+    .PrestacaoDeContas_Lista {
+      .PrestacaoDeContas_Lista_Ocorrencia {
+        .Lista_Ocorrencia_ListaCompetencias {
+          .Ocorrencia_ListaCompetencias_Item {
+            .ListaCompetencias_Item_ResumoCompetencia {
+              flex-wrap: wrap;
+
+              .Item_ResumoCompetencia_MesReferente {
+                width: 100%;
+
+                &:after {
+                  display: none;
+                }
+              }
+
+              .Item_ResumoCompetencia_ResumoDados {
+                width: calc(100% - 86px);
+              }
+
+              .Item_ResumoCompetencia_VerDetalhamento {
+                height: 56px;
+              }
+            }
+
+            .ListaCompetencias_Item_DetalhamentoCompetencia {
+              .Item_DetalhamentoCompetencia_BoletosPagos {
+                .DetalhamentoCompetencia_BoletosPagos_Lista {
+                  .BoletosPagos_Lista_Item {
+                    .Lista_Item_ResumoBoleto {
+
+                      .Item_ResumoBoleto_Emissao,
+                      .Item_ResumoBoleto_Vencimento {
+                        display: none;
+                      }
+                    }
+                  }
+                }
+              }
+
+              .Item_DetalhamentoCompetencia_ResumoOperacao {
+                .DetalhamentoCompetencia_ResumoOperacao_Painel {
+                  .ResumoOperacao_Painel_AnaliseRecebimento {
+                    .Painel_AnaliseRecebimento_BoxValores {
+                      .AnaliseRecebimento_BoxValores_Item {
+                        .BoxValores_Item_Label {
+                          font-size: 11px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
+              .Item_DetalhamentoCompetencia_LancamentosAdicionais {
+                .DetalhamentoCompetencia_LancamentosAdicionais_Painel {
+                  .LancamentosAdicionais_Painel_ListaLancamentos {
+                    .Painel_ListaLancamentos_Item {
+                      flex-wrap: wrap;
+
+                      .ListaLancamentos_Item_Descricao {
+                        width: 100%;
+                        padding-left: 32px;
+                        margin-top: 8px;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width:400px) {
+    .PrestacaoDeContas_Lista {
+      .PrestacaoDeContas_Lista_Ocorrencia {
+        .Lista_Ocorrencia_ListaCompetencias {
+          .Ocorrencia_ListaCompetencias_Item {
+            .ListaCompetencias_Item_ResumoCompetencia {
+              .Item_ResumoCompetencia_ResumoDados {
+                .ResumoCompetencia_ResumoDados_TotalLançamentos {
+                  display: none;
+                }
+              }
+            }
+
+            .ListaCompetencias_Item_DetalhamentoCompetencia {
+              padding: 24px 24px 32px 24px;
+
+              .Item_DetalhamentoCompetencia_ResumoOperacao {
+                .DetalhamentoCompetencia_ResumoOperacao_Painel {
+                  .ResumoOperacao_Painel_AnaliseRecebimento {
+                    .Painel_AnaliseRecebimento_BoxValores {
+                      padding: 24px;
+
+                      .AnaliseRecebimento_BoxValores_Item {
+                        &.AnaliseRecebimento_BoxValores_ValorPago {
+                          padding-right: 16px;
+
+                          .BoxValores_Item_Icone {
+                            width: 54px;
+                            height: 47px;
+                          }
+                        }
+
+                        &.AnaliseRecebimento_BoxValores_ValorEsperado {
+                          margin-left: 16px;
+
+                          .BoxValores_Item_Icone {
+                            width: 54px;
+                            height: 47px;
+                            background-position: 0 -53px;
+                          }
+                        }
+
+                        .BoxValores_Item_Icone {
+                          background-size: 100%;
+                        }
+
+                        .BoxValores_Item_Valor {
+                          .Item_Valor_Real {
+                            font-size: 16px;
+                            line-height: 16px;
+                          }
+                        }
+
+                        .BoxValores_Item_Label {
+                          font-size: 11px;
+                        }
+                      }
+                    }
+
+                    .Painel_AnaliseRecebimento_StatusCompetencia {
+                      padding: 16px;
+
+                      .AnaliseRecebimento_StatusCompetencia_Item {
+                        .StatusCompetencia_Item_Msg {
+                          font-size: 11px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width:360px) {
+    .PrestacaoDeContas_Lista {
+      .PrestacaoDeContas_Lista_Ocorrencia {
+        .Lista_Ocorrencia_ListaCompetencias {
+          .Ocorrencia_ListaCompetencias_Item {
+            .ListaCompetencias_Item_DetalhamentoCompetencia {
+              .Item_DetalhamentoCompetencia_BoletosPagos {
+                .DetalhamentoCompetencia_BoletosPagos_Lista {
+                  .BoletosPagos_Lista_Item {
+                    .Lista_Item_ResumoBoleto {
+                      .Item_ResumoBoleto_PagoEm {
+                        display: none;
+                      }
+                    }
+                  }
+                }
+              }
+
+              .Item_DetalhamentoCompetencia_ResumoTotais {
+                .DetalhamentoCompetencia_ResumoTotais_Item {
+                  flex-direction: column;
+
+                  .ResumoTotais_Item_Titulo {
+                    text-align: center;
+                    margin-right: 0;
+                    margin-bottom: 8px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

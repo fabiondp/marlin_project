@@ -1,0 +1,314 @@
+<div class="container pagamento-wrapper">
+  <section class="wrap">
+    <div class="row">
+      <div class="col-md-12">
+
+
+
+        <!-- RESUMO -->
+        <div class="resumo-pedido">
+
+          <h2 class="title title-bg title-resumo-pedido">Resumo do <strong>seu pedido</strong></h2>
+          <div class="row">
+            <div class="col-md-10  col-md-offset-1 col-lg-offset-1">
+
+
+
+              <div class="row row-item" *ngFor="let item of pedidoService.itens; let i = index">
+                <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10  col-item">
+                  <div>
+                    <div class="item">
+                      <h3>{{ item.TituloPlano }}</h3>
+                      <!-- <h4>{{ item.TituloProduto }}</h4> -->
+
+                      <!-- <p>{{ item.DescricaoPlano }} </p> -->
+
+                      <div *ngIf="!item.FichaCredito" class="descricao-item">
+                        <div *ngIf="item.TipoPlano === 0">
+                          <p>{{ item.TituloProduto }}</p>
+                          <p>
+                            <label>Quantidade de anúncios:</label>
+
+                            <span *ngIf="!item.Ilimitado">
+                              {{ item.QuantidadeProduto == 1 ? item.QuantidadeProduto + ' imóvel' :
+                              item.QuantidadeProduto + '
+                              imóveis' }}
+                            </span>
+                            <span *ngIf="item.Ilimitado">
+                              Ilimitado
+                            </span>
+                          </p>
+                          <p>
+                            <label>Validade do plano:</label>
+                            <span> {{ item.PrazoEmDias == 1 ?
+                              item.PrazoEmDias + ' dia' :
+                              item.PrazoEmDias
+                              + ' dias' }}</span>
+                          </p>
+                        </div>
+
+                        <div *ngIf="item.TipoPlano === 2">
+                          <p>{{ item.TituloProduto }}</p>
+                          <p>
+                            <label>Quantidade de imóveis:</label>
+                            <span>{{ item.QuantidadeProduto}}</span>
+                          </p>
+
+                        </div>
+                      </div>
+
+                      <p *ngIf="item.FichaCredito">{{ item.FichaCredito.Pretendente.Nome }} - {{
+                        item.FichaCredito.Pretendente.CPFCNPJ }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 col-valor">
+                  <div class="box-valor">
+                    <label>Valor:</label>
+                    <div *ngIf="item.ComDesconto" class="valor-sem-desconto">
+                      <span class="">{{ item.ValorSemDesconto | currency : 'BRL'}}</span>
+                    </div>
+
+                    <!-- <span *ngIf="item.ComDesconto" class="desconto">- {{ item.Desconto | currency : 'BRL'}}</span> -->
+                    <div class="valor">
+                      <span *ngIf="item.Valor != 0">
+                        {{ item.Valor | currency : 'BRL'}}
+                      </span>
+
+                      <span *ngIf="item.Valor == 0">
+                        GRÁTIS
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- TOTAL -->
+              <div class="row row-total">
+                <div class="col-xs-12 col-sm-12 col-md-12 no-border">
+                  <p class="total text-center">valor total do seu pedido: <span class="valor-total">{{ total |
+                      currency: 'BRL'}}</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="separador-pagamento">
+          <a href="/carrinho/pagamento#pagamento" class="btn btn-primary btn-continuar">Continue sua navegação para
+            <strong>efetuar o
+              pagamento</strong></a>
+        </div>
+
+        <div>
+          <a id="pagamento"></a>
+          <h1 class="title title-glyph title-pagamento">Forma de pagamento</h1>
+          <select class="form-control" required name="" [(ngModel)]="tabCorrent" id="tabPagSelect"
+            (change)="selectTab($event.target.value)">
+            <option value="tabCredito">Cartão de Crédito</option>
+          </select>
+
+          <div class="tabPadrao" id="tabPagamento">
+            <ul class="nav nav-tabs tabPadrao" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#pagamento-cartao-credito" aria-controls="pagamento-cartao-credito" role="tab"
+                  data-toggle="tab">Cartão
+                  de Crédito</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane tab-cartao-credito active" id="pagamento-cartao-credito">
+              <div class="wrapper-form-pagamento-paypal">
+                <div class="row row-carregando" *ngIf="emProcessamento()">
+                  <div class="col-md-12">
+                    <app-loading [message]="descricaoDoStatus"></app-loading>
+                  </div>
+                </div>
+
+                <div class="row row-mensagens" *ngIf="!emProcessamento() && mensagens">
+                  <div class="col-md-12" *ngFor="let msg of mensagens">
+                    <app-alert *ngIf="msg.text" [close]="true" [timeout]="msg.time" [color]="msg.type">{{msg.text}}
+                    </app-alert>
+                  </div>
+                </div>
+
+                <div class="row row-mensagens" *ngIf="!emProcessamento() && mensagensPagamento">
+                  <div class="col-md-12" *ngFor="let msg of mensagensPagamento">
+                    <app-alert *ngIf="msg.text" [close]="true" [timeout]="msg.time" [color]="msg.type">{{msg.text}}
+                    </app-alert>
+                  </div>
+                </div>
+
+                <!-- *ngIf="!emProcessamento() && !mensagens" -->
+                <div [hidden]="emProcessamento() || mensagens">
+                  <!-- PAYPAL -->
+                  <div class="row" *ngIf="this.exibirBlocoCartaoPaypal">
+                    <div class="col-md-12">
+                      <div id="ppplusDiv"></div>
+                    </div>
+                  </div>
+
+                  <!-- IUGU -->
+                  <div class="row" *ngIf="this.exibirBlocoCartaoIugu">
+
+
+                    <div class="col-md-12">
+
+                      <div class="gateway_pagamento">
+                        <!-- Using Formatter.js - Iugu detecta e melhora o input de Cartão: http://firstopinion.github.io/formatter.js/
+-->
+                        <form id="payment-form-iugu" target="_blank" action="https://<-- seu servico -->" method="POST"
+                          #formPagamentoIugu="ngForm">
+
+                          <fieldset>
+                            <div class="cardIconsContainer pppCardIconsContainer">
+                              <div class="control-group">
+                                <div class="controls">
+                                  <div class="row">
+                                    <div class="col-xs-12 card-row-height">
+                                      <img
+                                        src="http://storage.pupui.com.br/9CA0F40E971643D1B7C8DE46BBC18396/assets/cc-icons.e8f4c6b4db3cc0869fa93ad535acbfe7.png"
+                                        alt="Visa, Master, Diners. Amex" border="0" />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="ccContainer">
+                              <div class="control-group">
+                                <div class="controls">
+
+                                  <div class="row">
+                                    <div class="col-md-8 form-group">
+                                      <label label-default="" class="control-label pppLabel">
+                                        Número do cartão
+                                      </label>
+
+                                      <input autocomplete="off" class="form-control pppTextInput credit_card_number"
+                                        data-iugu="number" name="number" [(ngModel)]="credit_card_number"
+                                        #number="ngModel" placeholder="Número do cartão" type="text" />
+                                      <span id="cardicon" class="cardicon Generic"></span>
+                                      <!-- name="number"  -->
+
+                                      <div *ngIf="number.invalid && number.dirty">
+                                        <!-- <div *ngIf="number.errors.required" class="alert alert-danger">
+                                          Número do cartão obrigatório.
+                                        </div> -->
+                                        <div *ngIf="number.errors.invalid" class="alert alert-danger">
+                                          Número do cartão inválido.
+                                        </div>
+                                      </div>
+
+                                      <!-- <pre>{{ number.errors | json }}</pre>
+                                      <pre>{{ credit_card_number | json}}</pre> -->
+                                    </div>
+
+                                    <div class="col-md-4 form-group">
+                                      <label label-default="" class="control-label pppLabel">
+                                        Código de segurança (CVV)</label>
+
+                                      <input autocomplete="off" class="form-control pppTextInput credit_card_cvv"
+                                        data-iugu="verification_value" name="verification_value"
+                                        #verification_value="ngModel" [(ngModel)]="credit_card_cvv" placeholder="CVV"
+                                        type="text" />
+                                      <span class="securityCode ccback"></span>
+                                      <div *ngIf="verification_value.invalid && verification_value.dirty">
+                                        <!-- <div *ngIf="verification_value.errors.required" class="alert alert-danger">
+                                          Código de segurança (CVV) obrigatório.
+                                        </div> -->
+                                        <div *ngIf="verification_value.errors.invalid" class="alert alert-danger">
+                                          Código de segurança (CVV) inválido.
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="row">
+                                    <div class="col-md-8 form-group">
+                                      <label label-default="" class="control-label pppLabel">
+                                        Nome do titular do cartão
+                                      </label>
+
+                                      <input autocomplete="off" class="form-control pppTextInput credit_card_name"
+                                        data-iugu="full_name" name="full_name" #full_name="ngModel"
+                                        [(ngModel)]="credit_card_name" placeholder="Titular do Cartão" type="text" />
+
+                                      <div *ngIf="(full_name.invalid && full_name.dirty)">
+                                        <!-- <div *ngIf="full_name.errors.required" class="alert alert-danger">
+                                          Nome do titular do cartão obrigatório.
+                                        </div> -->
+                                        <div *ngIf="full_name.errors.invalid" class="alert alert-danger">
+                                          Nome do titular do cartão inválido.
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-md-4 form-group">
+                                      <label label-default="" class="control-label pppLabel">
+                                        Vencimento</label>
+
+
+                                      <input autocomplete="off" class="form-control pppTextInput" data-iugu="expiration"
+                                        name="expiration" #expiration="ngModel" [(ngModel)]="credit_card_expiration"
+                                        placeholder="MM/AA" type="text" />
+
+                                      <div *ngIf="expiration.invalid && expiration.dirty">
+                                        <!-- <div *ngIf="expiration.errors.required" class="alert alert-danger">
+                                          Vencimento obrigatório.
+                                        </div> -->
+                                        <div *ngIf="expiration.errors.invalid" class="alert alert-danger">
+                                          Vencimento inválido.
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                          </fieldset>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <div class="row row-actions" *ngIf="total > 0 && !emProcessamento()">
+                  <div class="col-md=12 clearfix">
+                    <div class="pull-right">
+                      <div class="box-total">
+                        <strong>Total a pagar:
+                          <span class="valor">{{ total | currency : 'BRL'}}</span>
+                        </strong>
+                      </div>
+                      <div class="box-buttons">
+                        <button *ngIf="mensagens" [disabled]="emProcessamento()" (click)="tentarNovamente()"
+                          type="button" class="btn btn-primary">Tentar
+                          novamente
+                        </button>
+                        <!--<button *ngIf="!mensagens && this.exibirBlocoCartaoPaypal" type="text" id="continueButton"
+                          class="btn btn-primary" onclick="ppp.doContinue(); return false;">
+                          Pagar com cartão de crédito </button>-->
+
+                        <button *ngIf="!mensagens && this.exibirBlocoCartaoIugu" type="text" id="continueButton"
+                          class="btn btn-primary" (click)="processarDadosIugu($event)">
+                          Pagar com cartão de crédito </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

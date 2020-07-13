@@ -1,0 +1,384 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Click Alugue</a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="carrinho navbar-carrinho" [routerLinkActive]="['active']" [routerLink]="['/carrinho']"
+        title="Carrinho de compras">
+        <span class="badge" *ngIf="items()">{{ items() }}</span>
+        <i class="icone"></i>
+        <span class="text hidden">Carrinho</span>
+
+      </a>
+
+
+      <a class="notificacao navbar-notificacao" [routerLink]="['/dashboard']"
+        *ngIf="this.authService.check && this.notificacoes?.length > 0 ">
+
+        <span class="badge">{{ this.notificacoes.length }}</span>
+        <i class="glyphicons glyphicons-bell"></i>
+
+      </a>
+
+
+    </div>
+    <div class="nav-logout">
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="li-user" *ngIf="this.authService.check">
+            <span class="username">Olá {{ authService.user.nome }}</span>
+          </li>
+
+          <li class="inicio visible-sm visible-xs" data-toggle="collapse" data-target=".navbar-collapse">
+            <a href="#inicio" *ngIf="isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Início</span>
+            </a>
+            <a *ngIf="!isHome" [routerLink]="['/home']">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Início</span>
+            </a>
+          </li>
+
+
+          <li class="inicio hidden-sm hidden-xs">
+            <a href="#inicio" *ngIf="isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Início</span>
+            </a>
+            <a *ngIf="!isHome" [routerLink]="['/home']">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Início</span>
+            </a>
+          </li>
+
+          <li class="visible-sm visible-xs" data-toggle="collapse" data-target=".navbar-collapse">
+            <a class="anuncios" href="#anuncios" *ngIf="isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Anúncios</span>
+            </a>
+
+            <a class="anuncios" [routerLink]="['/home']" fragment="anuncios" *ngIf="!isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Anúncios</span>
+            </a>
+          </li>
+
+          <li class="hidden-sm hidden-xs">
+            <a class="anuncios" href="#anuncios" *ngIf="isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Anúncios</span>
+            </a>
+
+            <a class="anuncios" [routerLink]="['/home']" fragment="anuncios" *ngIf="!isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Anúncios</span>
+            </a>
+          </li>
+
+          <li *ngIf="enableAutoGestaoDeLocacao" class="visible-sm visible-xs" data-toggle="collapse"
+            data-target=".navbar-collapse">
+            <a class="autogestao-locacao" href="#autogestao-locacao" *ngIf="isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Autogestão</span>
+            </a>
+
+            <a class="autogestao-locacao" [routerLink]="['/home']" fragment="autogestao-locacao" *ngIf="!isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Autogestão</span>
+            </a>
+          </li>
+
+
+          <li *ngIf="enableAutoGestaoDeLocacao" class="hidden-sm hidden-xs">
+            <a class="autogestao-locacao" href="#autogestao-locacao" *ngIf="isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Autogestão</span>
+            </a>
+
+            <a class="autogestao-locacao" [routerLink]="['/home']" fragment="autogestao-locacao" *ngIf="!isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Autogestão</span>
+            </a>
+          </li>
+
+          
+          <li *ngIf="enableAnaliseDeCredito" class="visible-sm visible-xs" data-toggle="collapse"
+            data-target=".navbar-collapse">
+            <!-- <a class="analise-credito" href="#analise-credito">
+                <i class="icone"></i>
+                <span class="text">Análise de crédito</span>
+            </a> -->
+            <a class="analise-credito" href="#analise-credito" *ngIf="isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Análise Cadastral</span>
+            </a>
+
+            <a class="analise-credito" [routerLink]="['/home']" fragment="analise-credito" *ngIf="!isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Análise Cadastral</span>
+            </a>
+          </li>
+
+          <li *ngIf="enableAnaliseDeCredito" class="hidden-sm hidden-xs">
+            <!-- <a class="analise-credito" href="#analise-credito">
+                <i class="icone"></i>
+                <span class="text">Análise de crédito</span>
+            </a> -->
+            <a class="analise-credito" href="#analise-credito" *ngIf="isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Análise Cadastral</span>
+            </a>
+
+            <a class="analise-credito" [routerLink]="['/home']" fragment="analise-credito" *ngIf="!isHome">
+              <!-- <i class="icone"></i> -->
+              <span class="text">Análise Cadastral</span>
+            </a>
+          </li>
+
+          <!--      <li>
+                        <a class="aluguel-temporada" href="#aluguel-temporada">
+                            <i class="icone"></i>
+                            <span class="text">Alugue por temporada</span>
+                        </a>
+                    </li> -->
+          <li>
+            <a class="carrinho" [routerLinkActive]="['active']" [routerLink]="['/carrinho']"
+              title="Carrinho de compras">
+              <span class="badge" *ngIf="items()">{{ items() }}</span>
+              <i class="icone"></i>
+              <span class="text hidden">Carrinho</span>
+
+            </a>
+          </li>
+          <li *ngIf="!this.authService.check">
+            <a class="login" [routerLink]="['/login']" title="Entrar" (click)="onMenuClick()">
+              <i class="icone" id="icoLogin"></i>
+              <span class="text">Entrar</span>
+            </a>
+          </li>
+          <li [routerLinkActive]="['active']" *ngIf="this.authService.check && this.notificacoes?.length > 0 ">
+            <a class="notificacao" [routerLink]="['/dashboard']">
+
+              <span class="badge">{{ this.notificacoes.length }}</span>
+              <i class="glyphicons glyphicons-bell"></i>
+
+            </a>
+          </li>
+          <li [routerLinkActive]="['active']" *ngIf="this.authService.check">
+
+            <div class="dropdown-user">
+
+              <button class="btn btn-user dropdown-toggle" type="button" id="dropdownMenuUser" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="true">
+                <span>
+                  <i></i>
+                </span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right dropdown-menu-user" aria-labelledby="dropdownMenuUser">
+                <li class="li-user">
+                  <span class="username">Olá {{ authService.user.nome }}</span>
+                </li>
+
+                <li [routerLinkActive]="['active']" class="visible-sm visible-xs" data-toggle="collapse"
+                  data-target=".navbar-collapse">
+                  <a [routerLink]="[ '/dashboard']">
+                    <i class="glyphicons glyphicons-dashboard"></i> Dashboard</a>
+                </li>
+
+                <li [routerLinkActive]="['active']" class="hidden-sm hidden-xs">
+                  <a [routerLink]="[ '/dashboard']">
+                    <i class="glyphicons glyphicons-dashboard"></i> Dashboard</a>
+                </li>
+
+                <li [routerLinkActive]="['active']" class="visible-sm visible-xs" data-toggle="collapse"
+                  data-target=".navbar-collapse">
+                  <a [routerLink]="['/usuario','editar']">
+                    <i class="glyphicons glyphicons-settings"></i> Editar perfil</a>
+                </li>
+
+                <li [routerLinkActive]="['active']" class="hidden-sm hidden-xs">
+                  <a [routerLink]="['/usuario','editar']">
+                    <i class="glyphicons glyphicons-settings"></i> Editar perfil</a>
+                </li>
+
+
+                <li [routerLinkActive]="['active']" class="visible-sm visible-xs" data-toggle="collapse"
+                  data-target=".navbar-collapse">
+                  <a [routerLink]="['/meus-planos']">
+                    <i class="glyphicons glyphicons-money"></i> Meus planos</a>
+                </li>
+
+                <li [routerLinkActive]="['active']" class="hidden-sm hidden-xs">
+                  <a [routerLink]="['/meus-planos']">
+                    <i class="glyphicons glyphicons-money"></i> Meus planos</a>
+                </li>
+
+                <li [routerLinkActive]="['active']" *ngIf="authService.possuiContratoDeAnuncios()"
+                  class="visible-sm visible-xs" data-toggle="collapse" data-target=".navbar-collapse">
+                  <a [routerLink]="['/anuncios']">
+                    <i class="glyphicons glyphicons-group"></i> Meus anúncios</a>
+                </li>
+
+                <li [routerLinkActive]="['active']" *ngIf="authService.possuiContratoDeAnuncios()"
+                  class="hidden-sm hidden-xs">
+                  <a [routerLink]="['/anuncios']">
+                    <i class="glyphicons glyphicons-group"></i> Meus anúncios</a>
+                </li>
+
+                <li [routerLinkActive]="['active']"
+                  *ngIf="enableAutoGestaoDeLocacao && authService.possuiContratoDeAutogestao() && !authService.user.inadimplente"
+                  class="visible-sm visible-xs" data-toggle="collapse" data-target=".navbar-collapse">
+                  <a class="meus-imoveis" [routerLink]="['/autogestao', 'imoveis']">
+                    <i class="glyphicons glyphicons-map-marker"></i>
+                    <span>Meus imóveis</span>
+                  </a>
+                </li>
+
+                <li [routerLinkActive]="['active']"
+                  *ngIf="enableAutoGestaoDeLocacao && authService.possuiContratoDeAutogestao() && !authService.user.inadimplente"
+                  class="hidden-sm hidden-xs">
+                  <a class="meus-imoveis" [routerLink]="['/autogestao', 'imoveis']">
+                    <i class="glyphicons glyphicons-map-marker"></i>
+                    <span>Meus imóveis</span>
+                  </a>
+                </li>
+
+                <!--<li class="dropdown-highlight">
+                                    <a href="#" target="_blank">Acesse APSA Temporada</a>
+                                    <div class="alert">Alugue seu imóvel por temporada usando o mesmo cadastro!</div>
+
+                                </li>-->
+
+                <li>
+                  <a href="#" (click)="logout()">
+                    <i class="glyphicons glyphicons-exit"></i> Sair
+
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- <div class="nav-login" *ngIf="this.authService.check">
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <div class="wrap-navbar-nav">
+                    <ul class="nav navbar-nav" [routerLinkActive]="['active']">
+                        <li class="produtos-planos" [routerLinkActive]="['active']">
+                            <a href="#">
+                                
+                                <i class="glyphicons glyphicons-money"></i>
+                                <span>Produtos e planos</span>
+                            </a>
+                        </li>
+                        <li [routerLinkActive]="['active']">
+                            <a class="meus-anuncios" [routerLink]="['/anuncios']">
+                                <i class="icone"></i>
+                                <span>Meus anúncios</span>
+                            </a>
+                        </li>
+                        <li [routerLinkActive]="['active']">
+                            <a class="meus-imoveis" href="#">
+                               
+                                <i class="glyphicons glyphicons-map-marker"></i>
+                                <span>Meus imóveis</span>
+                            </a>
+                        </li>
+                        <li [routerLinkActive]="['active']">
+                            <a class="notificacao" [routerLink]="['/dashboard']">
+                                <div>
+                                    <i class="icone"></i>
+                                    <span class="notification-ball">
+                    <i>99</i>
+                  </span>
+                                </div>
+                            </a>
+                        </li>
+                        <li [routerLinkActive]="['active']">
+
+                            <div class="dropdown-user">
+                                <span class="username">Olá {{ authService.user.name }}</span>
+                                <button class="btn btn-user dropdown-toggle" type="button" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  <span>
+                    <i></i>
+                  </span>
+                </button>
+                                <ul class="dropdown-menu dropdown-menu-right dropdown-menu-user" aria-labelledby="dropdownMenuUser">
+                                    <li>
+                                        <a [routerLink]="['/usuario',this.usuario.Uid,'editar']">
+                                            <i class="glyphicons glyphicons-settings"></i> Editar perfil</a>
+                                    </li>
+
+                                    <li [routerLinkActive]="['active']">
+                                        <a class="meus-anuncios" [routerLink]="['/anuncios']">
+                                            <i class="icone"></i>
+                                            <span>Meus anúncios</span>
+                                        </a>
+                                    </li>
+                                    <li [routerLinkActive]="['active']">
+                                        <a class="meus-imoveis" href="#">
+                                            <i class="glyphicons glyphicons-map-marker"></i>
+                                            <span>Meus imóveis</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="dropdown-highlight">
+                                        <a href="#" target="_blank">Acesse APSA Temporada</a>
+                                        <div class="alert">Alugue seu imóvel por temporada usando o mesmo cadastro!</div>
+
+                                    </li>
+
+                                    <li>
+                                        <a (click)="logout()">
+                                            <i class="glyphicons glyphicons-exit"></i> Sair
+
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+ -->
+
+
+
+  </div>
+  <div *ngIf="navAnuncios" class="wrap-nav-submenu">
+    <ul class="nav nav-pills nav-justified nav-submenu" [routerLinkActive]="['active']">
+      <li role="presentation" [class.active]="isMeusAnuncios">
+
+        <a [routerLink]="['/anuncios/listar']">Meus anúncios</a>
+      </li>
+      <li role="presentation" [routerLinkActive]="['active']">
+        <a [routerLink]="['/anuncios/relatorio']">Relatório</a>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="navAutogestao" class="wrap-nav-submenu">
+    <ul class="nav nav-pills nav-justified nav-submenu" [routerLinkActive]="['active']">
+      <li role="presentation" [class.active]="isMeusImoveis">
+
+        <a [routerLink]="['/autogestao/imoveis']">Meus imóveis</a>
+      </li>
+      <li role="presentation" [routerLinkActive]="['active']">
+        <a [routerLink]="['/autogestao/cobrancas']">Cobranças</a>
+      </li>
+      <li role="presentation" [class.active]="isFinanceiro">
+        <a [routerLink]="['/autogestao/financeiro/prestacao-contas']">Financeiro</a>
+      </li>
+    </ul>
+  </div>
+</nav>

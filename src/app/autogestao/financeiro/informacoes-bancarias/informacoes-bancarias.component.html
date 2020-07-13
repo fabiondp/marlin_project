@@ -1,0 +1,554 @@
+<div class="container">
+  <section class="wrap imoveis com-submenu">
+    <a id="topo-component-page"></a>
+    <h1 class="title title-no-icon">
+      Informações bancárias
+    </h1>
+
+    <div class="row">
+      <div class="col-md-12" *ngIf="carregandoFormulario">
+        <app-loading [message]="messageStatus"></app-loading>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div *ngIf="!carregandoFormulario && messages">
+          <div *ngFor="let msg of messages">
+            <app-alert [close]="true" color="danger">{{ msg }}</app-alert>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <app-alerta-convenio-bancario [close]="true" [ocultarAlertaCadastro]="true"></app-alerta-convenio-bancario>
+      </div>
+    </div>
+
+    <form #informacoesBancariasForm="ngForm" *ngIf="!carregandoFormulario && exibirFormulario"
+      (ngSubmit)="abrirModalDeConfirmacaoDeInformacoesBancarias()">
+      <div class="row" *ngIf="!carregandoFormulario">
+        <div class="col-md-12">
+          <p>
+            Informe os dados da sua conta bancária válida para receber os
+            pagamentos referentes aos seus imóveis cadastrados no Autogestão.
+          </p>
+          <hr />
+        </div>
+      </div>
+
+      <div id="alerta-alteracao-titular" class="alert alert-info" role="alert">
+        <h4><span class="glyphicons glyphicons-alert"></span> Lembre-se</h4>
+        <div>
+          <p>
+            As informações sobre o titular da conta e o nome para identificação nas cobranças não poderão ser
+            alterados.
+          </p>
+        </div>
+      </div>
+
+
+      <!-- <accordion>
+        <accordion-group [panelClass]="'ca-panel-secundary'">
+          <button type="button" class="btn btn-link btn-block clearfix" accordion-heading>
+            <div class="pull-left float-left">Informações gerais</div>
+          </button>
+          <div>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="inputNomeComunicacaoCobranca" class="control-label">
+                    Nome para identificação nas cobranças
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="right" [tooltip]="tooltipTelefoneMovel">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+
+                  <ng-template #tooltipTelefoneMovel>
+                    <div [innerHtml]="'Nome apresentado na comunicação via e-mail das cobranças'"></div>
+                  </ng-template>
+
+                  <input type="text" class="form-control" id="inputNomeComunicacaoCobranca" name="inputNomeComunicacaoCobranca"
+                    required [(ngModel)]="informacaoBancaria.NomeDescricaoCobranca" #nomeDescricaoCobranca="ngModel"
+                    [disabled]="informacaoBancaria.Titular.alteracaoBloqueada()" />
+
+                  <div *ngIf="nomeDescricaoCobranca.invalid && nomeDescricaoCobranca.dirty && nomeDescricaoCobranca.errors['required']"
+                    class="alert alert-danger">
+                    Campo obrigatório.
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </accordion-group>
+        <accordion-group heading="Static Header, initially expanded">
+          This content is straight in the template.
+        </accordion-group>
+        <accordion-group heading="Another group">
+          <p>Some content</p>
+        </accordion-group>
+
+      </accordion> -->
+
+      <div id="row-configuracoes-gerais" class="row">
+        <fieldset class="col-md-12">
+          <legend>Informações gerais</legend>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="inputNomeComunicacaoCobranca" class="control-label">
+                  Nome para identificação nas cobranças
+                  <button type="button" class="btn btn-icon btn-tooltip" placement="right"
+                    [tooltip]="tooltipTelefoneMovel">
+                    <i class="glyphicons glyphicons-question-sign"></i>
+                  </button>
+                </label>
+
+                <ng-template #tooltipTelefoneMovel>
+                  <div [innerHtml]="'Nome apresentado na comunicação via e-mail das cobranças'"></div>
+                </ng-template>
+
+                <input type="text" class="form-control" id="inputNomeComunicacaoCobranca"
+                  name="inputNomeComunicacaoCobranca" required [(ngModel)]="informacaoBancaria.NomeDescricaoCobranca"
+                  #nomeDescricaoCobranca="ngModel" [disabled]="informacaoBancaria.Titular.alteracaoBloqueada()" />
+
+                <div
+                  *ngIf="nomeDescricaoCobranca.invalid && nomeDescricaoCobranca.dirty && nomeDescricaoCobranca.errors['required']"
+                  class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+      </div>
+
+      <div id="row-titular" class="row">
+        <fieldset id="fieldset-info-titular-conta" class="col-md-12">
+          <legend>Informações sobre o titular da conta</legend>
+
+          <div class="row" *ngIf="!informacaoBancaria.Titular.alteracaoBloqueada()">
+            <div class="col-md-12">
+              <label>
+                <input type="checkbox" (change)="preencherDadosComInformacoesCadastrais()"
+                  name="checkPreencherDadosComInformacoesCadastrais"
+                  [(ngModel)]="flagPreencherDadosComInformacoesCadastrais"
+                  [disabled]="informacaoBancaria.Titular.alteracaoBloqueada()" />
+                Preencher dados do titular com minhas informações cadastrais
+              </label>
+            </div>
+          </div>
+
+
+          <div id="titular-tipo-pessoa" class="row">
+            <div class="col-lg-2">
+              <div>
+                <div class="radio-inline">
+                  <label>
+                    <input type="radio" id="cpfTitular" name="TipoPessoaCPF" [value]="1"
+                      [disabled]="informacaoBancaria.Titular.alteracaoBloqueada() || flagPreencherDadosComInformacoesCadastrais"
+                      [(ngModel)]="informacaoBancaria.Titular.TipoPessoa"
+                      (change)="informacaoBancaria.Titular.alterarTipoPessoa()" />CPF
+                  </label>
+                </div>
+                <div class="radio-inline">
+                  <label>
+                    <input type="radio" id="cnpjTitular" name="TipoPessoaCNPJ" [value]="2"
+                      [disabled]="informacaoBancaria.Titular.alteracaoBloqueada() || flagPreencherDadosComInformacoesCadastrais"
+                      [(ngModel)]="informacaoBancaria.Titular.TipoPessoa"
+                      (change)="informacaoBancaria.Titular.alterarTipoPessoa()" />CNPJ
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="row-titular-cpf-cnpj" class="row">
+            <div class="col-md-12">
+              <div class="form-group" *ngIf="informacaoBancaria.Titular.pessoaFisica()">
+                <input type="text" class="form-control" [textMask]="{mask: maskCPF, guide: false}" name="CPF"
+                  class="form-control input-cpf" id="inputCPFTitular" placeholder="000.000.000-00"
+                  [(ngModel)]="informacaoBancaria.Titular.CPFCNPJ" #cpfTitular="ngModel" #inputCpfCnpj required
+                  [disabled]="informacaoBancaria.Titular.alteracaoBloqueada() || flagPreencherDadosComInformacoesCadastrais" />
+
+                <div *ngIf="cpfTitular.invalid && cpfTitular.dirty && cpfTitular.errors['required']"
+                  class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+
+              <div class="form-group" *ngIf="informacaoBancaria.Titular.pessoaJuridica()">
+                <input type="text" [textMask]="{mask: maskCNPJ, guide: false}" name="CNPJ"
+                  class="form-control input-cnpj" id="textCNPJ" placeholder="00.000.000/0000-00"
+                  [(ngModel)]="informacaoBancaria.Titular.CPFCNPJ" #cnpjTitular="ngModel" #inputCpfCnpj required
+                  [disabled]="informacaoBancaria.Titular.alteracaoBloqueada() || flagPreencherDadosComInformacoesCadastrais" />
+
+                <div *ngIf="cnpjTitular.invalid && cnpjTitular.dirty && cnpjTitular.errors['required']"
+                  class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="row-titular-informacoes-gerais" class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="inputNomeTitular" class="control-label">Nome</label>
+                <input type="text" class="form-control" id="inputNomeTitular" name="inputNomeTitular" required
+                  #nomeTitular="ngModel" [(ngModel)]="informacaoBancaria.Titular.Nome"
+                  [disabled]="informacaoBancaria.Titular.alteracaoBloqueada() || flagPreencherDadosComInformacoesCadastrais" />
+                <div *ngIf="nomeTitular.invalid && nomeTitular.dirty && nomeTitular.errors['required']"
+                  class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="inputEmailTitular" class="control-label">E-mail</label>
+                <input type="text" class="form-control" id="inputEmailTitular" name="inputEmailTitular" required
+                  #emailTitular="ngModel" [(ngModel)]="informacaoBancaria.Titular.Email"
+                  [disabled]="informacaoBancaria.Titular.alteracaoBloqueada() || flagPreencherDadosComInformacoesCadastrais" />
+                <div *ngIf="emailTitular.invalid && emailTitular.dirty && emailTitular.errors['required']"
+                  class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="inputTelefoneTitular" class="control-label">Telefone</label>
+                <input type="text" class="form-control" id="inputTelefoneTitular" name="inputTelefoneTitular" required
+                  #telefoneTitular="ngModel" [(ngModel)]="informacaoBancaria.Titular.Telefone"
+                  [disabled]="informacaoBancaria.Titular.alteracaoBloqueada() || flagPreencherDadosComInformacoesCadastrais" />
+              </div>
+            </div>
+          </div>
+
+          <div id="row-titular-responsavel" class="row" *ngIf="informacaoBancaria.Titular.pessoaJuridica()">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="inputNomeResponsavelTitular" class="control-label">Nome da pessoa responsável</label>
+                <input type="text" class="form-control" id="inputNomeResponsavelTitular"
+                  name="inputNomeResponsavelTitular" required #nomeResponsavelTitular="ngModel"
+                  [(ngModel)]="informacaoBancaria.Titular.Responsavel.Nome"
+                  [disabled]="informacaoBancaria.Titular.alteracaoBloqueada() || flagPreencherDadosComInformacoesCadastrais" />
+                <div
+                  *ngIf="nomeResponsavelTitular.invalid && nomeResponsavelTitular.dirty && nomeResponsavelTitular.errors['required']"
+                  class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="inputCPFResponsavelTitular" class="control-label">CPF da pessoa responsável</label>
+                <input type="text" class="form-control" id="inputCPFResponsavelTitular"
+                  name="inputCPFResponsavelTitular" required #cpfResponsavelTitular="ngModel"
+                  [(ngModel)]="informacaoBancaria.Titular.Responsavel.CPF"
+                  [disabled]="informacaoBancaria.Titular.alteracaoBloqueada() || flagPreencherDadosComInformacoesCadastrais" />
+                <div
+                  *ngIf="cpfResponsavelTitular.invalid && cpfResponsavelTitular.dirty && cpfResponsavelTitular.errors['required']"
+                  class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div id="row-titular-endereco" class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Endereço</label>
+                <app-input-busca-cep [(endereco)]="informacaoBancaria.Titular.Endereco" (enderecoChange)="informacaoBancaria.Titular.alterarEndereco($event)"
+                  [disableEdit]="informacaoBancaria.Titular.alteracaoBloqueada()"></app-input-busca-cep>
+              </div>
+            </div>
+          </div> -->
+        </fieldset>
+
+        <fieldset class="col-md-12">
+          <legend>Endereço do titular da conta</legend>
+          <app-input-busca-cep [(endereco)]="informacaoBancaria.Titular.Endereco"
+            (enderecoChange)="informacaoBancaria.Titular.alterarEndereco($event)"
+            [disableEdit]="informacaoBancaria.Titular.alteracaoBloqueada()"></app-input-busca-cep>
+        </fieldset>
+
+      </div>
+
+      <div id="row-conta-bancaria" class="row">
+        <fieldset class="col-md-12">
+          <legend>Conta bancária</legend>
+
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="selectContaBancariaCodigoBanco" class="control-label">Banco</label>
+                <select class="form-control" id="selectContaBancariaCodigoBanco" name="selectContaBancariaCodigoBanco"
+                  [(ngModel)]="informacaoBancaria.ContaBancaria.CodigoBanco" required #codigoBanco="ngModel"
+                  (ngModelChange)="informacaoBancaria.ContaBancaria.alterarBanco($event)"
+                  [disabled]="informacaoBancaria.alteracaoDeContaBloqueada()">
+                  <option [disabled]="true" [ngValue]="null">Selecione um banco</option>
+                  <option *ngFor="let banco of informacaoBancaria.ContaBancaria.OpcoesBanco"
+                    [ngValue]="banco.CodigoBanco" selected="selected">{{
+                    banco.Descricao }}
+                  </option>
+                </select>
+
+                <div *ngIf="codigoBanco.invalid && codigoBanco.dirty && codigoBanco.errors['required']"
+                  class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3" *ngIf="informacaoBancaria.ContaBancaria.BancoSelecionado">
+              <div class="form-group ">
+                <label for="bancoCodigo" class="control-label">Código</label>
+                <input type="number" class="form-control" id="bancoCodigo" name="bancoCodigo"
+                  [(ngModel)]="informacaoBancaria.ContaBancaria.BancoSelecionado.CodigoBancoFormatado"
+                  [readonly]="true" />
+              </div>
+            </div>
+          </div>
+
+          <div id="group-campos-conta-bancaria" *ngIf="informacaoBancaria.ContaBancaria.ExibirCampos">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="radioTipoConta">Tipo de Conta</label>
+                  <div class="form-group clearfix">
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" name="TipoContaCC" [value]="1"
+                          [(ngModel)]="informacaoBancaria.ContaBancaria.TipoConta"
+                          [disabled]="informacaoBancaria.alteracaoDeContaBloqueada()" />Conta Corrente</label>
+                    </div>
+                    <div class="radio-inline">
+                      <label>
+                        <input type="radio" name="TipoContaCP" [value]="2"
+                          [(ngModel)]="informacaoBancaria.ContaBancaria.TipoConta"
+                          [disabled]="informacaoBancaria.alteracaoDeContaBloqueada()" />Conta Poupança</label>
+                    </div>
+                    <div class="radio-inline">
+                      <label *ngIf="informacaoBancaria.Titular.TipoPessoa == 1">
+                        <input type="radio" name="TipoContaCS" [value]="3"
+                          [(ngModel)]="informacaoBancaria.ContaBancaria.TipoConta"
+                          [disabled]="informacaoBancaria.alteracaoDeContaBloqueada()" />Conta Simples</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="inputContaBancariaAgencia" class="control-label"> Agência
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipAgencia">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+                  <ng-template #tooltipAgencia>
+                    <div [innerHtml]="informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoAgencia"></div>
+                  </ng-template>
+                  <input class="form-control" type="text" id="inputContaBancariaAgencia"
+                    name="inputContaBancariaAgencia" [(ngModel)]="informacaoBancaria.ContaBancaria.Agencia"
+                    #contaBancariaAgencia="ngModel" required [readonly]="informacaoBancaria.alteracaoDeContaBloqueada()"
+                    [textMask]="{mask: informacaoBancaria.ContaBancaria.obterMascara(informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoAgencia), guide: true}"
+                    placeholder="{{ informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoAgencia }}" />
+
+                  <div
+                    *ngIf="contaBancariaAgencia.invalid && contaBancariaAgencia.dirty && contaBancariaAgencia.errors['required']"
+                    class="alert alert-danger">
+                    Campo obrigatório.
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="inputContaBancariaConta">
+                    Conta
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipConta">
+                      <i class="glyphicons glyphicons-question-sign"></i></button>
+                  </label>
+
+                  <ng-template #tooltipConta>
+                    <div [innerHtml]="informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoConta"></div>
+                  </ng-template>
+
+                  <input class="form-control" type="text" id="inputContaBancariaConta" name="inputContaBancariaConta"
+                    [(ngModel)]="informacaoBancaria.ContaBancaria.Conta" #contaBancariaConta="ngModel" required
+                    [readonly]="informacaoBancaria.alteracaoDeContaBloqueada()"
+                    [textMask]="{mask: informacaoBancaria.ContaBancaria.obterMascara(informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoConta), guide: true}"
+                    placeholder="{{ informacaoBancaria.ContaBancaria.BancoSelecionado.FormatacaoConta }}" />
+
+                  <div
+                    *ngIf="contaBancariaConta.invalid && contaBancariaConta.dirty && contaBancariaConta.errors['required']"
+                    class="alert alert-danger">
+                    Campo obrigatório.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div id="row-botoes" class="row">
+        <div class="form-btn-group col-md-12">
+          <button type="button " class="btn btn-link pull-left "
+            [routerLink]="['/autogestao/financeiro', 'prestacao-contas']">
+            Cancelar
+          </button>
+          <div class="pull-right">
+            <button type="submit" class="btn btn-primary"
+              [disabled]="informacoesBancariasForm.invalid || informacaoBancaria.alteracaoDeContaBloqueada()"
+              id="Salvar ">
+              Salvar
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </form>
+
+    <app-modal #modalConfirmacaoInformacoesBancarias class="modal-lg">
+      <div class="modal-header modal-warning">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true" (click)="closeModalConfirmacaoInformacoesBancarias()">&times;</span>
+        </button>
+
+        <h4 class="modal-title text-center">Confirmação</h4>
+      </div>
+      <div class="modal-body modal-body-confirmacao-informacoes-bancarias">
+        <div class="alert alert-warning">
+          <h4><span class="glyphicons glyphicons-alert"></span> Atenção</h4>
+          <p>
+            Estaremos validando as informações da sua conta bancária e essa
+            validação poderá levar alguns dias após sua confirmação. <br />
+            Com isso, você não poderá alterar as informações até a
+            conclusão do processo de validação.
+          </p>
+        </div>
+
+        <h5>Deseja realmente salvar as informações bancárias?</h5>
+
+        <hr />
+
+
+        <div class="row" *ngIf="!informacaoBancaria.Titular.alteracaoBloqueada()">
+          <div class="col-md-12">
+            Nome para identificação nas cobranças: {{ informacaoBancaria.NomeDescricaoCobranca }}
+          </div>
+        </div>
+
+        <hr *ngIf="!informacaoBancaria.Titular.alteracaoBloqueada()" />
+
+        <div class="row" *ngIf="!informacaoBancaria.Titular.alteracaoBloqueada()">
+          <div class="col-md-6">
+            Titular: {{ informacaoBancaria.Titular.Nome }}
+          </div>
+
+          <div class="col-md-6" *ngIf="informacaoBancaria.Titular.CPFCNPJ">
+            <span>
+              {{ informacaoBancaria.Titular.pessoaJuridica() ? 'CNPJ' : 'CPF' }}:</span> <span>{{
+                informacaoBancaria.Titular.CPFCNPJ | cpfcnpj }} </span>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="!informacaoBancaria.Titular.alteracaoBloqueada()">
+          <div class="col-md-12">
+            E-mail do titular: {{ informacaoBancaria.Titular.Email }}
+          </div>
+        </div>
+
+        <div class="row" *ngIf="!informacaoBancaria.Titular.alteracaoBloqueada()">
+          <div class="col-md-12">
+            Telefone do titular: {{ informacaoBancaria.Titular.Telefone }}
+          </div>
+        </div>
+
+        <div class="row" *ngIf="!informacaoBancaria.Titular.alteracaoBloqueada()">
+          <div class="col-md-12">
+            Endereço: {{ informacaoBancaria.Titular.Endereco.Logradouro }}, {{
+            informacaoBancaria.Titular.Endereco.Numero }} - {{ informacaoBancaria.Titular.Endereco.Bairro }} - {{
+            informacaoBancaria.Titular.Endereco.Cidade }} - {{ informacaoBancaria.Titular.Endereco.Estado }} - {{
+            informacaoBancaria.Titular.Endereco.CEP }}
+          </div>
+        </div>
+
+        <hr *ngIf="!informacaoBancaria.Titular.alteracaoBloqueada()" />
+
+        <div class="row">
+          <div class="col-md-12">
+            Tipo de conta:
+            {{ informacaoBancaria.ContaBancaria.TipoConta == 1 ? 'Corrente' : 'Poupança' }}
+          </div>
+        </div>
+
+        <div class="row" *ngIf="informacaoBancaria.ContaBancaria.BancoSelecionado">
+          <div class="col-md-12">
+            Banco: {{ informacaoBancaria.ContaBancaria.BancoSelecionado.Descricao }} -
+            {{ informacaoBancaria.ContaBancaria.CodigoBanco }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">Agência: {{ informacaoBancaria.ContaBancaria.Agencia }}</div>
+          <div class="col-md-6">Conta: {{ informacaoBancaria.ContaBancaria.CodigoBanco == '104' ? contaCaixa : informacaoBancaria.ContaBancaria.Conta }}</div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link pull-left" (click)="closeModalConfirmacaoInformacoesBancarias()">
+          Não
+        </button>
+        <button type="button" class="btn btn-primary" (click)="confirmarInformacoesBancarias()">
+          Sim
+        </button>
+      </div>
+    </app-modal>
+
+    <app-modal #modalInformacaoBancariaSalvaComSucesso>
+      <div class="modal-header modal-warning">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true" (click)="closeModalInformacaoBancariaSalvaComSucesso()">&times;</span>
+        </button>
+
+        <h4 class="modal-title text-center">Atenção!</h4>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-success">
+          Informações bancárias salvas com sucesso!
+        </div>
+        <p>
+          Estaremos validando as informações da sua conta bancária. Essa
+          confirmação poderá levar alguns dias após o cadastro da mesma.
+        </p>
+
+        <!--
+            <p> Aguarde o prazo de 3 dias úteis após o
+              cadastro da mesma para a validação das informações da sua conta bancária.</p>
+    
+            Aguarde a validação das informações da sua conta bancária no prazo de 3 dias úteis após o
+            cadastro da mesma.
+          -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="closeModalInformacaoBancariaSalvaComSucesso()">
+          Ok
+        </button>
+      </div>
+    </app-modal>
+  </section>
+</div>

@@ -1,0 +1,342 @@
+<div class="container">
+  <section class="wrap imoveis com-submenu">
+    <!-- <h1 class="title title-glyph title-autogestao-cobranca"> -->
+    <a id="topo-component-page"></a>
+    <h1 class="title">Informações bancárias</h1>
+    <div class=" btn-group-actions row clearfix">
+      <div class=" col-xs-2 clearfix">
+
+
+        <button data-toggle="button" class="btn btn-primary btn-icon" (click)="goBack()" title="Voltar">
+          <i class="glyphicons glyphicons-chevron-left"></i>
+          <span>Voltar</span>
+        </button>
+
+      </div>
+    </div>
+
+    <div class="col-md-12" *ngIf="carregandoFormulario">
+      <app-loading [message]="messageStatus"></app-loading>
+    </div>
+
+    <div class="col-md-12" *ngIf="!carregandoFormulario && messages">
+      <div *ngFor="let msg of messages">
+        <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{ msg }}</app-alert>
+      </div>
+    </div>
+
+    <form #convenioBancarioForm="ngForm" (ngSubmit)="abrirModalDeConfirmacaoDeInformacoesBancarias()" class="col-lg-12">
+      <div *ngIf="!carregandoFormulario && exibirFormulario">
+        <app-alerta-convenio-bancario [close]="true" [ocultarAlertaCadastro]="true"></app-alerta-convenio-bancario>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <p>
+              Informe os dados da sua conta bancária válida para receber os
+              pagamentos referentes aos seus imóveis cadastrados no Autogestão.
+            </p>
+
+            <!-- <p *ngIf="getNaturezaPessoa() == 'CNPJ'"> -->
+            <!--
+              Informe uma conta bancária válida vinculada ao CPF/CNPJ cadastrado na verificação da subconta.
+            -->
+
+            <!--
+              <strong>IMPORTANTE:</strong> Uma vez cadastrada uma conta bancária, não poderá alterar o nome e o cpf do
+              titular.
+              Você só poderá utilizar outra conta bancária se for do mesmo titular cadastrado inicialmente.
+            -->
+
+            <!--
+              Obs.: Não é possível receber valores em uma conta bancária que tenha um titular diferente do cadastrado
+              inicialmente.
+            -->
+            <!-- </p> -->
+            <hr />
+          </div>
+        </div>
+
+        <div class="alert alert-warning" role="alert" *ngIf="getNaturezaPessoa() == 'CNPJ' && !getResponsavelCadastrado()">
+          <h4><span class="glyphicons glyphicons-alert"></span> Atenção</h4>
+          <div>
+            <p>
+              Notamos que está faltando no seu cadastro as informações
+              necessárias do responsável financeiro. Precisamos dessa informação
+              para concluir o cadastro da sua conta bancária.
+            </p>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group ">
+                <label for="ResponsavelNome">Nome da Pessoa Responsável</label>
+
+                <input type="text" class="form-control" id="ResponsavelNome" name="ResponsavelNome" [(ngModel)]="convenioBancario.ResponsavelNome"
+                  #ResponsavelNome="ngModel" required />
+
+                <div *ngIf="
+                    ResponsavelNome.invalid &&
+                    (ResponsavelNome.dirty || ResponsavelNome.touched)
+                  ">
+                  <div *ngIf="ResponsavelNome.errors.required" class="alert alert-danger">
+                    Campo obrigatório.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="form-group ">
+                <label for="ResponsavelCPF">CPF da Pessoa Responsável</label>
+
+                <input type="text" class="form-control" id="ResponsavelCPF" name="ResponsavelCPF" [(ngModel)]="convenioBancario.ResponsavelCPF"
+                  #ResponsavelCPF="ngModel" required placeholder="000.000.000-00" [textMask]="{ mask: maskCPF, guide: false }" />
+
+                <div *ngIf="
+                    ResponsavelCPF.invalid &&
+                    (ResponsavelCPF.dirty || ResponsavelCPF.touched)
+                  ">
+                  <div *ngIf="ResponsavelCPF.errors.required" class="alert alert-danger">
+                    Campo obrigatório.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-info" role="alert">
+          <h4><span class="glyphicons glyphicons-alert"></span> Lembre-se</h4>
+          <div>
+            <p>
+              As informações bancárias devem ser referentes aos dados do titular
+              abaixo.
+            </p>
+          </div>
+          <div class="text-info">
+            <div *ngIf="getNaturezaPessoa() == 'CNPJ'">
+              <label>CNPJ do titular da conta: </label>
+              <strong>{{ this.authService.user.cpfcnpj }}</strong>
+            </div>
+
+            <div *ngIf="getNaturezaPessoa() == 'CPF'">
+              <label>CPF do titular da conta: </label>
+              <strong>{{ this.authService.user.cpfcnpj }}</strong>
+            </div>
+
+            <div>
+              <label>Titular da conta: </label>
+              <strong>{{ this.authService.user.nome }}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="form-group ">
+              <label for="CodigoBanco">Banco</label>
+
+              <select class="form-control" id="CodigoBanco" name="CodigoBanco" [(ngModel)]="convenioBancario.CodigoBanco"
+                required #CodigoBanco="ngModel" (ngModelChange)="onChangeBanco($event)" [disabled]="formTypeEdit">
+                <option [disabled]="true" [ngValue]="null">Selecione um banco</option>
+                <option *ngFor="let banco of bancos" [ngValue]="banco.CodigoBanco" selected="selected">{{
+                  banco.Descricao }}
+                </option>
+              </select>
+              <div *ngIf="
+                  CodigoBanco.invalid &&
+                  (CodigoBanco.dirty || CodigoBanco.touched)
+                ">
+                <div *ngIf="CodigoBanco.errors.required" class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 " *ngIf="BancoSelecionado">
+            <div class="form-group ">
+              <label for="bancoCodigo">Código</label>
+              <input type="number" class="form-control" id="bancoCodigo" name="bancoCodigo" [(ngModel)]="BancoSelecionado.CodigoBancoFormatado"
+                [readonly]="true" />
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="exibirCampos">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group ">
+                <label for="TipoConta">Tipo de conta </label>
+                <div class="form-group clearfix">
+                  <div class="radio-inline">
+                    <label>
+                      <input type="radio" name="TipoConta" [value]="1" [(ngModel)]="convenioBancario.TipoConta"
+                        [disabled]="formTypeEdit" />Conta Corrente</label>
+                  </div>
+                  <div class="radio-inline">
+                    <label>
+                      <input type="radio" name="TipoConta" [value]="2" [(ngModel)]="convenioBancario.TipoConta"
+                        [disabled]="formTypeEdit" />Conta Poupança</label>
+                  </div>
+                </div>
+
+                <!--
+                  <div *ngIf="TipoConta.invalid && (TipoConta.dirty || TipoConta.touched)">
+                    <div *ngIf="TipoConta.errors.required" class="alert alert-danger">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                -->
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-3">
+              <div class="form-group ">
+                <label for="Agencia">Agência
+                  <button type="button" class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipAgencia">
+                    <i class="glyphicons glyphicons-question-sign"></i>
+                  </button>
+                </label>
+                <ng-template #tooltipAgencia>
+                  <div [innerHtml]="BancoSelecionado.FormatacaoAgencia"></div>
+                </ng-template>
+
+                <input type="text" class="form-control" id="Agencia" name="Agencia" [(ngModel)]="convenioBancario.Agencia"
+                  #Agencia="ngModel" required [readonly]="formTypeEdit" placeholder="{{BancoSelecionado.FormatacaoAgencia}}" />
+
+                <div *ngIf="Agencia.invalid && (Agencia.dirty || Agencia.touched)">
+                  <div *ngIf="Agencia.errors.required" class="alert alert-danger">
+                    Campo obrigatório.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div class="form-group ">
+                <label for="Conta">Conta
+                  <button type="button" class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipConta">
+                    <i class="glyphicons glyphicons-question-sign"></i></button></label>
+                <ng-template #tooltipConta>
+                  <div [innerHtml]="BancoSelecionado.FormatacaoConta"></div>
+                </ng-template>
+
+                <input type="text" class="form-control" id="Conta" name="Conta" [(ngModel)]="convenioBancario.Conta"
+                  #Conta="ngModel" required [readonly]="formTypeEdit" placeholder="{{BancoSelecionado.FormatacaoConta}}" />
+                <div *ngIf="Conta.invalid && (Conta.dirty || Conta.touched)">
+                  <div *ngIf="Conta.errors.required" class="alert alert-danger">
+                    Campo obrigatório.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div role="group " class="form-btn-group ">
+        <button type="button " class="btn btn-link pull-left " [routerLink]="['/autogentao/financeiro']">
+          Cancelar
+        </button>
+        <div class="pull-right ">
+          <button type="submit" class="btn btn-primary" [disabled]="
+              convenioBancarioForm.invalid ||
+              formTypeEdit ||
+              carregandoFormulario
+            "
+            id="Salvar ">
+            Salvar
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <app-modal #modalConvenioBancario>
+    <div class="modal-header modal-warning">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+        <span aria-hidden="true" (click)="closeModalConvenioBancario()">&times;</span>
+      </button>
+
+      <h4 class="modal-title text-center">Atenção!</h4>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-success">
+        Informações bancárias salvas com sucesso!
+      </div>
+      <p>
+        Estaremos validando as informações da sua conta bancária. Essa
+        confirmação poderá levar alguns dias após o cadastro da mesma.
+      </p>
+
+      <!--
+        <p> Aguarde o prazo de 3 dias úteis após o
+          cadastro da mesma para a validação das informações da sua conta bancária.</p>
+
+        Aguarde a validação das informações da sua conta bancária no prazo de 3 dias úteis após o
+        cadastro da mesma.
+      -->
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="closeModalConvenioBancario()">
+        Ok
+      </button>
+    </div>
+  </app-modal>
+
+  <app-modal #modalConfirmacaoConvenioBancario>
+    <div class="modal-header modal-warning">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+        <span aria-hidden="true" (click)="closeModalConfirmacaoConvenioBancario()">&times;</span>
+      </button>
+
+      <h4 class="modal-title text-center">Confirmação</h4>
+    </div>
+    <div class="modal-body modal-body-confirmacao-informacoes-bancarias">
+      <div class="alert alert-warning">
+        <h4><span class="glyphicons glyphicons-alert"></span> Atenção</h4>
+        <p>
+          Estaremos validando as informações da sua conta bancária e essa
+          validação poderá levar alguns dias após sua confirmação. <br />
+          Com isso, você não poderá alterar as informações abaixo até a
+          conclusão do processo de validação.
+        </p>
+      </div>
+
+      <h5>Deseja realmente salvar as informações bancárias?</h5>
+
+      <hr />
+
+      <div class="row">
+        <div class="col-md-12">
+          Tipo de conta:
+          {{ convenioBancario.TipoConta == 1 ? 'Corrente' : 'Poupança' }}
+        </div>
+      </div>
+      <div class="row" *ngIf="BancoSelecionado">
+        <div class="col-md-12">
+          Banco: {{ BancoSelecionado.Descricao }} -
+          {{ convenioBancario.CodigoBanco }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">Agência: {{ convenioBancario.Agencia }}</div>
+        <div class="col-md-6">Conta: {{ convenioBancario.Conta }}</div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-link pull-left" (click)="closeModalConfirmacaoConvenioBancario()">
+        Não
+      </button>
+      <button type="button" class="btn btn-primary" (click)="confirmarInformacoesBancarias(convenioBancarioForm)">
+        Sim
+      </button>
+    </div>
+  </app-modal>
+</div>

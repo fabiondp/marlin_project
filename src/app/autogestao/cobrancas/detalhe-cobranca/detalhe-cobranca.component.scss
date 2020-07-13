@@ -1,0 +1,142 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+.detalhe-cobranca {
+  .row-descricao-cobranca {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 15px 0px 0px;
+    margin-bottom: 10px;
+
+    .item-descricao-cobranca {
+
+      // display: inline-block;
+      label {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .row-resumo-cobranca {
+    margin-top: 20px;
+
+    .box-boleto {
+      margin-bottom: 15px;
+
+      .descricao {
+        padding: 20px;
+        background: #f1f1f1;
+
+      }
+
+      .valor-total {
+        font-size: 15px;
+        font-weight: bold;
+        padding-top: 30px;
+        margin-top: 15px;
+        border-top: 1px solid #ccc;
+      }
+    }
+
+
+    .box-ultimo-boleto {
+      .titulo {
+        background: linear-gradient(0deg, #696967 0%, #a19e9c 100%);
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: normal;
+        padding: 8px 10px !important;
+        font-size: 14px;
+        font-weight: bold;
+
+      }
+
+
+
+      .lista-lancamentos {
+
+
+        .itens-lancamento {
+          display: block;
+        }
+      }
+    }
+
+    .box-novo-boleto {
+      .titulo {
+        background: linear-gradient(0deg, #a11959 0%, #cc265f 100%);
+        color: #f1f0f0;
+        text-transform: uppercase;
+        font-weight: normal;
+        padding: 8px 10px !important;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 10px 0px;
+      }
+
+      .descricao {
+        padding: 20px;
+        background: #f1f1f1;
+
+      }
+
+      .valor-total {
+        font-size: 15px;
+        font-weight: bold;
+      }
+
+      .lista-lancamentos {
+        padding: 20px;
+        background: #f1f1f1;
+
+        .itens-lancamento {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+
+.row-detalhe {
+  position: relative;
+
+  .col-lancarCobrancaDesconto {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    .btn {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+  }
+
+}
+
+.box-lancamentos {
+  h5 {
+    color: $color-primary;
+    font-size: 15px;
+    margin-top: 0;
+
+  }
+
+  padding: 5px 0;
+  // background-color: transparent;
+  // border: 1px solid $color-sixth;
+  font-size: 15px;
+
+  label {
+    font-size: 13px;
+  }
+}
+
+.novos-lancamentos {
+  padding: 10px 0;
+
+  .btn {
+    margin-right: 10px;
+  }
+
+}

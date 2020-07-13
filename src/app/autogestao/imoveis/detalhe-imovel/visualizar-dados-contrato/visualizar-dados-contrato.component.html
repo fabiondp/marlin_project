@@ -1,0 +1,830 @@
+<div class=" btn-group-actions position-top"
+  *ngIf="imovel && imovel.TipoPlano !== 1 && contratoLocacao && this.dadosContratoLocacao.isEdicao()">
+  <div>
+    <a [routerLink]="['/autogestao', 'imoveis', imovel.Uid , 'editar', 'novoContrato']" href="#"
+      class="btn-link pull-left" title="Novo contrato">
+      <span>Novo contrato</span>
+      <i class="glyphicons glyphicons-plus"></i>
+    </a>
+
+    <a *ngIf="contratoLocacao && contratoLocacao.PossuiHistorico" title="Histórico de contrato"
+      [routerLink]="['/autogestao', 'imoveis', imovel.Uid, 'contrato', 'historico']" href="#"
+      class="btn-link pull-right">
+      <span>Histórico de contrato</span>
+      <i class="glyphicons glyphicons-more-items"></i>
+    </a>
+  </div>
+</div>
+
+<div class="detalhe-locacao">
+  <fieldset>
+    <legend>Contrato</legend>
+
+    <div *ngIf="contratoLocacao" id="accordion-aba-contrato-locacao" role="tablist" aria-multiselectable="true">
+      <div id="panelInfoVigencia" class="panel panel-form-group panel-detail">
+        <div class="panel-heading" role="tab" id="headingPanelInfoVigencia">
+          <h4 class="panel-title">
+            <button type="button" class="accordion-toggle"
+              [class.collapsed]="!dadosContratoLocacao.panelInfoVigenciaIsOpen"
+              [attr.aria-expanded]="dadosContratoLocacao.panelInfoVigenciaIsOpen"
+              (click)="dadosContratoLocacao.toggleCollapse('panelInfoVigenciaIsOpen')"
+              aria-controls="collapsePanelInfoVigencia">
+              Vigência
+            </button>
+          </h4>
+        </div>
+        <div id="panelInfoVigenciaIsOpen" class="panel-collapse collapse"
+          [class.in]="dadosContratoLocacao.panelInfoVigenciaIsOpen" role="tabpanel"
+          aria-labelledby="headingPanelDadosPessoais">
+          <div class="panel-body">
+            <fieldset>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="txtDataInicioVigencia">Data início:
+                    </label>
+                    {{ dadosContratoLocacao.DataInicioVigenciaServer | date:'shortDate' | detailInfo }}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="txtVigenciaContratoMeses">Duração:
+                    </label>
+                    {{ dadosContratoLocacao.VigenciaContratoMeses | detailInfo: ' meses' }}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="txtDataInicioVigencia">Encerramento previsto:
+                    </label>
+                    {{ dadosContratoLocacao.DataFinalContratoServer | date:'shortDate' | detailInfo }}
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <div id="panelInfoCobranca" class="panel panel-form-group panel-detail">
+        <div class="panel-heading" role="tab" id="headingPanelInfoCobranca">
+          <h4 class="panel-title">
+            <button type="button" class="accordion-toggle"
+              [class.collapsed]="!dadosContratoLocacao.panelInfoCobrancaIsOpen"
+              [attr.aria-expanded]="dadosContratoLocacao.panelInfoCobrancaIsOpen"
+              (click)="dadosContratoLocacao.toggleCollapse('panelInfoCobrancaIsOpen')"
+              aria-controls="collapsePanelInfoCobranca">
+              Cobrança
+            </button>
+          </h4>
+        </div>
+        <div id="panelInfoCobrancaIsOpen" class="panel-collapse collapse"
+          [class.in]="dadosContratoLocacao.panelInfoCobrancaIsOpen" role="tabpanel"
+          aria-labelledby="headingPanelInfoCobranca">
+          <div class="panel-body">
+            <fieldset>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="txtValorLocacao">Valor do aluguel:
+                    </label>
+                    {{ dadosContratoLocacao.ValorLocacao | currency : 'BRL' | detailInfo }}
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <div>
+                      <label for="DiaPagamento">Dia do vencimento:
+                      </label>
+                      {{ dadosContratoLocacao.DiaPagamento | detailInfo }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Em caso de atraso dos pagamentos</legend>
+              <div class="row">
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label for="MultaSobreBoletoLocacao">Cobrar multa? </label>
+                    {{ dadosContratoLocacao.MultaSobreBoletoLocacao | detailInfo }}
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group" *ngIf="dadosContratoLocacao.MultaSobreBoletoLocacao">
+                    <label for="ValorPercentualMultaSobreBoletoLocacao">Valor da multa: </label>
+                    {{ dadosContratoLocacao.ValorPercentualMultaSobreBoletoLocacao | detailInfo: '%' }}
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="JurosMoraSobreBoletoLocacao">Cobrar juros de mora?
+                    </label>
+
+                    {{ dadosContratoLocacao.JurosMoraSobreBoletoLocacao | detailInfo }}
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <div id="panelInfoReajuste" class="panel panel-form-group panel-detail">
+        <div class="panel-heading" role="tab" id="headingPanelInfoReajuste">
+          <h4 class="panel-title">
+            <button type="button" class="accordion-toggle"
+              [class.collapsed]="!dadosContratoLocacao.panelInfoReajusteIsOpen"
+              [attr.aria-expanded]="dadosContratoLocacao.panelInfoReajusteIsOpen"
+              (click)="dadosContratoLocacao.toggleCollapse('panelInfoReajusteIsOpen')"
+              aria-controls="collapsePanelInfoVigencia">
+              Reajustes
+            </button>
+          </h4>
+        </div>
+        <div id="panelInfoReajusteIsOpen" class="panel-collapse collapse"
+          [class.in]="dadosContratoLocacao.panelInfoReajusteIsOpen" role="tabpanel"
+          aria-labelledby="headingPanelInfoReajuste">
+          <div class="panel-body">
+            <fieldset>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="txtDescricaoPercentualReajuste">Índice base:
+                    </label>
+                    {{ dadosContratoLocacao.DescricaoPercentualReajuste | detailInfo }}
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="txtMesReajuste">Mês de Reajuste:
+                    </label>
+
+                    {{ dadosContratoLocacao.MesReajuste | descricaoMes }}
+                  </div>
+                </div>
+              </div>
+
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <div id="panelInfoBonificacao" class="panel panel-form-group panel-detail">
+        <div class="panel-heading" role="tab" id="headingPanelInfoBonificacao">
+          <h4 class="panel-title">
+            <button type="button" class="accordion-toggle"
+              [class.collapsed]="!dadosContratoLocacao.panelInfoBonificacaoIsOpen"
+              [attr.aria-expanded]="dadosContratoLocacao.panelInfoBonificacaoIsOpen"
+              (click)="dadosContratoLocacao.toggleCollapse('panelInfoBonificacaoIsOpen')"
+              aria-controls="collapsePanelInfoVigencia">
+              Bonificações
+            </button>
+          </h4>
+        </div>
+        <div id="panelInfoBonificacaoIsOpen" class="panel-collapse collapse"
+          [class.in]="dadosContratoLocacao.panelInfoBonificacaoIsOpen" role="tabpanel"
+          aria-labelledby="headingPanelInfoBonificacao">
+          <div class="panel-body">
+            <div *ngIf="dadosContratoLocacao.PossuiBonificacoes" class="box-multiple">
+
+              <div class="row">
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                  <div class="alert alert-warning alert-small" role="alert">
+                    <i class="glyphicons glyphicons-alert icon"></i> Atenção: Os valores de bonificação cadastrados
+                    abaixo são apenas informativos para consultas futuras.
+                  </div>
+
+                </div>
+
+
+              </div>
+
+              <fieldset *ngFor="let bonificacao of dadosContratoLocacao.Bonificacoes; let indexBonificacao = index">
+                <div class="row">
+                  <div class="col-md-3">
+                    <label for="DescricaoBonificacao">Descrição: </label>
+                    {{ bonificacao.Descricao | detailInfo }}
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label [for]="'ValorBonificacao' + indexBonificacao">Valor: </label>
+                      {{ bonificacao.Valor | currency : 'BRL' | detailInfo }}
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <div *ngIf="!dadosContratoLocacao.PossuiBonificacoes">
+              <div class="row">
+                <div class="col-md-12">
+                  <p>Nenhuma bonificação informada</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="panelInfoObservacoes" class="panel panel-form-group panel-detail">
+        <div class="panel-heading" role="tab" id="headingpanelInfoObservacoes">
+          <h4 class="panel-title">
+            <button type="button" class="accordion-toggle"
+              [class.collapsed]="!dadosContratoLocacao.panelInfoObservacoesIsOpen"
+              [attr.aria-expanded]="dadosContratoLocacao.panelInfoObservacoesIsOpen"
+              (click)="dadosContratoLocacao.toggleCollapse('panelInfoObservacoesIsOpen')"
+              aria-controls="collapsePanelInfoObservacoes">
+              Observações
+            </button>
+          </h4>
+        </div>
+        <div id="panelInfoObservacoesIsOpen" class="panel-collapse collapse"
+          [class.in]="dadosContratoLocacao.panelInfoObservacoesIsOpen" role="tabpanel"
+          aria-labelledby="collapsePanelInfoObservacoes">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <div [innerHTML]="dadosContratoLocacao.Observacao | detailInfo"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!contratoLocacao">
+      <div class="row">
+        <div class="col-md-12">
+          <p>Imóvel sem contrato até o momento.</p>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <div *ngIf="contratoLocacao">
+    <br />
+
+    <fieldset id="fieldset-locatario">
+      <legend>Locatário</legend>
+
+      <div *ngIf="contratoLocacao && contratoLocacao.Locatario" id="accordion-aba-contrato-locacao-locatario"
+        role="tablist" aria-multiselectable="true">
+        <div id="panelDadosPessoais" class="panel panel-form-group panel-detail">
+          <div class="panel-heading" role="tab" id="headingPanelDadosPessoais">
+            <h4 class="panel-title">
+              <button type="button" class="accordion-toggle"
+                [class.collapsed]="!locatarioFiadorGarantia.panelDadosPessoaisIsOpen"
+                [attr.aria-expanded]="locatarioFiadorGarantia.panelDadosPessoaisIsOpen"
+                (click)="locatarioFiadorGarantia.toggleCollapse('panelDadosPessoaisIsOpen')"
+                aria-controls="collapsePanelDadosPessoais">
+                Dados pessoais
+              </button>
+            </h4>
+          </div>
+          <div id="panelDadosPessoaisIsOpen" class="panel-collapse collapse"
+            [class.in]="locatarioFiadorGarantia.panelDadosPessoaisIsOpen" role="tabpanel"
+            aria-labelledby="headingPanelDadosPessoais">
+            <div class="panel-body">
+              <fieldset>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="txtNomelocatario">Nome: </label>
+                      <span class="text-highlight">{{ locatarioFiadorGarantia.Locatario.Nome | detailInfo }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="">CPF/CNPJ: </label>
+                      {{ locatarioFiadorGarantia.Locatario.CPFCNPJ | cpfcnpj }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="txtEmail">E-mail: </label>
+                      {{ locatarioFiadorGarantia.Locatario.Email | detailInfo}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" *ngIf="locatarioPessoaFisica()">
+                  <div class="col-md-4" *ngIf="locatarioPessoaFisica()">
+                    <div class="form-group">
+                      <label for="txtDataNacionalidade">Nacionalidade: </label>
+                      {{ locatarioFiadorGarantia.Locatario.Nacionalidade | detailInfo }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-4" *ngIf="locatarioPessoaFisica()">
+                    <div class="form-group">
+                      <label for="EstadoCivilLocatario">Estado Civil:
+                      </label>
+                      {{ contratoLocacao.Locatario.DescricaoEstadoCivil | detailInfo}}
+                    </div>
+                  </div>
+
+                  <div class="col-md-4" *ngIf="locatarioPessoaFisica()">
+                    <div class="form-group">
+                      <label for="ProfissaoLocacatario">Profissão:
+                      </label>
+                      {{ contratoLocacao.Locatario.Profissao | detailInfo}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" *ngIf="locatarioPessoaFisica()">
+                  <div class="col-md-4" *ngIf="locatarioPessoaFisica()">
+                    <div class="form-group">
+                      <label for="txtDataNascimento">Data de Nascimento: </label>
+                      {{ locatarioFiadorGarantia.Locatario.DataNascimento | detailInfo }}
+                    </div>
+                  </div>
+
+                  <div class="col-md-4" *ngIf="locatarioPessoaFisica()">
+                    <div class="form-group">
+                      <label for="Sexo">Sexo:
+                      </label>
+                      {{ contratoLocacao.Locatario.DescricaoSexo | detailInfo}}
+                    </div>
+                  </div>
+                </div>
+
+              </fieldset>
+
+              <fieldset class="field-contatos">
+                <legend>Contatos</legend>
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>Telefone Fixo</h6>
+                    <div class="bloco-telefone"
+                      *ngFor="let telFixo of locatarioFiadorGarantia.Locatario.ContatosTelFixo; let i=index">
+                      <div class="form-group">
+                        <span>{{locatarioFiadorGarantia.Locatario.ContatosTelFixo[i].telefone | detailInfo}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <h6>Telefone Celular</h6>
+                    <div class="bloco-telefone"
+                      *ngFor="let telCelular of locatarioFiadorGarantia.Locatario.ContatosTelCel; let i=index">
+                      <div class="form-group">
+                        <span>{{locatarioFiadorGarantia.Locatario.ContatosTelCel[i].telefone | detailInfo}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+        <div id="panelEnderecoCobranca" class="panel panel-form-group panel-detail">
+          <div class="panel-heading" role="tab" id="headingPanelEnderecoCobranca">
+            <h4 class="panel-title">
+              <button type="button" class="accordion-toggle"
+                [class.collapsed]="!locatarioFiadorGarantia.panelEnderecoCobrancaIsOpen"
+                [attr.aria-expanded]="locatarioFiadorGarantia.panelEnderecoCobrancaIsOpen"
+                (click)="locatarioFiadorGarantia.toggleCollapse('panelEnderecoCobrancaIsOpen')"
+                aria-controls="collapsePanelEnderecoCobranca">
+                Endereço para cobrança
+              </button>
+            </h4>
+          </div>
+          <div id="panelEnderecoCobrancaIsOpen" class="panel-collapse collapse"
+            [class.in]="locatarioFiadorGarantia.panelEnderecoCobrancaIsOpen" role="tabpanel"
+            aria-labelledby="headingPanelEnderecoCobranca">
+            <div class="panel-body">
+              <fieldset>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <span *ngIf="contratoLocacao.Locatario.EnderecoCobranca">
+                        {{ contratoLocacao.Locatario.EnderecoCobranca.Logradouro }},
+                        {{contratoLocacao.Locatario.EnderecoCobranca.Numero ?
+                        contratoLocacao.Locatario.EnderecoCobranca.Numero + ', ' :
+                        contratoLocacao.Locatario.EnderecoCobranca.Numero}}
+
+                        {{contratoLocacao.Locatario.EnderecoCobranca.Complemento ?
+                        contratoLocacao.Locatario.EnderecoCobranca.Complemento + ' -
+                        ' : contratoLocacao.Locatario.EnderecoCobranca.Complemento}}
+                        {{contratoLocacao.Locatario.EnderecoCobranca.Bairro
+                        ? contratoLocacao.Locatario.EnderecoCobranca.Bairro + ' - ' :
+                        contratoLocacao.Locatario.EnderecoCobranca.Bairro}}
+                        {{contratoLocacao.Locatario.EnderecoCobranca.Cidade
+                        ? contratoLocacao.Locatario.EnderecoCobranca.Cidade + ' - ' :
+                        contratoLocacao.Locatario.EnderecoCobranca.Cidade}}
+                        {{contratoLocacao.Locatario.EnderecoCobranca.Estado}}
+                        {{contratoLocacao.Locatario.EnderecoCobranca.CEP
+                        ? ' - CEP ' + contratoLocacao.Locatario.EnderecoCobranca.CEP : ''}}
+                      </span>
+                      <span *ngIf="!contratoLocacao.Locatario.EnderecoCobranca"> - </span>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!contratoLocacao || !contratoLocacao.Locatario">
+        <div class="row">
+          <div class="col-md-12">
+            <p>Contrato sem locatário até o momento.</p>
+          </div>
+        </div>
+      </div>
+
+    </fieldset>
+
+    <fieldset id="fieldset-garantias">
+      <legend>Garantia</legend>
+
+      <div *ngIf="contratoLocacao">
+
+        <fieldset id="fieldset-garantia-sem-garantia" *ngIf="contratoLocacao && contratoLocacao.GarantiaImovel==0">
+          <div class="row">
+            <div class="col-md-12">
+              <p>Contrato sem garantia</p>
+            </div>
+          </div>
+        </fieldset>
+
+        <div *ngIf="contratoLocacao" id="accordion-aba-contrato-garantia" role="tablist" aria-multiselectable="true">
+
+          <div id="panelSeguroFianca" class="panel panel-form-group panel-detail"
+            *ngIf="contratoLocacao && contratoLocacao.GarantiaImovel == 1 && locatarioFiadorGarantia.SeguroFianca">
+            <div class="panel-heading" role="tab" id="headingPanelSeguroFianca">
+              <h4 class="panel-title">
+                <button type="button" class="accordion-toggle"
+                  [class.collapsed]="!locatarioFiadorGarantia.panelSeguroFiancaIsOpen"
+                  [attr.aria-expanded]="locatarioFiadorGarantia.panelSeguroFiancaIsOpen"
+                  (click)="locatarioFiadorGarantia.panelSeguroFiancaIsOpen = !locatarioFiadorGarantia.panelSeguroFiancaIsOpen"
+                  aria-controls="collapsePanelFiador">
+                  {{ contratoLocacao.DescricaoGarantiaImovel }}
+                </button>
+              </h4>
+            </div>
+            <div id="panelSeguroFiancaIsOpen" class="panel-collapse collapse"
+              [class.in]="locatarioFiadorGarantia.panelSeguroFiancaIsOpen" role="tabpanel"
+              aria-labelledby="headingPanelSeguroFianca">
+              <div class="panel-body">
+                <fieldset id="fieldset-seguro-fianca">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="">Seguradora: </label>
+                        {{ locatarioFiadorGarantia.SeguroFianca.Seguradora | detailInfo}}
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="">Nº Proposta/ Apólice: </label>
+                        {{ locatarioFiadorGarantia.SeguroFianca.CodigoPropostaApolice | detailInfo}}
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="">Data Renovação: </label>
+                        {{ locatarioFiadorGarantia.SeguroFianca.DataRenovacao | date:'shortDate' | detailInfo}}
+                        <span *ngIf="!locatarioFiadorGarantia.SeguroFianca.DataRenovacao">-</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="">Cobertura: </label>
+                        <div [innerHTML]="(locatarioFiadorGarantia.SeguroFianca.Cobertura | detailInfo)"></div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+
+          <div id="panelFiador" class="panel panel-form-group panel-detail"
+            *ngIf="contratoLocacao && contratoLocacao.GarantiaImovel == 2 && locatarioFiadorGarantia.Fiador">
+            <div class="panel-heading" role="tab" id="headingPanelFiador">
+              <h4 class="panel-title">
+                <button type="button" class="accordion-toggle"
+                  [class.collapsed]="!locatarioFiadorGarantia.panelFiadorIsOpen"
+                  [attr.aria-expanded]="locatarioFiadorGarantia.panelFiadorIsOpen"
+                  (click)="locatarioFiadorGarantia.panelFiadorIsOpen = !locatarioFiadorGarantia.panelFiadorIsOpen"
+                  aria-controls="collapsePanelFiador">
+                  {{ contratoLocacao.DescricaoGarantiaImovel }}
+                </button>
+              </h4>
+            </div>
+            <div id="panelFiadorIsOpen" class="panel-collapse collapse"
+              [class.in]="locatarioFiadorGarantia.panelFiadorIsOpen" role="tabpanel"
+              aria-labelledby="headingPanelFiador">
+              <div class="panel-body">
+                <fieldset id="fieldset-garantia-fiador">
+                  <!-- <legend>{{contratoLocacao.DescricaoGarantiaImovel}}</legend> -->
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="">CPF/CNPJ:
+                      </label>
+                      {{ locatarioFiadorGarantia.Fiador.CPFCNPJ | cpfcnpj }}
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="">Nome:
+                      </label>
+                      <span class="text-highlight">{{ locatarioFiadorGarantia.Fiador.Nome | detailInfo }}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="">E-mail:
+                      </label>
+                      {{ locatarioFiadorGarantia.Fiador.Email | detailInfo}}
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="">Endereço:
+                      </label>
+                      {{ locatarioFiadorGarantia.Fiador.Endereco | detailInfo}}
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="">Telefone Fixo:
+                      </label>
+                      <p *ngFor="let contatoFixo of FiadorContatosTelFixo; let i=index ">
+                        <span *ngIf="contatoFixo.telefone">({{ contatoFixo.telefone | slice:0:2 }})
+                          {{contatoFixo.telefone
+                          |
+                          slice:2:6 }}-{{ contatoFixo.telefone
+                          | slice:6:11 }}</span>
+                        <span *ngIf="!contatoFixo.telefone"> - </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="">Telefone Celular:
+                      </label>
+                      <p *ngFor="let contatoCel of FiadorContatosTelCel; let i=index ">
+                        <span *ngIf="contatoCel.telefone ">({{ contatoCel.telefone | slice:0:2 }}) {{
+                          contatoCel.telefone |
+                          slice:2:7 }}-{{ contatoCel.telefone | slice:7:12 }}</span>
+                        <span *ngIf="!contatoCel.telefone"> - </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="">Endereços dos imóveis:
+                      </label>
+                      <p *ngFor="let imovel of locatarioFiadorGarantia.Fiador.ImoveisFiador; let i=index "><label
+                          for="">Imóvel
+                          {{ i+1 }}
+                          -
+                        </label>
+                        {{ imovel.Endereco }}</p>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+
+          <div id="panelCaucao" class="panel panel-form-group panel-detail"
+            *ngIf="contratoLocacao && contratoLocacao.GarantiaImovel === 3 && locatarioFiadorGarantia.Caucao">
+            <div class="panel-heading" role="tab" id="headingPanelCaucao">
+              <h4 class="panel-title">
+                <button type="button" class="accordion-toggle"
+                  [class.collapsed]="!locatarioFiadorGarantia.panelCaucaoIsOpen"
+                  [attr.aria-expanded]="locatarioFiadorGarantia.panelCaucaoIsOpen"
+                  (click)="locatarioFiadorGarantia.panelCaucaoIsOpen = !locatarioFiadorGarantia.panelCaucaoIsOpen"
+                  aria-controls="collapsePanelFiador">
+                  {{ contratoLocacao.DescricaoGarantiaImovel }}
+                </button>
+              </h4>
+            </div>
+            <div id="panelCaucaoIsOpen" class="panel-collapse collapse"
+              [class.in]="locatarioFiadorGarantia.panelCaucaoIsOpen" role="tabpanel"
+              aria-labelledby="headingPanelCaucao">
+              <div class="panel-body">
+
+                <fieldset id="fieldset-garantia-caucao">
+
+                  <div class="row">
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="">Banco: </label>
+                        {{ locatarioFiadorGarantia.Caucao.Banco }}
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="">Agência: </label>
+                        {{ locatarioFiadorGarantia.Caucao.Agencia }}
+                        {{ locatarioFiadorGarantia.Caucao.DVAgencia ? ' - ' + locatarioFiadorGarantia.Caucao.DVAgencia
+                        : '' }}
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="">Conta: </label>
+                        {{ locatarioFiadorGarantia.Caucao.Conta}}
+                        {{ locatarioFiadorGarantia.Caucao.DVConta ? ' - ' + locatarioFiadorGarantia.Caucao.DVConta : ''
+                        }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="">Valor: </label>
+                        {{ locatarioFiadorGarantia.Caucao.Valor| currency : 'BRL' : true}}
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+
+          <div id="panelTituloCapitalizacao" class="panel panel-form-group panel-detail"
+            *ngIf="contratoLocacao && contratoLocacao.GarantiaImovel === 4 && locatarioFiadorGarantia.TituloCapitalizacao">
+            <div class="panel-heading" role="tab" id="headingPanelTituloCapitalizacao">
+              <h4 class="panel-title">
+                <button type="button" class="accordion-toggle"
+                  [class.collapsed]="!locatarioFiadorGarantia.panelTituloCapitalizacaoIsOpen"
+                  [attr.aria-expanded]="locatarioFiadorGarantia.panelTituloCapitalizacaoIsOpen"
+                  (click)="locatarioFiadorGarantia.panelTituloCapitalizacaoIsOpen = !locatarioFiadorGarantia.panelTituloCapitalizacaoIsOpen"
+                  aria-controls="collapsePanelFiador">
+                  {{ contratoLocacao.DescricaoGarantiaImovel }}
+                </button>
+              </h4>
+            </div>
+            <div id="panelTituloCapitalizacaoIsOpen" class="panel-collapse collapse"
+              [class.in]="locatarioFiadorGarantia.panelTituloCapitalizacaoIsOpen" role="tabpanel"
+              aria-labelledby="headingPanelTituloCapitalizacao">
+              <div class="panel-body">
+                <fieldset id="fieldset-titulo-capitalizacao">
+                  <div class="row">
+
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <label for="">Seguradora: </label>
+                        {{ locatarioFiadorGarantia.TituloCapitalizacao.Seguradora }}
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="">Nº título: </label>
+                        {{ locatarioFiadorGarantia.TituloCapitalizacao.CodigoTitulo }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <label for="">Data Renovação: </label>
+                        {{ locatarioFiadorGarantia.TituloCapitalizacao.DataRenovacao | date:'shortDate' }}
+                        <span *ngIf="!locatarioFiadorGarantia.TituloCapitalizacao.DataRenovacao">-</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="">Valor: </label>
+                        {{ locatarioFiadorGarantia.TituloCapitalizacao.Valor | currency : 'BRL' : true }}
+                      </div>
+                    </div>
+
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+
+          <div id="panelCartaFianca" class="panel panel-form-group panel-detail"
+            *ngIf="contratoLocacao && contratoLocacao.GarantiaImovel === 5 && locatarioFiadorGarantia.CartaFianca">
+            <div class="panel-heading" role="tab" id="headingPanelCartaFianca">
+              <h4 class="panel-title">
+                <button type="button" class="accordion-toggle"
+                  [class.collapsed]="!locatarioFiadorGarantia.panelCartaFiancaIsOpen"
+                  [attr.aria-expanded]="locatarioFiadorGarantia.panelCartaFiancaIsOpen"
+                  (click)="locatarioFiadorGarantia.panelCartaFiancaIsOpen = !locatarioFiadorGarantia.panelCartaFiancaIsOpen"
+                  aria-controls="collapsePanelFiador">
+                  {{ contratoLocacao.DescricaoGarantiaImovel }}
+                </button>
+              </h4>
+            </div>
+            <div id="panelCartaFiancaIsOpen" class="panel-collapse collapse"
+              [class.in]="locatarioFiadorGarantia.panelCartaFiancaIsOpen" role="tabpanel"
+              aria-labelledby="headingPanelCartaFianca">
+              <div class="panel-body">
+                <fieldset id="fieldset-garantia-carta-fianca">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="">Seguradora: </label>
+                        {{ locatarioFiadorGarantia.CartaFianca.Origem }}
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="">Data Renovação: </label>
+                        {{ locatarioFiadorGarantia.CartaFianca.DataRenovacao | date:'shortDate' }}
+                        <span *ngIf="!contratoLocacao.CartaFianca.DataRenovacao">-</span>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="">Cobertura: </label>
+                        <div>
+                          {{ locatarioFiadorGarantia.CartaFianca.Cobertura }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+
+          <div id="panelGarantiaOutros" class="panel panel-form-group panel-detail"
+            *ngIf="contratoLocacao && contratoLocacao.GarantiaImovel === 6 && locatarioFiadorGarantia.GarantiaOutros">
+            <div class="panel-heading" role="tab" id="headingPanelGarantiaOutros">
+              <h4 class="panel-title">
+                <button type="button" class="accordion-toggle"
+                  [class.collapsed]="!locatarioFiadorGarantia.panelGarantiaOutrosIsOpen"
+                  [attr.aria-expanded]="locatarioFiadorGarantia.panelGarantiaOutrosIsOpen"
+                  (click)="locatarioFiadorGarantia.panelGarantiaOutrosIsOpen = !locatarioFiadorGarantia.panelGarantiaOutrosIsOpen"
+                  aria-controls="collapsePanelFiador">
+                  {{contratoLocacao.DescricaoGarantiaImovel}}
+                </button>
+              </h4>
+            </div>
+            <div id="panelGarantiaOutrosIsOpen" class="panel-collapse collapse"
+              [class.in]="locatarioFiadorGarantia.panelGarantiaOutrosIsOpen" role="tabpanel"
+              aria-labelledby="headingPanelGarantiaOutros">
+              <div class="panel-body">
+                <fieldset id="fieldset-garantia-outros">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <div [innerHtml]="locatarioFiadorGarantia.GarantiaOutros.Descricao"></div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div *ngIf="!contratoLocacao">
+        <div class="row">
+          <div class="col-md-12">
+            <p>Contrato sem garantia informada até o momento.</p>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div id="contratoLocacaoHistoricoCobranca" class="panel-footer panel-listagem"
+      *ngIf="contratoLocacao && contratoLocacao.Uid != null && contratoLocacao.HistoricoCobranca">
+      <h4>Histórico de cobranças</h4>
+      <table class="table table-striped">
+
+        <tr *ngFor="let cobranca of contratoLocacao.HistoricoCobranca ; let x = index" class="list-row-group">
+          <td>{{cobranca.MesAno}}</td>
+          <td> <span [class]="'status-cobranca ' + (cobranca.Status | statusCobranca)">{{cobranca.Status}}</span>
+          </td>
+          <td class="text-right">
+            <button class="btn btn-sm btn-primary btn-ver-boleto"
+              [routerLink]="['/autogestao', 'cobrancas', cobranca.UidCobranca,'detalhe']">detalhe</button></td>
+        </tr>
+
+      </table>
+    </div>
+  </div>
+</div>

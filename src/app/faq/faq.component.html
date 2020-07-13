@@ -1,0 +1,92 @@
+<div class="container">
+  <section class="wrap termos-uso">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <h1 class="title title-bg title-faq">
+          Perguntas e Respostas</h1>
+        <div>
+          <div class="faq-group">
+            <h3>Proprietários - Cadastro</h3>
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+              <div class="panel-group">
+                <div class="panel panel-primary faq" *ngFor="let item of faqCadastroProprietarios; let i = index">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ i }}"
+                        aria-expanded="true" data-target="#accordion{{ i }}" aria-controls="collapseOne" class="collapsed">{{
+                        item.Pergunta }}</a>
+                    </h4>
+                  </div>
+                  <div id="collapse{{ i }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body" [innerHTML]="item.Resposta">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="faq-group">
+            <h3>Proprietários - Anúncios</h3>
+            <div class="panel-group" id="accordionB" role="tablist" aria-multiselectable="true">
+              <div class="panel-group">
+                <div class="panel panel-primary faq" *ngFor="let item of faqAnunciosProprietarios; let i = index">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseB{{ i }}"
+                        aria-expanded="true" data-target="#accordion{{ i }}" aria-controls="collapseTwo" class="collapsed">{{
+                        item.Pergunta }}</a>
+                    </h4>
+                  </div>
+                  <div id="collapseB{{ i }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                    <div class="panel-body" [innerHTML]="item.Resposta">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <h3>Pretendentes</h3>
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel-group">
+              <div class="panel panel-primary faq" *ngFor="let item of faqAnunciosPretendentes; let i = index">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseC{{ i }}"
+                      aria-expanded="true" data-target="#accordion{{ i }}" aria-controls="collapseThree" class="collapsed">{{
+                      item.Pergunta }}</a>
+                  </h4>
+                </div>
+                <div id="collapseC{{ i }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                  <div class="panel-body" [innerHTML]="item.Resposta">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3>Plataforma de Gestão</h3>
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel-group">
+              <div class="panel panel-primary faq" *ngFor="let item of faqAutoGestao; let i = index">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseD{{ i }}"
+                      aria-expanded="true" data-target="#accordion{{ i }}" aria-controls="collapseFour" class="collapsed">{{
+                      item.Pergunta }}</a>
+                  </h4>
+                </div>
+                <div id="collapseD{{ i }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                  <div class="panel-body" [innerHTML]="item.Resposta">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

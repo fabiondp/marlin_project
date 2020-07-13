@@ -1,0 +1,96 @@
+<div class="row form-cobranca-desconto" *ngIf="cobranca.NovoLancamento">
+
+  <form class="col-md-12" #cobrancaDescontoForm="ngForm" (ngSubmit)="salvarCobrancaDesconto(cobrancaDescontoForm)">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12">
+
+        <div class="form-group ">
+          <div>
+            <label class="radio-inline">
+              <input type="radio" [name]="indexAgrupadorCobranca + 'lancamentoTipo' + indexCobranca" [value]="1"
+                [id]="indexAgrupadorCobranca + 'lancamentoTipoCobranca' + indexCobranca"
+                [(ngModel)]="cobranca.NovoLancamento.TipoLancamento">Entrada</label>
+
+            <label class="radio-inline">
+              <input type="radio" [name]="indexAgrupadorCobranca + 'lancamentoTipo' + indexCobranca" [value]="2"
+                [id]="indexAgrupadorCobranca + 'lancamentoTipoDesconto' + indexCobranca"
+                [(ngModel)]="cobranca.NovoLancamento.TipoLancamento">Saída</label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-5">
+        <div class="form-group">
+          <label for="txtData">Data
+          </label>
+          <input required type="text" [maxDate]="maxDate" [bsConfig]="bsConfig" class="form-control" bsDatepicker
+            [id]="indexAgrupadorCobranca + 'Data' + indexCobranca"
+            [name]="indexAgrupadorCobranca + 'Data' + indexCobranca"
+            [(ngModel)]="cobranca.NovoLancamento.DataLancamento" #DataLancamento="ngModel" required>
+
+        </div>
+      </div>
+
+
+      <div class="col-xs-12 col-sm-8">
+        <div class="form-group ">
+          <label for="Descricao">Descrição</label>
+          <input type="text" class="form-control" [id]="indexAgrupadorCobranca + 'Descricao' + indexCobranca"
+            [name]="indexAgrupadorCobranca + 'Descricao' + indexCobranca"
+            [(ngModel)]="cobranca.NovoLancamento.DescricaoLancamento" autocomplete="off" #Descricao="ngModel" required>
+
+
+          <div *ngIf="Descricao.invalid && (Descricao.dirty || Descricao.touched)">
+            <div *ngIf="Descricao.errors.required" class="alert alert-danger">
+              Campo obrigatório.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-4 form-inline">
+        <div class="form-group">
+          <label for="Valor">Valor</label>
+          <div class="input-group">
+            <div class="input-group-addon">R$</div>
+            <input currencyMask type="text" class="form-control text-right"
+              [id]="indexAgrupadorCobranca + 'Valor' + indexCobranca"
+              [name]="indexAgrupadorCobranca + 'Valor' + indexCobranca"
+              [(ngModel)]="cobranca.NovoLancamento.ValorLancamento"
+              [options]="{prefix: '', thousands: '.', decimal: ',' }" placeholder="0,00" autocomplete="off"
+              #Valor="ngModel" required>
+
+
+
+          </div>
+
+          <div *ngIf="Valor.invalid && (Valor.dirty || Valor.touched)">
+            <div *ngIf="Valor.errors.required" class="alert alert-danger">
+              Campo obrigatório.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="pull-left">
+
+        <button type="button" class="btn btn-default btn-sm" (click)="cancelarEntradaSaida(cobranca)">cancelar</button>
+
+
+      </div>
+
+      <div class="pull-right">
+        <button type="submit" class="btn btn-primary btn-sm" id="incluirEntradaSaida"
+          (click)="incluirEntradaSaida(cobranca)" [disabled]="cobrancaDescontoForm.invalid">incluir</button>
+
+      </div>
+
+
+    </div>
+
+  </form>
+</div>

@@ -1,0 +1,171 @@
+<div class="container">
+
+  <section class="wrap anuncios  com-submenu">
+    <h1 class="title title-bg title-anuncios">Meus Anúncios</h1>
+
+    <app-loading *ngIf="carregando"></app-loading>
+    <div *ngIf="!carregando" class="row">
+
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="row" *ngIf="message">
+          <div class="col-md-12" *ngFor="let msg of message">
+            <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+          </div>
+        </div>
+        <div class="row">
+          <div
+            class="col-lg-4 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0 col-novo-anuncio"
+            *ngIf="totalAnunciosDisponiveis || anunciosIlimitados" id="tour-step-2">
+            <div>
+              <button type=" button " class="btn btn-novo-anuncio " routerLink="/anuncios/cadastrar">
+                <i class="glyphicons glyphicons-plus "></i>
+                <span>
+                  Criar novo anúncio</span>
+              </button>
+              <p *ngIf="!anunciosIlimitados">(Você ainda pode cadastrar mais {{ totalAnunciosDisponiveis }})</p>
+              <p *ngIf="anunciosIlimitados">(Cadastre anúncios ilimitados durante seu período de degustação)</p>
+            </div>
+          </div>
+
+
+          <div [@animationRemove]="anuncio.state " *ngFor="let anuncio of anuncios " class="col-lg-4 col-lg-offset-0 col-md-6
+            col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0 col-resultado-imovel ">
+
+            <div class="apsa-imovel clearfix " [ngStyle]="{ 'background-image':(anuncio.FotoDestaque ?
+            'url(data:image/jpg;base64,'+ anuncio.FotoDestaque + ')' : '') } ">
+              <div class="btn-group btn-group-actions ">
+                <button data-toggle="button " class="btn btn-icon " [routerLink]="[ '/anuncios',this.anuncio.Uid,
+            'editar'] " title="Editar este anúncio ">
+                  <i class="glyphicons glyphicons-edit "></i>
+                </button>
+
+                <button data-toggle="button " class="btn btn-icon btn-remove " (click)="openModal(anuncio) " title="Remover
+            este anúncio ">
+                  <i class="glyphicons glyphicons-bin "></i>
+                </button>
+              </div>
+
+              <a class="container-foto col-lg-5 col-md-5 col-sm-6 col-xs-12 " [routerLink]="[ '/anuncios', anuncio.Uid]"
+                target="_blank">
+
+                <!-- <a [routerLink]="[ '/anuncios', anuncio.Uid] ">
+                  <img [alt]="anuncio.CodigoImovel " class="img-responsive " [src]=" 'data:image/jpg;base64,'+ anuncio.FotoDestaque
+            " *ngIf="anuncio.FotoDestaque ">
+
+                  <img [alt]="anuncio.CodigoImovel " class="img-responsive " src="assets/images/sem-foto.png " *ngIf="!anuncio.FotoDestaque ">
+
+                </a> -->
+
+              </a>
+
+
+              <a class="container-description col-lg-7 col-md-7 col-sm-6 col-xs-12" target="_blank"
+                [routerLink]="[ '/anuncios', anuncio.Uid] ">
+                <div class="container-header ">
+                  <strong>{{anuncio.ValorLocacao | currency : 'BRL'}}</strong>
+
+                  <p>{{anuncio.DescricaoTipoImovel}}</p>
+                  <p>{{anuncio.Bairro}}</p>
+
+                  <div class="endereco-formatado ">
+                    <p>{{anuncio.Logradouro}}, {{anuncio.Numero}} {{anuncio.Bloco}} {{anuncio.Complemento}}</p>
+
+                  </div>
+
+                  <!-- <p class="codigo-imovel ">{{anuncio.CodigoImovel}} {{' - ' + anuncio.Id}}</p> -->
+                </div>
+
+                <div class="table-info ">
+
+                  <!-- <div class="col-md-6 ">Quartos
+                    <span>{{anuncio.Quartos == null ? '0' : anuncio.Quartos}}</span>
+                  </div>
+                  <div class="col-md-6 ">Area
+
+                    <span>{{anuncio.AreaConstruida == null ? '-' : anuncio.AreaConstruida + 'm²' }}</span>
+                  </div>
+                  <div class="col-md-6 ">Banheiros
+                    <span>{{anuncio.Banheiros == null ? '0' : anuncio.Banheiros}}</span>
+                  </div>
+
+                  <div class="col-md-6 ">Valor total
+
+                    <span>{{anuncio.ValorTotal | currency : 'BRL' : true}}</span>
+
+                  </div> -->
+
+                  <table>
+
+                    <tbody>
+                      <tr>
+                        <td>
+                          <span>Quartos
+                            <br />
+                            <span>{{anuncio.Quartos == null ? '0' : anuncio.Quartos}}</span>
+                          </span>
+                        </td>
+                        <td>
+                          <span>Banheiros
+                            <br />
+                            <span>{{anuncio.Banheiros == null ? '0' : anuncio.Banheiros}}</span>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <span> Área
+                            <br>
+                            <span>{{anuncio.AreaConstruida == null ? '-' : anuncio.AreaConstruida + 'm²' }} </span>
+                          </span>
+                        </td>
+                        <td>
+                          <span>
+                            Valor total
+                            <br>
+                            <span>{{anuncio.ValorTotal | currency : 'BRL'}}</span>
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+              </a>
+            </div>
+
+
+          </div>
+
+        </div>
+
+        <!-- <div class="panel panel-default ">
+                    <div class="panel-body ">
+                        Que tal alugar seu imóvel por temporada? Veja como em
+                        <a href="# ">APSA Temporada</a>
+                    </div>
+                </div> -->
+      </div>
+
+    </div>
+  </section>
+
+  <app-modal>
+    <div class="modal-header modal-warning ">
+      <button type="button " class="close " data-dismiss="modal " aria-label="Fechar ">
+        <span aria-hidden="true ">&times;</span>
+      </button>
+      <h4 class="modal-title text-center ">Atenção!</h4>
+    </div>
+    <div class="modal-body " *ngIf="anuncioToDelete ">
+      <p>Deseja realmente excluir este anúncio ?</p>
+      <p class="truncate ">
+        <strong>[ {{ anuncioToDelete.Descricao }} ]</strong>
+      </p>
+    </div>
+    <div class="modal-footer ">
+      <button type="button " class="btn btn-link pull-left " data-dismiss="modal ">Não</button>
+      <button type="button " class="btn btn-primary " (click)="remove() ">Sim</button>
+    </div>
+  </app-modal>
+
+</div>

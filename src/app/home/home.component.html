@@ -1,0 +1,734 @@
+<section id="inicio">
+  <div class="jumbotron">
+      <div class="titulo">
+        <!-- <div class="div1">Seu imóvel, </div>
+        <div class="div2"> sua gestão</div> -->
+        <!-- <div class="div1">Seu imóvel alugado</div>
+        <div class="div2">da forma mais prática <span class="no-break">e econômica.</span></div>
+        <div class="div2LowWidth">da forma mais</div>
+        <div class="div3LowWidth">prática e econômica</div> -->
+
+        <div class="TextArea">
+          Seu imóvel alugado da forma mais prática <span class="no-break">e econômica</span>.
+        </div>
+      </div>
+
+      <div class="container-saiba-como-anunciar">
+        <button type="button" class="anuncios bottom-30 show-mobile btn-outline"
+            (click)="irParaPlanosDeAnuncios('Anuncios_Produtos_Anchor')">Saiba como anunciar</button>
+      </div>
+
+      <div class="container-navegue-ver-mais">
+        <button type="button" class="anuncios bottom-10 show-mobile btn-navegue-ver-mais"
+            (click)="irParaPlanosDeAnuncios('Anuncios_Produtos_Anchor')">Navegue para ver mais
+            <span class="arrow">
+              <span></span>  
+            </span>
+        </button>
+      </div>
+  </div>
+
+  <!-- <div class="container-todos-os-produtos" *ngIf="enableAnaliseDeCredito">
+    <div class="container">
+      <h2 class="title">Anuncie seu imóvel nas principais plataformas pelo menor custo e gerencie você mesmo.</h2>
+      <div class="row row-eq-height icones-home" id="icones-home">
+        <div class="center-block">
+          <div class="col-sm-4 col-xs-12 col-md-4 col-centered">
+            <figure role="group">
+              <a href="#anuncios">
+                <img alt="Ícone de anúncio" src="assets/images/icone-anuncio.png"
+                  class="img-responsive img-center">
+                <figcaption>anuncie seu imóvel</figcaption>
+              </a>
+            </figure>
+          </div>
+
+          
+          <div class="col-sm-4 col-xs-12 col-md-4 col-centered" *ngIf="enableAutoGestaoDeLocacao">
+            <figure role="group">
+              <a href="#autogestao-locacao">
+                <img alt="Ícone de autogestão" src="assets/images/icone-autogestao.png"
+                  class="img-responsive img-center">
+                <figcaption>plataforma de autogestão</figcaption>
+              </a>
+            </figure>
+          </div>
+
+          <div class="col-sm-4 col-xs-12 col-md-4 col-centered" *ngIf="enableAnaliseDeCredito">
+            <figure role="group">
+              <a class="analise-credito" href="#analise-credito">
+                <img alt="Ícone de análise de crédito" src="assets/images/icone-analise-credito.png"
+                  class="img-responsive img-center">
+                <figcaption>análise cadastral</figcaption>
+              </a>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-produto-anuncio" *ngIf="!enableAnaliseDeCredito">
+      <h2 class="title">Anuncie seu Imóvel – Alugue e Venda casas e apartamentos</h2>
+      <div class="row row-eq-height icones-home" id="icones-home">
+        <div class="col-sm-6 col-xs-12 col-md-3 col-centered center-block">
+          <figure role="group">
+            <a href="#anuncios">
+              <img alt="Informe de Rendimento" src="assets/images/icone-anuncios.png" class="img-responsive img-center">
+              <figcaption>Anuncie seu imóvel</figcaption>
+            </a>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+</section>
+
+<section class="Anuncios section" id="anuncios">
+  <div class="Anuncios_Content">
+    <div class="Anuncios_Container container">
+      <div class="Anuncios_Instrucoes">
+        <div class="Anuncios_Resposta">
+          <!-- Escolha abaixo o plano que mais se
+          enquadra no seu <span>perfil de anunciante</span>. -->
+
+          Anuncie seu imóvel nas principais plataformas pelo <span>menor custo</span> e gerencie você mesmo.
+        </div>
+      </div>
+
+      <div id="Anuncios_Produtos_Anchor"></div>
+
+      <div class="row" *ngIf="message">
+        <div class="col-md-12" *ngFor="let msg of message">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+        </div>
+      </div>
+
+      <div *ngIf="carregando">
+        <app-loading></app-loading>
+      </div>
+
+      <div class="Anuncios_Produtos" *ngIf="produtoAnuncio && !carregando">
+        <div class="Produtos_Item" *ngFor="let plano of produtoAnuncio.Planos" data-toggle="popover" title="Benefícios" data-html="true" popover-trigger="'outsideClick'" #anuncios>
+          <div class="Produtos_Item_Titulo">Plano <span>{{ plano.TituloPlano }}</span></div>
+
+          <div class="Produtos_Item_Descricao">
+            <p>
+              {{ plano.DescricaoPlano }}
+            </p>
+          </div>
+
+          <div class="Produtos_Item_Separador"></div>
+
+          <!-- <div class="Produtos_Item_DadosPlano">
+            <div class="Produtos_Item_DadosPlano_Quantidade">
+              <div class="Produtos_Item_DadosPlano_Titulo">Quantidade de Anúncios:</div>
+              <div class="Produtos_Item_DadosPlano_Valor">
+                {{plano.QuantidadeProduto}} {{plano.QuantidadeProduto == 1 ? 'imóvel' :
+                'imóveis'}}
+              </div>
+            </div>
+            <div class="Produtos_Item_DadosPlano_Periodo">
+              <div class="Produtos_Item_DadosPlano_Titulo">Anuncie seus<br />imóveis por até:</div>
+              <div class="Produtos_Item_DadosPlano_Valor">{{plano.PrazoEmDias === 1 ? plano.PrazoEmDias + ' Dia' :
+                plano.PrazoEmDias + ' Dias' }}</div>
+            </div>
+          </div> -->
+
+          <!-- <div class="Produtos_Item_CTAExperimente">
+            <div class="Produtos_Item_CTAExperimente_Content">
+              Clique aqui e
+              <a href="#" (click)="degustarAnuncio(plano, $event)">Experimente grátis</a>
+              <b>ilimitado</b> por até <b>{{ produtoAnuncio &&
+                produtoAnuncio.PlanoDegustacao ?
+                produtoAnuncio.PlanoDegustacao.PrazoEmDias : 60 }} dias</b>.
+            </div>
+          </div>
+          <div class="Produtos_Item_Divisor">
+            <span>ou</span>
+          </div> -->
+
+          <div class="Produtos_Item_Comprar">
+            <!-- <div class="Produtos_Item_Comprar_Msg">
+              <a href="#" (click)="adicionarCarrinho(plano, $event)">Clique aqui</a>, se você Já experimentou e deseja
+              contratar por apenas:
+            </div> -->
+
+            <div class="Produtos_Item_Comprar_Preco">
+              <div class="Produtos_Item_Comprar_Preco_Sifrao">R$</div>
+              <div class="Produtos_Item_Comprar_Preco_Real">{{(plano.Valor | currency: 'BRL' |
+                removeCurrencySymbol)
+                }}</div>
+            </div>
+
+            <div class="Produtos_Item_Comprar_PrecoPor">
+              por imóvel
+            </div>
+
+            <div class="Produtos_Item_Comprar_MsgGratuidade">
+              {{ plano.mensagemDeGratuidade }}
+            </div>
+
+            <div class="Produtos_Item_Comprar_Bt">
+              <a href="#" (click)="adicionarCarrinho(plano, $event)">
+                Contratar
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="Anuncios_Aviso">
+        <p>
+          * A gratuidade na plataforma de gestão se inicia juntamente com o
+          serviço de anúncio, logo após confirmação do pagamento. Após período
+          de gratuidade, será cobrado a mensalidade de R$ 14,90 por imóvel,
+          conforme termos de uso e contrato.
+        </p>
+      </div>
+
+      <!-- <div class="Anuncios_Beneficios Anuncios_Beneficios_Sem_Img" *ngIf="produtoAnuncio && !carregando">
+        <div class="Anuncios_Beneficios_Content">
+          <div class="Anuncios_Beneficios_Titulo">
+            Veja os <span>benefícios</span> de ser um <span>assinante</span>:
+          </div>
+
+          <div class="Anuncios_Beneficios_Lista">
+            <div class="Beneficios_Lista_Item" *ngFor="let beneficio of produtoAnuncio.InformacoesAdicionaisProduto">
+              <div class="Beneficios_Lista_Item_Texto"> {{ beneficio.Descricao}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="Anuncios_Beneficios_Img"></div>
+      </div> -->
+    </div>
+  </div>
+
+  <!-- <article class="article-2 home-fale-conosco">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-xs-12">
+          <h4>Ainda não encontrou o plano perfeito para você?</h4>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <button type="button" class="btn btn-primary" (click)="abrirModalFaleConosco()">FALE CONOSCO</button>
+        </div>
+      </div>
+    </div>
+  </article> -->
+
+  <!-- <article class="article-2 home-faq">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8  col-sm-12">
+          <h4>Dúvidas de como anunciar seu imóvel?</h4>
+        </div>
+        <div class="col-md-4 col-sm-12 ">
+          <a class="btn btn-default" [routerLink]="['/faq']">PERGUNTAS E RESPOSTAS</a>
+        </div>
+      </div>
+    </div>
+  </article> -->
+</section>
+
+<section id="anuncios" class="section" *ngIf="false">
+  <article class="article-1" id="anuncio-artigo">
+    <div class="container">
+
+      <div class="row" *ngIf="message">
+        <div class="col-md-12" *ngFor="let msg of message">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+        </div>
+      </div>
+
+      <div *ngIf="carregando">
+        <app-loading></app-loading>
+      </div>
+
+      <div *ngIf="produtoAnuncio && !carregando">
+        <h2 hidden class="title title-bkg">{{ produtoAnuncio.TituloProduto }}</h2>
+        <h2 class="title title-bkg">Anuncie seu imóvel</h2>
+        <div class="well well-transparent descricaoProduto">{{ produtoAnuncio.DescricaoProduto }}</div>
+
+
+        <div class="row  row-eq-height bloco-planos">
+          <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" *ngFor="let plano of produtoAnuncio.Planos">
+            <div class="panel panel-primary planos">
+              <div class="panel-heading">
+                <div class="panel-heading-title">
+                  <h3 class="panel-title">{{ plano.TituloPlano }}</h3>
+                </div>
+                <div class="panel-heading-flag" *ngIf="plano.Degustacao">
+                  <div class="panel-flag">
+                    <span *ngIf="plano.PrazoEmDias % 30 !== 0">Grátis</span>
+                    <span *ngIf="plano.PrazoEmDias % 30 === 0 && plano.PrazoEmDias / 30 === 1">1 Mês Grátis</span>
+                    <span *ngIf="plano.PrazoEmDias % 30 === 0 && plano.PrazoEmDias / 30 !== 1">{{ plano.PrazoEmDias /
+                      30
+                      + ' Meses Grátis' }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="descricaoPlano">
+                  <p class="descricaoPlano-qtd">Quantidade de anúncios:
+                    <span>
+                      <strong>{{plano.QuantidadeProduto}}</strong> {{plano.QuantidadeProduto == 1 ? 'imóvel' :
+                      'imóveis'}}
+                    </span>
+                  </p>
+                  <div class="duracao">
+                    {{plano.PrazoEmDias === 1 ? plano.PrazoEmDias + ' Dia' : plano.PrazoEmDias + ' Dias' }}
+                  </div>
+                  <div class="valor">
+                    {{plano.Valor === 0 ? 'Grátis' : (plano.Valor | currency : 'BRL') }}
+                  </div>
+                  <button type="button" class="btn btn-default"
+                    (click)="adicionarCarrinho(plano, $event)">CONTRATAR</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row bloco-beneficios" *ngIf="produtoAnuncio.InformacoesAdicionaisProduto">
+          <div class="col-sm-12">
+            <div class="wrapper-nav-beneficios">
+              <ul class="nav nav-tabs">
+                <li role="presentation" class="active">
+                  <a href="#produtoAnunciosBeneficios">Benefícios</a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="produtoAnunciosBeneficios">
+                  <ul class="list-group list-glyphicon clearfix">
+                    <li class="list-group-item col-xs-12 col-sm-12 col-md-6"
+                      *ngFor="let beneficio of produtoAnuncio.InformacoesAdicionaisProduto">
+                      {{ beneficio.Descricao}}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+
+</section>
+
+<section id="autogestao-locacao" class="section" *ngIf="enableAutoGestaoDeLocacao">
+  <article class="article-1">
+    <div class="container">
+
+      <div class="row" *ngIf="messageAutogestao">
+        <div class="col-md-12" *ngFor="let msg of messageAutogestao">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessageAutogestao">{{msg}}</app-alert>
+        </div>
+      </div>
+
+      <div *ngIf="carregandoAutogestao">
+        <app-loading></app-loading>
+      </div>
+
+      <div *ngIf="produtoAutogestao && !carregandoAutogestao">
+
+        <!-- <h2 class="title title-bkg">Plataforma de Autogestão de Aluguel</h2> -->
+        <h2 class="title title-bkg __has-less-width-on-desktop">Autogestão</h2>
+
+        <h2 hidden class="title title-bkg">{{ produtoAutogestao.TituloProduto }}</h2>
+        <!-- <div class="well well-transparent descricaoProduto">{{ produtoAutogestao.DescricaoProduto }}</div> -->
+
+        <div class="well well-transparent descricaoProduto">
+          A ferramenta completa para gestão do seu imóvel alugado, sem burocracia e custos com imobiliárias. 
+          Gerencie e controle suas locações, emita boletos de cobrança e tenha acesso a diferentes modelos de contrato.
+        </div>
+
+        <div class="row  row-eq-height bloco-planos">
+          <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" *ngFor="let plano of produtoAutogestao.Planos">
+            <div class="panel panel-primary planos">
+              <div class="panel-heading">
+                <div class="panel-heading-title">
+                  <h3 class="panel-title">{{ plano.TituloPlano }}</h3>
+                </div>
+                <div class="panel-heading-flag" *ngIf="plano.Degustacao">
+                  <div class="panel-flag">
+                    <span>1 Mês Grátis</span>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="descricaoPlano">
+                  <div class="gerencie">Gerencie sua locação</div>
+                  <div *ngIf="plano.TipoPlanoDescricao === 'Mensal'">
+                    <p class="descricaoPlano-qtd">Quantidade:
+                      <span>
+                        <strong>{{plano.QuantidadeProduto}}</strong> {{plano.QuantidadeProduto == 1 ? ' imóvel' :
+                        'imóveis'}}
+                      </span>
+                    </p>
+
+                    <div *ngIf="!plano.Degustacao">
+                      <p class="preco">
+                        {{ plano.Valor | currency : 'BRL' }}
+                        <small>por mês</small>
+                      </p>
+                    </div>
+                    <div *ngIf="plano.Degustacao">
+                      <p class="preco promocional">Grátis
+                      </p>
+                    </div>
+
+                    <button type="button" class="btn btn-default"
+                      (click)="adicionarCarrinho(plano, $event)">CONTRATAR</button>
+                  </div>
+
+                  <div *ngIf="plano.TipoPlanoDescricao === 'Contrato'">
+                    <p class="descricaoPlano-qtd">Quantidade:
+                      <span>
+                        <strong>{{plano.QuantidadeProduto}}</strong> {{plano.QuantidadeProduto == 1 ? ' imóvel' : '
+                        imóveis'}}
+                      </span>
+                    </p>
+                    <p class="highlight text-center">
+                      Valor calculado com base no aluguel e na vigência do contrato
+                    </p>
+
+
+                    <button class="btn btn-default" (click)="simularValorPlano(plano)">FAÇA UMA SIMULAÇÃO</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="row bloco-beneficios" *ngIf="produtoAutogestao.InformacoesAdicionaisProduto">
+          <div class="col-sm-12">
+            <div class="wrapper-nav-beneficios">
+              <ul class="nav nav-tabs">
+                <li role="presentation" class="active">
+                  <a href="#produtoAutogestaoCaracteristicas">Vantagens</a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="produtoAutogestaoCaracteristicas">
+                  <ul class="list-group list-glyphicon clearfix">
+                    <li class="list-group-item col-xs-12 col-sm-12 col-md-6"
+                      *ngFor="let caracteristica of produtoAutogestao.InformacoesAdicionaisProduto">
+                      {{ caracteristica.Descricao}}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+      </div>
+    </div>
+  </article>
+
+  <!-- <article class="article-2 home-fale-conosco">
+    <div class="container">
+      <div class="col-sm-12">
+        <div class="col-md-8  col-sm-12">
+          <h4>Ainda não encontrou o plano perfeito para você?</h4>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <button type="button" class="btn btn-primary" (click)="abrirModalFaleConosco()">FALE CONOSCO</button>
+        </div>
+
+      </div>
+    </div>
+  </article> -->
+
+</section>
+
+<section id="analise-credito" class=" section" *ngIf="enableAnaliseDeCredito">
+  <article class="article-1">
+    <div class="container">
+      <div class="row" *ngIf="messageAnalise">
+        <div class="col-md-12" *ngFor="let msg of messageAnalise">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessageAnalise">{{msg}}</app-alert>
+        </div>
+      </div>
+
+      <div *ngIf="carregandoAnalise">
+        <app-loading></app-loading>
+      </div>
+
+      <div *ngIf="produtoAnalise && !carregandoAnalise">
+        <h2 class="title title-bkg">{{ produtoAnalise.TituloProduto }}</h2>
+        <!-- <div class="well well-transparent descricaoProduto">{{ produtoAnalise.DescricaoProduto }}</div> -->
+
+        <div class="well well-transparent descricaoProduto">
+          Serviço que oferece de forma ágil e segura todas as informações que o locador precisa saber para avançar
+          com a negociação da locação. No prazo médio de 15 minutos você receberá por email as informações do
+          interessado em alugar ou ser fiador do seu imóvel.
+        </div>
+
+        <div class="row row-eq-height bloco-planos">
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 center-block" *ngFor="let plano of produtoAnalise.Planos">
+            <div class="panel panel-primary planos">
+              <div class="panel-heading">
+                <h3 class="panel-title">{{ plano.TituloPlano }}</h3>
+              </div>
+              <div class="panel-body">
+                <div *ngIf="plano.DescricaoPlano" class="descricaoPlano">
+
+                  <div class="descricao">
+                    {{ plano.DescricaoPlano }}
+                  </div>
+
+                  <p class="texto-de-promocao">Preço promocional</p>
+
+                  <p class="preco">
+                    {{ plano.Valor | currency : 'BRL' }}
+                    <small>por consulta</small>
+                  </p>
+
+
+                  <button type="button" class="btn btn-default"
+                    [routerLink]="['/analise-completa', plano.Uid]">CONTRATAR</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="well well-transparent listagemAnalise">
+          <h3 class="title" >O que será analisado</h3>
+          <ul>
+            <li *ngFor="let item of produtoAnalise.InformacoesAdicionaisProduto">{{ item.Descricao }} </li>
+          </ul>
+        </div>
+
+        <!-- <div class="row bloco-beneficios" *ngIf="produtoAnalise.InformacoesAdicionaisProduto">
+          <div class="col-sm-12">
+            <div class="wrapper-nav-beneficios">
+              <ul class="nav nav-tabs">
+                <li role="presentation" class="active">
+                  <a>Vantagens</a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="produtoAnaliseVantagens">
+                  <ul class="list-group list-glyphicon clearfix">
+                    <li class="list-group-item col-xs-12 col-sm-12 col-md-6"
+                      *ngFor="let beneficio of produtoAnalise.InformacoesAdicionaisProduto">
+                      {{ beneficio.Descricao}}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </article>
+
+  <article class="article-2 home-fale-conosco">
+    <div class="container">
+      <div class="col-sm-12">
+        <div class="col-md-8 col-sm-12">
+          <h4>Ainda não encontrou o plano perfeito para você?</h4>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <button type="button" class="btn btn-primary" (click)="abrirModalFaleConosco()">FALE CONOSCO</button>
+        </div>
+
+      </div>
+    </div>
+  </article>
+
+    <article class="article-2 home-faq">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8  col-sm-12">
+          <h4>Dúvidas de como anunciar seu imóvel?</h4>
+        </div>
+        <div class="col-md-4 col-sm-12 ">
+          <a class="btn btn-default" [routerLink]="['/faq']">PERGUNTAS E RESPOSTAS</a>
+        </div>
+      </div>
+    </div>
+  </article>
+ </section>
+
+<section id="aluguel-temporada" class="section" *ngIf="enableAluguelTemporada">
+  <article class="article-1">
+    <div class="container">
+      <h2 class="title title-bkg">Alugue por temporada</h2>
+      <div class="well well-transparent">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pulvinar
+        velit
+        sed nulla aliquam, ac sollicitudin risus convallis. In a sagittis urna, ut tincidunt tellus. Nam sit amet
+        hendrerit
+        nisi, et tempus elit. Quisque convallis mollis pharetra. Vestibulum ante velit, fermentum nec felis in, posuere
+        vestibulum
+        lectus. Phasellus elementum libero turpis, nec lobortis orci vestibulum in. Donec condimentum ullamcorper
+        lacus,
+        eu consequat arcu interdum at. Cras nec varius lorem. Etiam sodales eu risus ut finibus. Morbi consectetur
+        vehicula
+        interdum. Nam consectetur, elit finibus sodales elementum, sem nisi laoreet enim, vitae vehicula tellus felis
+        ut
+        tortor.
+      </div>
+      <p class="text-center">
+        <button type="button" class="btn btn-lg btn-confira">CONFIRA</button>
+      </p>
+    </div>
+  </article>
+
+</section>
+
+<app-modal #modal1>
+  <div *ngIf="!mensagemEnviada">
+    <div class="modal-header  modal-info">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">Não encontrou o plano perfeito para você?
+        <br />Fale conosco!</h4>
+    </div>
+    <div class="modal-body">
+
+      <div class="row" *ngIf="messageFaleConosco">
+        <div class="col-md-12" *ngFor="let msg of messageFaleConosco">
+          <app-alert [close]="true" [timeout]="timeMessageFaleConosco" [color]="typeMessageFaleConosco">{{msg}}
+          </app-alert>
+        </div>
+      </div>
+
+      <form #faleConoscoForm="ngForm" (ngSubmit)="onSubmit(faleConoscoForm)">
+        <div class="form-group">
+          <label for="nomeCompleto">Nome Completo</label>
+          <input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto" [(ngModel)]="faleConosco.nome"
+            required #nome="ngModel" minlength="3">
+
+          <div *ngIf="nome.invalid && (assunto.dirty || nome.touched)" class="alert alert-danger">
+            <div *ngIf="nome.errors.required">
+              Campo obrigatório.
+            </div>
+            <div *ngIf="nome.errors.minlength">
+              O nome deve ter pelo menos 3 caracteres.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="text" class="form-control" id="email" name="email" [(ngModel)]="faleConosco.email" required
+            #email="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+
+          <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+            <div *ngIf="email.errors.required">
+              Campo obrigatório.
+            </div>
+            <div *ngIf="email.errors.pattern">
+              Digite um e-mail válido
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="assunto">Assunto</label>
+          <input type="text" class="form-control" id="assunto" name="assunto" [(ngModel)]="faleConosco.assunto" required
+            #assunto="ngModel" minlength="3">
+
+          <div *ngIf="assunto.invalid && (assunto.dirty || assunto.touched)" class="alert alert-danger">
+            <div *ngIf="assunto.errors.required">
+              Campo obrigatório.
+            </div>
+            <div *ngIf="assunto.errors.minlength">
+              O assunto deve ter pelo menos 3 caracteres.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="mensagem">Mensagem</label>
+          <textarea class="form-control" name="mensagem" id="mensagem" cols="30" rows="5"
+            [(ngModel)]="faleConosco.mensagem" required minlength="10" maxlength="500" #mensagem="ngModel"></textarea>
+
+          <p class="text-muted text-right">
+            <code>{{faleConosco.mensagem | contadorCaracteres:500}}</code>
+          </p>
+
+          <div *ngIf="mensagem.invalid && (mensagem.dirty || mensagem.touched)" class="alert alert-danger">
+            <div *ngIf="mensagem.errors.required">
+              Campo obrigatório.
+            </div>
+            <div *ngIf="mensagem.errors.minlength">
+              A mensagem deve ter pelo menos 10 caracteres.
+            </div>
+            <div *ngIf="mensagem.errors.maxlength">
+              A mensagem excedeu a quantidade máxima de 500 caracteres.
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-link pull-left" data-dismiss="modal">Cancelar</button>
+      <button type="button" class="btn btn-primary" (click)="enviarMensagem()"
+        [disabled]="faleConoscoForm.invalid">Enviar</button>
+    </div>
+  </div>
+
+  <div *ngIf="mensagemEnviada">
+    <div class="modal-header  modal-info">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">Não encontrou o plano perfeito para você?
+        <br />Fale conosco!</h4>
+    </div>
+    <div class="modal-body">
+
+      <div *ngIf="mensagemEnviada">
+        <p>Mensagem enviada com sucesso! </p>
+        <p>Em breve entraremos em contato.</p>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+
+      <button type="button" class="btn btn-primary" (click)="fecharMensagem()">Ok</button>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal #modalValidacaoCarrinho>
+  <div class="modal-header  modal-info">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Ops!</h4>
+  </div>
+  <div class="modal-body">
+    {{mensagemDegustacao}}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modalValidacaoCarrinho.close()">Ok</button>
+  </div>
+</app-modal>
+
+<app-modal #modalErrorInesperado>
+  <div class="modal-header  modal-info">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Ops!</h4>
+  </div>
+  <div class="modal-body">
+    Ocorreu um erro inesperado ao processar sua operação. Tente novamente mais tarde.
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modalErrorInesperado.close()">Ok</button>
+  </div>
+</app-modal>

@@ -1,0 +1,12 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+$section-padding-top: 50px;
+.has-navbar-fixed-top {
+    padding-top: $section-padding-top + 32;
+}
+
+@media (min-width: 1024px) 
+{    
+    .content.has-navbar-fixed-top{
+        min-height: 800px; 
+    }
+}

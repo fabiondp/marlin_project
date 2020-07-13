@@ -1,0 +1,29 @@
+<div class="row ca-paginacao" *ngIf="qtdTotalDeItensEncontrados > 0">
+  <div class="col-md-12">
+    <div class="row box-personalizar-qtd-itens-por-pagina" *ngIf="personalisarItensPorPagina">
+      <form class="col-md-6" #f="ngForm" (ngSubmit)="_atualizarQtdDeItensPorPagina(qtdItensPorPaginaInput.value)">
+        <label>
+          Mostrar
+          <input type="number" #qtdItensPorPaginaInput name="qtdItensPorPagina" id="qtdItensPorPagina" class="form-control input-mostrar"
+            [(ngModel)]="qtdItensPorPagina" (blur)="_atualizarQtdDeItensPorPagina($event.target.value)" min="1">
+          resultados
+        </label>
+      </form>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 texto-resultado">
+        Mostrando de {{indicePrimeiroResultadoApresentado}} a {{indiceUltimoResultadoApresentado}} de
+        {{qtdTotalDeItensEncontrados}}
+        resultado(s)
+      </div>
+      <div class="col-md-6 clearfix" *ngIf="qtdTotalDeItensEncontrados > qtdItensPorPagina ">
+        <div class="pull-right">
+          <pagination [totalItems]="qtdTotalDeItensEncontrados" [(ngModel)]="paginaCorrente" (pageChanged)="_atualizarPagina($event)"
+            [boundaryLinks]="true" [itemsPerPage]="qtdItensPorPagina" [maxSize]="5" previousText="&lsaquo;" nextText="&rsaquo;"
+            firstText="&laquo;" lastText="&raquo;"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

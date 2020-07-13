@@ -1,0 +1,150 @@
+<div class="container">
+  <section class="wrap login">
+
+    <div class="login-head">
+
+      <h1 class="title title-glyph title-identificacao">
+        Identificação</h1>
+    </div>
+
+    <!-- Mensagem de erro para lista de mensagens -->
+    <!-- <div class="row" *ngIf="messageArray">
+            <div class="col-md-12" *ngFor="let msg of messageArray">
+                <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+            </div>
+        </div> -->
+
+    <!-- Mensagem erro para objeto com uma mensagem -->
+
+
+    <div class="row login-body">
+
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box-left">
+        <div class="box-round clearfix">
+          <div class="box-round-head">
+            <h2>
+              <i class="icon-ad"></i> Já tenho cadastro</h2>
+          </div>
+
+          <div class="row" *ngIf="message">
+            <div class="col-md-12">
+              <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{message}}</app-alert>
+            </div>
+          </div>
+
+          <app-loading *ngIf="carregandoForm" message="Aguarde..."></app-loading>
+          <div class="box-round-body" *ngIf="!carregandoForm">
+            <form #loginForm="ngForm" (ngSubmit)="onSubmitLogin(loginForm)">
+              <div class="form-group">
+                <label for="username">E-mail</label>
+                <input type="text" class="form-control" id="username" name="username" [(ngModel)]="user.username"
+                  #username="ngModel" required>
+
+                <div *ngIf="username.invalid && username.dirty" class="alert alert-danger">
+                  <div *ngIf="username.errors.required">
+                    Campo obrigatório.
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" class="form-control" id="password" name="password" [(ngModel)]="user.password"
+                  #password="ngModel" required>
+
+                <div *ngIf="password.invalid && password.dirty" class="alert alert-danger">
+                  <div *ngIf="password?.errors.required">
+                    Campo obrigatório.
+                  </div>
+                </div>
+              </div>
+              <div class="form-group text-right">
+                <a [routerLink]="['/autenticacao/lembrar-senha']" class="btn-link">Esqueci minha senha</a>
+              </div>
+
+              <!-- <div class="instruction">
+                <label>
+                  Você também pode usar seus dados de acesso à área exclusiva para clientes APSA ou ao APSA Temporada,
+                  caso já possua.
+                </label>
+              </div> -->
+              <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || carregandoForm || validandoEmail"
+                  id="continuar">Continuar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box-right">
+        <div class="box-round clearfix">
+          <div class="box-round-head">
+            <h2>
+              Não tenho cadastro
+            </h2>
+          </div>
+
+          <app-loading *ngIf="validandoEmail" message="Validando e-mail"></app-loading>
+
+          <div *ngIf="mensagensValidacaoEmail">
+            <div *ngFor="let msg of mensagensValidacaoEmail">
+              <app-alert [close]="true" color="danger">{{msg}}</app-alert>
+            </div>
+          </div>
+
+
+          <div class="box-round-body" *ngIf="!validandoEmail">
+            <!-- <app-loading *ngIf="carregando"></app-loading> -->
+            <form #cadastroEmailForm="ngForm" (ngSubmit)="validarEmail()">
+              <div class="form-group">
+                <label for="emailCadastro">E-mail</label>
+                <input type="text" class="form-control" id="emailCadastro" name="emailCadastro" (keyup)="invalidEmailFormat = false"
+                  [(ngModel)]="emailCadastro" #emailCad="ngModel" required>
+              </div>
+              <div *ngIf="emailCad.invalid && emailCad.dirty">
+                <div *ngIf="emailCad?.errors.required" class="alert alert-danger">
+                  Campo obrigatório.
+                </div>
+              </div>
+
+
+
+              <div *ngIf="invalidEmailFormat" class="alert alert-danger">
+                Formato de e-mail inválido.
+              </div>
+
+              <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary" [disabled]="cadastroEmailForm.invalid || carregandoForm || validandoEmail"
+                  id="criarCadastro">Criar
+                  Cadastro</button>
+              </div>
+
+              <div class="instruction">
+                <label>
+                  Usuário <strong>Área Exclusiva?</strong> <a [routerLink]="['/autenticacao/login-area-exclusiva']"
+                    class="link">Clique
+                    aqui</a> para reaproveitar seu cadastro.
+                </label>
+              </div>
+              <p></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row login-footer">
+      <div class="col-md-12">
+        
+        <div class="instruction">
+          <label>
+            Você também pode usar seus dados de acesso à área exclusiva para clientes APSA,
+            caso já possua.
+          </label>
+        </div>
+        <p><a [routerLink]="['/autenticacao/login-area-exclusiva']">Clique
+            aqui para entrar.</a></p>
+      </div>
+    </div> -->
+  </section>
+</div>

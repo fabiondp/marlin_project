@@ -1,0 +1,57 @@
+<fieldset class="field-fiador">
+  <legend>Título captalização</legend>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="tituloCapitalizacao.Seguradora">Seguradora</label>
+        <input type="text" required id="tituloCapitalizacao.Seguradora" name="tituloCapitalizacao.Seguradora"
+          [(ngModel)]="tituloCapitalizacao.Seguradora" #tituloCapitalizacaoSeguradora="ngModel" class="form-control" />
+        <div *ngIf="tituloCapitalizacaoSeguradora.errors && tituloCapitalizacaoSeguradora.dirty"
+          class="alert alert-danger">
+          <div *ngIf="tituloCapitalizacaoSeguradora.errors.required">Campo obrigatório.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 ">
+      <div class="form-group ">
+        <label for="tituloCapitalizacao.CodigoTitulo">Nº título</label>
+        <input type="text " required id="tituloCapitalizacao.CodigoTitulo" name="tituloCapitalizacao.CodigoTitulo"
+          [(ngModel)]="tituloCapitalizacao.CodigoTitulo" #tituloCapitalizacaoCodigoTitulo="ngModel"
+          class="form-control " />
+        <div *ngIf="tituloCapitalizacaoCodigoTitulo.errors && tituloCapitalizacaoCodigoTitulo.dirty"
+          class="alert alert-danger">
+          <div *ngIf="tituloCapitalizacaoCodigoTitulo.errors.required">Campo obrigatório.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="tituloCapitalizacao.DataRenovacao">Data Renovação</label>
+        <input type="text" id="tituloCapitalizacao.DataRenovacao" name="tituloCapitalizacao.DataRenovacao"
+          [(ngModel)]="tituloCapitalizacao.DataRenovacao" #tituloCapitalizacaoDataRenovacao="ngModel"
+          class="form-control" bsDatepicker #drp="bsDatepicker" [minDate]="minDate"
+          [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass: 'theme-orange' }" />
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="tituloCapitalizacao.Valor">Valor</label>
+        <div class="input-group">
+          <div class="input-group-addon">R$</div>
+          <input currencyMask type="text" class="form-control" id="caucao.Valor" name="caucao.Valor"
+            [(ngModel)]="tituloCapitalizacao.Valor" #tituloCapitalizacaoValor="ngModel"
+            [options]="{prefix: '', thousands: '.', decimal: ',' }" required placeholder="0,00">
+        </div>
+        <div *ngIf="tituloCapitalizacaoValor.errors && tituloCapitalizacaoValor.dirty" class="alert alert-danger">
+          <div *ngIf="tituloCapitalizacaoValor.errors.required">Campo obrigatório.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>

@@ -1,0 +1,66 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+//  LOADING
+div.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20vh;
+  color: $color-primary;
+  // text-transform: uppercase;
+  font-size: 2.5em;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes dots {
+  50% {
+    transform: translateY(-.4rem);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.d {
+  animation: dots 1.5s ease-out infinite;
+}
+
+.d-2 {
+  animation-delay: .5s;
+}
+
+.d-3 {
+  animation-delay: 1s;
+}
+
+.box-loading-result {
+  // background: #f2f2f2;
+  opacity: 0.5;
+  min-height: 208px;
+  text-align: center;
+}
+
+.box-loading-result {
+  p {
+    color: #ffffff;
+    color: #666666;
+  }
+
+  p:not(:nth-of-type(2)) {
+    padding: 30px 0 20px;
+  }
+}
+
+.overlayInside {
+  // border: 1px solid red;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  opacity: 0.5;
+  padding: 30px;
+  z-index: 1999;
+}

@@ -1,0 +1,104 @@
+<div class="container">
+  <section class="wrap anuncios com-submenu">
+
+
+    <app-loading *ngIf="carregando"></app-loading>
+    <div *ngIf="!carregando">
+
+      <h1 class="title title-no-icon">
+        Relatório
+      </h1>
+
+      <!-- Mensagem de erro para lista de mensagens -->
+      <div class="row" *ngIf="messageArray">
+        <div class="col-md-12" *ngFor="let msg of messageArray">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+        </div>
+      </div>
+
+      <!-- Mensagem erro para objeto com uma mensagem -->
+      <div class="row" *ngIf="message">
+        <div class="col-md-12">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{message}}</app-alert>
+        </div>
+      </div>
+
+
+      <div class="panel  panel-info panel-filter">
+        <div class="panel-heading clearfix">
+          <h3 class="panel-title">
+            <span>Buscar</span>
+
+            <button type="button" class="btn btn-xs pull-right" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
+              aria-controls="collapseEvent">
+              <span class="glyphicons {{iconCollapse}}" title="{{textCollapse}}"></span>
+            </button>
+          </h3>
+
+        </div>
+
+        <div id="collapseEvent" (collapsed)="collapsed()" (expanded)="expanded()" [collapse]="isCollapsed">
+          <div class="panel-body">
+            <form (ngSubmit)="buscar(filtroForm)" class="filter" #filtroForm="ngForm">
+              <div class="row">
+                <div class="form-group col-md-8">
+                  <label for="dataPeriodo">Período</label>
+                  <div class="input-group">
+                    <input type="text" autocomplete="off" name="dataPeriodo" class="form-control" placeholder="selecione o período" bsDaterangepicker
+                      [(ngModel)]="filtro.periodo" #drp="bsDaterangepicker" [bsConfig]="bsConfig" />
+                    <div class="input-group-addon">
+                      <!-- placement="right" -->
+
+                      <button class="btn btn-sm btn-icon" type="button" (click)="drp.toggle()" [attr.aria-expanded]="drp.isOpen">
+                        <i class="glyphicons glyphicons-calendar"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4 box-buttons">
+                  <button type="button" class="btn btn-link" (click)="limpar()">Limpar</button>
+                  <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+              </div>
+            </form>
+
+            <!-- <pre class="code-preview">{{dataPeriodo | json}}</pre> -->
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="anuncios?.length > 0" class="div-table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Anúncio</th>
+              <th>Cliques telefone</th>
+              <th>Cliques whatsapp</th>
+              <th>Mensagens recebidas</th>
+              <th>Visitas imóveis</th>
+              <th>Imóvel listado na busca</th>
+              <!-- <td>imóvel listado no destaque</td> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let anuncio of anuncios">
+              <td>{{anuncio.DescricaoImovel}}</td>
+              <td>{{anuncio.CliquesTelefone}}</td>
+              <td>{{anuncio.CliquesWhatsapp}}</td>
+              <td>{{anuncio.MensagensRecebidas}}</td>
+              <td>{{anuncio.VisitasImovel}}</td>
+              <td>{{anuncio.ImovelListadoBusca}}</td>
+              <!-- <td>{{anuncio.ImovelListadoDestaque}}</td> -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="anuncios?.length == 0 && !carregando">
+        <strong>Nenhum resultado encontrado!</strong>
+      </div>
+
+    </div>
+  </section>
+</div>

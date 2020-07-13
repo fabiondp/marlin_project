@@ -1,0 +1,22 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+
+.list-proprietarios {
+  padding-top: 30px;
+
+  .list-row-group {
+    border-collapse: collapse;
+    border-radius: 1em;
+    overflow: hidden;
+    border: 2px solid $color-fifth;
+
+    th {
+      background: $color-gradient-third;
+    }
+
+    th,
+    td {
+      padding: 1em;
+      border-bottom: 2px solid $color-fifth;
+    }
+  }
+}

@@ -1,0 +1,532 @@
+<div class="container">
+  <section class="wrap anuncios  com-submenu">
+    <app-loading *ngIf="carregando"></app-loading>
+
+    <!-- <div *ngIf="!carregando" joyrideStep="step3" title="" text="Escolha um dos planos contratado"> -->
+    <div [hidden]="carregando">
+      <h1 class="title title-no-icon" joyrideStep="step3" title="" text="Escolha um dos planos contratado"
+        stepPosition="center">
+        {{ !anuncio.Uid?'Criar anúncio':'Editar anúncio' }}
+      </h1>
+
+      <!-- Mensagem de erro para lista de mensagens -->
+      <div class="row" *ngIf="messageArray">
+        <div class="col-md-12" *ngFor="let msg of messageArray">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+        </div>
+      </div>
+
+      <!-- Mensagem erro para objeto com uma mensagem -->
+      <div class="row" *ngIf="message">
+        <div class="col-md-12">
+          <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{message}}</app-alert>
+        </div>
+      </div>
+
+      <form #planoForm="ngForm" (ngSubmit)="selecionarPlano(planoForm)" class="col-lg-12"
+        *ngIf="!planoSelecionado && !formTypeEdit && !carregando">
+        <div class="row" title="" text="Escolha um dos planos contratado" stepPosition="bottom">
+          <div class="col-lg-12 ">
+            <div class="form-group ">
+              <div *ngIf="messageArray?.length <=0 && (planos?.length <=0 || planos==null)">
+                <p> Você não possui planos ativos
+                  <a class="btn-link " href="/home#anuncios ">Compre Agora.</a>
+                </p>
+              </div>
+              <div *ngIf="planos?.length> 0 && planos != null">
+                <label for="planos">Selecione um plano para anunciar seu imóvel</label>
+                <select class="form-control" id="Plano" name="Plano" [(ngModel)]="anuncio.Plano" required
+                  #Plano="ngModel">
+                  <option [disabled]="true" [ngValue]="null">Selecione um plano</option>
+                  <option *ngFor="let plano of planos" [ngValue]="plano" selected="selected">{{plano.TituloPlano}} -
+                    <span *ngIf="!plano.AnunciosIlimitado">
+                      {{plano.QuantidadeProdutoDisponivel == 1 ? plano.QuantidadeProdutoDisponivel + ' anúncio' :
+                      plano.QuantidadeProdutoDisponivel
+                      + ' anúncios' }}
+                    </span>
+                    <span *ngIf="plano.AnunciosIlimitado">
+                      Ilimitado
+                    </span>
+                    disponível com validade de {{plano.DataInicioVigencia | date :'shortDate'}} até
+                    {{plano.DataFimVigencia | date :'shortDate'}}
+                  </option>
+                </select>
+                <div *ngIf="Plano.invalid && (Plano.dirty || Plano.touched)">
+                  <div *ngIf="Plano.errors.required" class="alert alert-danger">
+                    Campo obrigatório.
+                  </div>
+                </div>
+
+
+                <div class="alerta-plano" style="margin-top: 20px;"
+                  *ngIf="inicioVigenciaDoPlanoEscolhidoFutura(anuncio.Plano)">
+                  <h5 class=" text-warning">
+                    <span class="glyphicons glyphicons-alert"></span> Atenção</h5>
+
+                  <div class="alert alert-warning">
+
+                    <!-- O
+                  anúncio só será publicado dentro da validade do plano, que
+                  é de {{ anuncio.Plano.DataInicioVigencia | date :'shortDate' }} até {{ anuncio.Plano.DataFimVigencia
+                  |
+                  date
+                  :'shortDate' }}. -->
+
+                    <p> Identificamos que o plano selecionado iniciará somente a partir do dia
+                      <strong> {{ anuncio.Plano.DataInicioVigencia | date :'shortDate' }}</strong>.
+                    </p>
+                    <p>Portanto, todos os anúncios cadastrados neste plano serão exibidos a partir desta data.</p>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;" *ngIf="planos?.length> 0 && planos != null">
+          <div *ngIf="imoveis?.length> 0 && imoveis != null" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="alert alert-info" role="alert">
+              <p *ngIf="imoveis?.length == 1">
+                <span class="glyphicons glyphicons-exclamation-sign"></span> Você possui imóvel cadastrado para
+                locação.</p>
+
+              <p *ngIf="imoveis?.length >= 2">
+                <span class="glyphicons glyphicons-exclamation-sign"></span> Você possui imóveis cadastrados para
+                locação.</p>
+            </div>
+
+            <div class="form-group">
+              <label for="">Gostaria de aproveitar os dados do imóvel para o cadastramento do anúncio?</label>
+              <div>
+                <div class="radio-inline">
+                  <label>
+                    <input type="radio" id="reaproveitarImovel_sim" name="reaproveitarImovel" [value]="true"
+                      [(ngModel)]="reaproveitarImovel" />Sim
+                  </label>
+                </div>
+                <div class="radio-inline">
+                  <label>
+                    <input type="radio" id="reaproveitarImovel_nao" name="reaproveitarImovel" [value]="false"
+                      [(ngModel)]="reaproveitarImovel" />Não
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="reaproveitarImovel">
+              <label for="imoveis">Selecione um imóvel</label>
+              <select multiple class="form-control" id="Imovel" name="Imovel" [(ngModel)]="dadosImovelSelecionado"
+                #Imovel="ngModel">
+                <!-- <option [disabled]="true" [ngValue]="null" selected="selected">Selecione um imóvel</option> -->
+                <option *ngFor="let imovel of imoveis" [ngValue]="imovel">
+                  {{imovel.Logradouro + ', ' + imovel.Numero + ' - ' + imovel.Bairro + ' - ' + imovel.Cidade}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+
+        <div role="group" class="form-btn-group" *ngIf="planos?.length> 0 && planos != null">
+          <button type="button" class="btn btn-link pull-left" [routerLink]="['/anuncios']">Cancelar</button>
+          <div class="pull-right">
+            <button type="submit" class="btn btn-primary" id="Continuar" [disabled]="planoForm.invalid"
+              joyrideStep="step5" title="" text="Clique no botão CONTINUAR" stepPosition="left">Continuar</button>
+          </div>
+        </div>
+      </form>
+
+      <form #anuncioForm="ngForm" class="col-md-12" (ngSubmit)="onSubmit(anuncioForm)" *ngIf="planoSelecionado">
+        <!-- <div [hidden]="anuncioForm.submitted"> -->
+        <div>
+          <label for="TipoPlano">Tipo do plano</label>
+          <h4 *ngIf="!formTypeEdit && anuncio.Plano">{{ anuncio.Plano.TituloPlano }} -
+            <span *ngIf="!anuncio.Plano.AnunciosIlimitado">
+              {{anuncio.Plano.QuantidadeProdutoDisponivel == 1 ? anuncio.Plano.QuantidadeProdutoDisponivel + ' anúncio'
+              : anuncio.Plano.QuantidadeProdutoDisponivel
+              + ' anúncios' }}
+            </span>
+            <span *ngIf="anuncio.Plano.AnunciosIlimitado">
+              Ilimitado
+            </span>
+
+            com validade de {{ anuncio.Plano.DataInicioVigencia | date :'shortDate' }} até {{
+            anuncio.Plano.DataFimVigencia | date :'shortDate'
+            }}
+          </h4>
+          <h4 *ngIf="formTypeEdit">{{ anuncio.TituloPlano }}
+          </h4>
+
+
+          <div class="alerta-plano" style="margin-top: 20px;"
+            *ngIf="inicioVigenciaDoPlanoEscolhidoFutura(anuncio.Plano)">
+            <h5 class=" text-warning">
+              <span class="glyphicons glyphicons-alert"></span> Atenção</h5>
+
+            <div class="alert alert-warning">
+
+              <p> Identificamos que o plano selecionado iniciará somente a partir do dia
+                <strong> {{ anuncio.Plano.DataInicioVigencia | date :'shortDate' }}</strong>.
+              </p>
+              <p>Portanto, todos os anúncios cadastrados neste plano serão exibidos a partir desta data.</p>
+            </div>
+          </div>
+
+
+        </div>
+        <hr />
+        <fieldset>
+          <div class="form-group">
+            <label for="TipoImovel">Selecione um tipo de imóvel</label>
+            <select class="form-control" id="TipoImovel" name="TipoImovel" [(ngModel)]="anuncio.TipoImovel" required
+              #TipoImovel="ngModel" (change)="onChangeTipoImovel()">
+              <option [disabled]="true" [ngValue]="null">Selecione um tipo</option>
+              <option *ngFor="let tipo of tiposImovel" [ngValue]="tipo.Id">{{tipo.Descricao}}</option>
+            </select>
+            <div *ngIf="TipoImovel.errors && TipoImovel.touched" class="alert alert-danger">
+              <div *ngIf="TipoImovel.errors.required">Campo obrigatório.</div>
+            </div>
+          </div>
+        </fieldset>
+
+        <div>
+          <fieldset class="row">
+            <div class="form-group col-lg-6">
+
+              <label for="Descricao">Descrição
+                <!-- <button type="button" class="btn btn-icon btn-tooltip" placement="right"
+                  [tooltip]="tooltipDescricao"><i class="glyphicons glyphicons-question-sign"></i>
+                </button> -->
+              </label>
+
+              <!-- <ng-template #tooltipDescricao>
+                <div [innerHtml]="arrayTooltip[0]"></div>
+              </ng-template> -->
+
+              <textarea class="form-control" id="Descricao" name="Descricao" [(ngModel)]="anuncio.Descricao"
+                minlength="4" required #Descricao="ngModel" rows="10" required="required"></textarea>
+              <div *ngIf="Descricao.invalid && (Descricao.dirty || Descricao.touched)" class="alert alert-danger">
+                <div *ngIf="Descricao.errors.required">
+                  Campo obrigatório.
+                </div>
+                <div *ngIf="Descricao.errors.minlength">
+                  A Descrição deve ter pelo menos 4 caracteres.
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="panel panel-default panel-descricao">
+                <div class="panel-heading">Na descrição, não esqueça de falar sobre:</div>
+                <div class="panel-body">
+                  <div [innerHtml]="arrayTooltip[0]"></div>
+                </div>
+              </div>
+
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Localização do imóvel</legend>
+
+            <app-input-busca-cep [(endereco)]="endereco" (enderecoChange)="enderecoChange($event)"
+              [disableEdit]="bloquearEdicaoDeEndereco"></app-input-busca-cep>
+
+            <div class="row">
+              <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="txtDescricao">Bloco
+                    <span class="opcional">(Opcional)</span>
+                  </label>
+                  <input type="text" class="form-control" id="Bloco" name="Bloco" [(ngModel)]="anuncio.Bloco"
+                    [readonly]="formTypeEdit">
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Contatos</legend>
+            <div class="row">
+              <div class="col-xs-8 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="TelefoneFixo">Telefone Fixo
+                      <span class="opcional">(Opcional)</span>
+                  </label>
+                  <!-- <input type="text" class="form-control" id="TelefoneFixo" name="TelefoneFixo" [(ngModel)]="anuncio.TelefoneFixo" placeholder="(00)0000-0000"> -->
+                  <input [textMask]="{mask: masktel, guide: false}" [(ngModel)]="anuncio.TelefoneFixo" type="text"
+                    class="form-control" id="TelefoneFixo" name="TelefoneFixo" #telefoneFixo="ngModel"
+                    placeholder="(00) 0000-0000" minlength="14"
+                    pattern="^\(?\d{2}\)?\s?[0-5]{1}\d{3}[-]\d{4}\d?$" />
+
+                  <div *ngIf="telefoneFixo.invalid && telefoneFixo.touched && telefoneFixo.dirty"
+                    class="alert alert-danger">
+                    <div *ngIf="telefoneFixo.errors.minlength || telefoneFixo.errors.pattern">
+                      Telefone inválido.
+                    </div>
+                    <!-- <div *ngIf="telefoneFixo.errors.required">
+                      Telefone obrigatório.
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-8 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="TelefoneCelular">Telefone Móvel
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="right"
+                      [tooltip]="tooltipTelefoneMovel">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+
+                  <ng-template #tooltipTelefoneMovel>
+                    <div [innerHtml]="arrayTooltip[12]"></div>
+                  </ng-template>
+                  <!-- <input type="text" class="form-control" id="TelefoneCelular" name="TelefoneCelular" [(ngModel)]="anuncio.TelefoneCelular" placeholder="(00)00000-0000"> -->
+                  <input [textMask]="{mask: maskcel, guide: false}" [(ngModel)]="anuncio.TelefoneCelular" type="text"
+                    class="form-control" id="TelefoneCelular" name="TelefoneCelular" placeholder="(00) 00000-0000" required
+                    #telefoneCelular="ngModel" pattern="^\(?\d{2}\)?\s?[6-9]{1}\d{4}[-]\d{4}\d?$" />
+                  <!-- ^\(?\d{2}\)?[5-9]{1}\d{4}[-]\d{4}$ -->
+                  <!-- /^\(?\d{2}\)?\d{5}[-]?\d{4}$/ -->
+
+                  <div *ngIf="telefoneCelular.invalid && telefoneCelular.touched && telefoneCelular.dirty"
+                    class="alert alert-danger">
+                    <div *ngIf="telefoneCelular.errors.pattern">
+                      Telefone inválido.
+                    </div>
+                   <div *ngIf="telefoneCelular.errors.required">
+                      Telefone móvel obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Principais características do imóvel</legend>
+            <div class="row">
+              <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="AreaConstruida ">Área construída (M²)
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="top"
+                      [tooltip]="tooltipAreaConstruida">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+
+                  <ng-template #tooltipAreaConstruida>
+                    <div [innerHtml]="arrayTooltip[1]"></div>
+                  </ng-template>
+                  <input type="number" min="1" class="form-control" id="AreaConstruida" name="AreaConstruida "
+                    [(ngModel)]="anuncio.AreaConstruida" required #AreaConstruida="ngModel" placeholder="0">
+                  <div *ngIf="AreaConstruida.invalid && (AreaConstruida.dirty || AreaConstruida.touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="AreaConstruida.errors.required">
+                      Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="Quartos">Quarto(s)
+                    <span class="opcional">(Opcional)</span>
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipQuartos">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+
+                  <ng-template #tooltipQuartos>
+                    <div [innerHtml]="arrayTooltip[2]"></div>
+                  </ng-template>
+
+                  <input type="number" class="form-control" id="Quartos" name="Quartos" [(ngModel)]="anuncio.Quartos"
+                    placeholder="0">
+                </div>
+              </div>
+              <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="Suites">Suíte(s)
+                    <span class="opcional">(Opcional)</span>
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipSuites">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+
+                  <ng-template #tooltipSuites>
+                    <div [innerHtml]="arrayTooltip[3]"></div>
+                  </ng-template>
+
+                  <input type="number" class="form-control" id="Suites" name="Suites" [(ngModel)]="anuncio.Suites"
+                    placeholder="0">
+                </div>
+              </div>
+              <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="Banheiros">Banheiro(s)
+                      <span class="opcional">(Opcional)</span>
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipBanheiros">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+
+                  <ng-template #tooltipBanheiros>
+                    <div [innerHtml]="arrayTooltip[4]"></div>
+                  </ng-template>
+                  <input type="number" class="form-control" id="Banheiros" name="Banheiros"
+                    [(ngModel)]="anuncio.Banheiros" #Banheiros="ngModel"  placeholder="0">
+                </div>
+              </div>
+              <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="Vagas">Vaga(s) de garagem
+                    <span class="opcional">(Opcional)</span>
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipVagas">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+
+                  <ng-template #tooltipVagas>
+                    <div [innerHtml]="arrayTooltip[5]"></div>
+                  </ng-template>
+                  <input type="text" class="form-control" id="Vagas" name="Vagas" [(ngModel)]="anuncio.Vagas"
+                    placeholder="0">
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Valores</legend>
+            <div class="row">
+              <div class="col-xs-8 col-sm-4 col-md-4 col-lg-4 form-inline">
+                <div class="form-group">
+                  <label for="txtValorLocacao">Valor da locação
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="top"
+                      [tooltip]="tooltipValorLocacao">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+
+                  <ng-template #tooltipValorLocacao>
+                    <div [innerHtml]="arrayTooltip[6]"></div>
+                  </ng-template>
+                  <div class="input-group">
+                    <div class="input-group-addon">R$</div>
+                    <!-- <input type="text" class="form-control text-right" id="ValorLocacao" name="ValorLocacao" [(ngModel)]="anuncio.ValorLocacao" required #ValorLocacao="ngModel"> -->
+                    <input currencyMask type="text" class="form-control text-right" id="ValorLocacao"
+                      name="ValorLocacao" [(ngModel)]="anuncio.ValorLocacao" #ValorLocacao="ngModel"
+                      [options]="{prefix: '', thousands: '.', decimal: ',' }" required placeholder="0,00">
+                  </div>
+                  <div *ngIf="ValorLocacao.errors && ValorLocacao.touched" class="alert alert-danger">
+                    <div *ngIf="ValorLocacao.errors.required">Campo obrigatório.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-8 col-sm-4 col-md-4 col-lg-4 form-inline">
+                <div class="form-group">
+                  <label for="ValorCondominio">Valor do condomínio
+                    <span class="opcional">(Opcional)</span>
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="top"
+                      [tooltip]="tooltipValorCondominio">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+
+                  <ng-template #tooltipValorCondominio>
+                    <div [innerHtml]="arrayTooltip[7]"></div>
+                  </ng-template>
+                  <div class="input-group">
+                    <div class="input-group-addon">R$</div>
+                    <input currencyMask type="text" class="form-control  text-right" id="ValorCondominio"
+                      name="ValorCondominio" [(ngModel)]="anuncio.ValorCondominio" #ValorCondominio="ngModel"
+                      [options]="{prefix: '', thousands: '.', decimal: ',' }" placeholder="0,00">
+                  </div>
+                </div>
+              </div>
+              <div class=" col-xs-8 col-sm-4 col-md-4 col-lg-4 form-inline ">
+                <div class="form-group ">
+                  <label for="txtValorIPTU ">Valor IPTU
+                    <span class="opcional ">(Opcional)</span>
+                    <button type="button" class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipValorIPTU">
+                      <i class="glyphicons glyphicons-question-sign"></i>
+                    </button>
+                  </label>
+
+                  <ng-template #tooltipValorIPTU>
+                    <div [innerHtml]="arrayTooltip[8]"></div>
+                  </ng-template>
+                  <div class="input-group ">
+                    <div class="input-group-addon ">R$</div>
+                    <input currencyMask type="text " class="form-control text-right " id="ValorIPTU " name="ValorIPTU
+                      " [(ngModel)]="anuncio.ValorIPTU " #ValorIPTU="ngModel"
+                      [options]="{prefix: '', thousands: '.', decimal: ',' }" placeholder="0,00">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="form-group">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="TemSeguroFianca" id="TemSeguroFianca" [(ngModel)]="anuncio.TemSeguroFianca">
+                  Seguro fiança
+                </label>
+              </div>
+            </div> -->
+          </fieldset>
+
+          <fieldset>
+            <legend>Imagens </legend>
+
+            <small>Escolha no máximo 20 imagens para o seu imóvel com tamanho máximo de 2MB por imagem
+              <button type="button" class="btn btn-icon btn-tooltip" placement="top" [tooltip]="tooltipImagens">
+                <i class="glyphicons glyphicons-question-sign"></i>
+              </button>
+            </small>
+            <ng-template #tooltipImagens>
+              <div [innerHtml]="arrayTooltip[9]"></div>
+            </ng-template>
+            <image-upload [max]="20" [extensions]="[ 'jpeg', 'png', 'gif'] " [buttonCaption]=" 'Selecione a imagem'
+                      " [clearButtonCaption]=" 'Limpar' " [dropBoxMessage]=" 'Arraste e solte suas imagens aqui!' "
+              [class]=" 'ng2-image-upload'
+                      " [uploadedFiles]="fotosAnuncio" [max]="20" [maxFileSize]="2048000 " [fileTooLargeMessage]=" 'Excedeu o tamanho máximo de 2MB permitido'
+                      " (removed)="onRemoved($event, $index) " (uploadFinished)="onUploadFinished($event) "
+              (uploadStateChanged)="onUploadStateChanged($event)
+                      " (updateArray)="onUpdateArray($event) ">
+            </image-upload>
+          </fieldset>
+        </div>
+
+        <div role="group " class="form-btn-group ">
+          <button type="button" class="btn btn-link pull-left " [routerLink]="['/anuncios']">Cancelar</button>
+          <div class="pull-right ">
+            <button type="button" class="btn btn-icon btn-tooltip" placement="left" [tooltip]="tooltipPublicar">
+              <i class="glyphicons glyphicons-question-sign"></i>
+            </button>
+
+            <button type="button" class="btn btn-primary " [disabled]="anuncioForm.invalid || carregando"
+              (click)="onPublish(anuncioForm) ">Publicar</button>
+
+            <ng-template #tooltipPublicar>
+              <div [innerHtml]="arrayTooltip[10]"></div>
+            </ng-template>
+
+            <button type="submit" class="btn btn-primary" [disabled]="anuncioForm.invalid || carregando"
+              id="Salvar ">Salvar</button>
+            <button type="button" class="btn btn-icon btn-tooltip" placement="left" [tooltip]="tooltipSalvar">
+              <i class="glyphicons glyphicons-question-sign"></i>
+            </button>
+            <ng-template #tooltipSalvar>
+              <div [innerHtml]="arrayTooltip[11]"></div>
+            </ng-template>
+            <!-- [disabled]="anuncioForm.invalid " -->
+          </div>
+        </div>
+        <!-- </div> -->
+      </form>
+    </div>
+  </section>
+</div>

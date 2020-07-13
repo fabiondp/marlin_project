@@ -1,0 +1,113 @@
+<div class="container">
+  <section class="wrap imoveis com-submenu">
+    <h1 class="title title-no-icon">
+      Boleto</h1>
+    <div class=" btn-group-actions row clearfix">
+      <div class=" col-xs-4 clearfix">
+        <div *ngIf="existeBoletos()">
+          Agrupar por:
+          <a [routerLink]="['/autogestao', 'boleto']" class=" btn-link">Data de vencimento</a> |
+          <span>Imóveis</span>
+        </div>
+      </div>
+      <div class=" col-xs-8 clearfix">
+        <button data-toggle="button" class=" btn-link  pull-right" title="Histórico de boletos gerados" [routerLink]="['/autogestao', 'boleto', 'historico']">
+          <span>Histórico de boletos gerados</span>
+          <i class="glyphicons glyphicons-file-plus"></i>
+        </button>
+
+        <button data-toggle="button" class=" btn-link  pull-right" title="Histórico de arquivos remessa" [routerLink]="">
+          <span>Histórico de arquivos remessa</span>
+          <i class="glyphicons glyphicons-inbox-out"></i>
+        </button>
+      </div>
+    </div>
+
+
+    <div class="col-md-12" *ngIf="carregandoFormulario">
+      <app-loading [message]="messageStatus"></app-loading>
+    </div>
+
+    <div class="col-md-12" *ngIf="!carregandoFormulario && messages">
+      <div *ngFor="let msg of messages">
+        <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+      </div>
+    </div>
+
+    <form #boletoForm="ngForm" (ngSubmit)="gerarBoletos(boletoForm)" class="col-lg-12">
+
+      <div class="list-panel" *ngIf="!carregandoFormulario && exibirFormulario">
+
+        <div *ngIf="existeBoletos()">
+
+          <div class="marcar-todos">
+
+            <label for="selectAll">
+              <input name="selectAll" id="selectAll" type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();" />
+              Marcar todos</label>
+          </div>
+          <div *ngFor="let boleto of boletos ; let x = index" class="list-row-group">
+            <p class="text-center"> {{boleto.Agrupador}}</p>
+
+            <div class="panel panel-primary" *ngFor="let item of boleto.Lista; let i = index">
+              <div class="panel-heading">
+                <p class="panel-title">
+                  <input type="checkbox" [(ngModel)]="item.Selected" (change)="checkIfAllSelected();" name="Selected"
+                    #Selected="ngModel">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ x + '_' + i }}"
+                    aria-expanded="true" data-target="#accordion{{ x + '_' + i }}" aria-controls="collapseOne" class="collapsed">{{
+                    item.DataVencimento | date: 'shortDate' }}</a>
+                </p>
+              </div>
+              <div id="collapse{{ x + '_' + i }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                  <div class="col-lg-8">
+                    <button type="submit" class="btn btn-primary btn-sm" id="lancarCobrancaDesconto">Lançar
+                      cobrança/desconto</button>
+                  </div>
+                  <div class="col-lg-4 detail">
+                    <p *ngIf="item.ValorLocacao != 0">
+                      <label>ALUGUEL:</label> {{item.ValorLocacao | currency : 'BRL' : true : '3.2'}}</p>
+
+                    <p *ngIf="item.ValorCondominio != 0">
+                      <label>CONDOMÍNIO:</label> {{item.ValorCondominio | currency : 'BRL' : true : '3.2'}}</p>
+
+                    <p *ngIf="item.ValorIPTU != 0">
+                      <label>IPTU:</label> {{item.ValorIPTU | currency : 'BRL' : true : '3.2'}}</p>
+                  </div>
+                  <div class="col-lg-12 total">
+                    Total: {{item.ValorTotal | currency : 'BRL' : true : '3.2'}}
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
+
+          <div role="group" class="form-btn-group">
+
+            <div class="row">
+              <div class="col-lg-6 col-lg-offset-3 ">
+                <button type="submit" class="btn btn-link btn-block" id="MostrarProximosVencimentos">Mostrar próximos
+                  vencimentos</button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-lg-offset-3 ">
+                <button type="submit" class="btn btn-primary btn-block" id="GerarBoletos">Gerar boletos</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!existeBoletos()">
+          <div class="alert alert-warning" role="alert">Não existe boleto(s) para serem gerados.</div>
+        </div>
+      </div>
+    </form>
+  </section>
+
+</div>

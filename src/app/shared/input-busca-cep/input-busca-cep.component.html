@@ -1,0 +1,121 @@
+<!-- <pre>{{ endereco | json }}</pre> -->
+<div *ngIf="endereco" class="content">
+
+  <div class="row">
+    <div [class]="getCssClassRowCEP()">
+      <div class="custom-autocomplete form-group cleafix">
+        <label for="Endereco">CEP</label>
+        <div class="custom-autocomplete__container">
+          <div class="custom-autocomplete__input form-group button-included">
+            <input class="form-control" id="txtCepParaBusca" name="search" required="" type="search" #cepEl placeholder="Digite o CEP"
+              [(ngModel)]="endereco.CEP" name="txtCepParaBusca" [textMask]="{mask: maskCep, guide: false}" [disabled]="disableEdit"
+              autocomplete="off" (focusout)="buscarEnderecoPorCep($event)" (keydown.enter)="buscarEnderecoPorCep($event)">
+
+            <button id="btnBuscarCep" class="search-icon" type="button" (click)="buscarEnderecoPorCep($event)"
+              [disabled]="disableEdit">
+              <i class="search-default-icon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div [class]="getCssClassColLimparEndereco()" *ngIf="this.buscouCep && !disableEdit && !carregandoEndereco">
+      <button class="btn btn-default btn-sm btn-limpar-endereco" (click)="limparEndereco($event)" type="button">Limpar
+        endereço</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div *ngIf="carregandoEndereco">
+      <app-loading message="Carregando endereço..."></app-loading>
+    </div>
+
+    <div *ngIf="erros">
+      <div class="col-md-12" *ngFor="let msg of erros; let i = index">
+        <app-alert [close]="true" color="danger" *ngIf="msg">{{msg}}</app-alert>
+      </div>
+    </div>
+
+    <div [hidden]="carregandoEndereco">
+
+      <div [class]="getCssClassColLogradouro()">
+        <div class="form-group">
+          <label for="Logradouro">Logradouro</label>
+          <input type="text" class="form-control" id="Logradouro" name="Logradouro" [(ngModel)]="endereco.Logradouro"
+            required #Logradouro="ngModel" [disabled]="this.buscouCep || disableEdit" (change)="onEnderecoChange()"
+            autocomplete="off">
+          <div *ngIf="Logradouro.invalid && Logradouro.dirty" class="alert alert-danger">
+            <div *ngIf="Logradouro.errors.required">
+              Campo obrigatório.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div [class]="getCssClassColNumero()">
+        <div class="form-group">
+          <label for="txtDescricao">Número</label>
+          <input type="text" class="form-control" id="Numero" name="Numero" #Numero="ngModel" [(ngModel)]="endereco.Numero"
+            (change)="onEnderecoChange()" required [disabled]="disableEdit" autocomplete="off">
+          <div *ngIf="Numero.invalid && Numero.dirty" class="alert alert-danger">
+            <div *ngIf="Numero.errors.required">
+              Campo obrigatório.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div [class]="getCssClassColComplemento()">
+        <div class="form-group">
+          <label for="txtDescricao">Complemento
+            <span class="opcional">(Opcional)</span>
+          </label>
+          <input type="text" class="form-control" id="Complemento" name="Complemento" [(ngModel)]="endereco.Complemento"
+            [disabled]="disableEdit" (change)="onEnderecoChange()" autocomplete="off">
+        </div>
+      </div>
+
+
+
+      <div [class]="getCssClassColBairro()">
+        <div class="form-group">
+          <label for="txtDescricao">Bairro</label>
+          <input type="text" class="form-control" id="Bairro" name="Bairro" #Bairro="ngModel" [(ngModel)]="endereco.Bairro"
+            (change)="onEnderecoChange()" required [disabled]="this.buscouCep || disableEdit" autocomplete="off">
+          <div *ngIf="Bairro.invalid && Bairro.dirty" class="alert alert-danger">
+            <div *ngIf="Bairro.errors.required">
+              Campo obrigatório.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div [class]="getCssClassColCidade()">
+        <div class="form-group">
+          <label for="Cidade">Cidade</label>
+          <input type="text" class="form-control" id="Cidade" name="Cidade" [(ngModel)]="endereco.Cidade" required
+            (change)="onEnderecoChange()" #Cidade="ngModel" [disabled]="this.buscouCep || disableEdit" autocomplete="off">
+          <div *ngIf="Cidade.invalid && Cidade.dirty" class="alert alert-danger">
+            <div *ngIf="Cidade.errors.required">
+              Campo obrigatório.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div [class]="getCssClassColEstado()">
+        <div class="form-group">
+          <label for="Estado">Estado</label>
+          <input type="text" class="form-control" id="Estado" name="Estado" maxlength="2" [(ngModel)]="endereco.Estado"
+            required (change)="onEnderecoChange()" #Estado="ngModel" [disabled]="this.buscouCep || disableEdit"
+            autocomplete="off">
+          <div *ngIf="Estado.invalid && Estado.dirty" class="alert alert-danger">
+            <div *ngIf="Estado.errors.required">
+              Campo obrigatório.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

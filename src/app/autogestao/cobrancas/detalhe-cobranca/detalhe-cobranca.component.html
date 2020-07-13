@@ -1,0 +1,489 @@
+<div class="container">
+  <section class="wrap imoveis com-submenu">
+    <h1 class="title title-no-icon">Detalhe Cobrança</h1>
+
+    <div class=" btn-group-actions row clearfix">
+      <div class=" col-xs-2 clearfix">
+        <!-- <button data-toggle="button" class="btn btn-primary btn-icon" [routerLink]="['/autogestao/cobrancas/historico']"
+          title="Voltar">
+          <i class="glyphicons glyphicons-chevron-left"></i>
+          <span>Voltar</span>
+        </button> -->
+
+        <button data-toggle="button" class="btn btn-primary btn-icon" (click)="goBack()" title="Voltar">
+          <i class="glyphicons glyphicons-chevron-left"></i>
+          <span>Voltar</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-12" *ngIf="carregando">
+      <app-loading [message]="messageStatus"></app-loading>
+    </div>
+
+    <div class="col-md-12" *ngIf="!carregando && messages">
+      <div *ngFor="let msg of messages">
+        <app-alert [close]="true" [timeout]="timeMessage" [color]="typeMessage">{{msg}}</app-alert>
+      </div>
+    </div>
+
+    <!-- <pre>{{ cobranca | json }}</pre> -->
+
+    <div class="detalhe-cobranca" *ngIf="!carregando && cobranca && cobranca.Imovel">
+      <div class="panel panel-default panel-custom">
+        <div class="panel-body">
+          <h3>{{ cobranca.Imovel }}</h3>
+
+          <div class="row row-descricao-cobranca">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+
+              <div class="form-group">
+                <label for="">Competência da Cobrança:
+                </label>
+                {{cobranca.MesAno}}
+              </div>
+
+              <div class="form-group">
+                <label for="">Locatário:
+                </label>
+                {{cobranca.Contrato.Locatario.Nome}}
+              </div>
+
+              <div class="form-group">
+                <label for="">Proprietário:
+                </label>
+                {{cobranca.Proprietario.Nome}}
+              </div>
+            </div>
+
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <div class="form-group">
+                <label for="">Status da Cobrança:
+                </label>
+                <span [class]="'status-cobranca ' + (cobranca.StatusCobranca | statusCobranca)">
+
+                  <!-- <span [class]="'status-cobranca ' + getStatusCobranca(cobranca.StatusCobranca)"> -->
+                  {{cobranca.StatusCobranca}}
+                </span>
+
+              </div>
+
+              <div class="form-group valor-total">
+                <label for="">Valor total da cobrança:
+                </label>
+                {{cobranca.ValorTotalCobranca |
+                currency : 'R$' : '3.2'}}
+
+              </div>
+
+              <div class="form-group valor-total  status-cobranca verde" *ngIf="cobranca.Paga">
+                <label for="">Valor total pago da cobrança:
+                </label>
+                {{cobranca.ValorTotalCobrancaPago |
+                currency : 'R$' : '3.2'}}
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row row-resumo-cobranca row-eq-height">
+            <div class="col-xs-12 col-sm-12 col-md-6 box-boleto box-ultimo-boleto">
+              <div class="titulo">
+                Informações do último boleto gerado:
+              </div>
+              <div class="descricao col-height">
+
+                <div class="form-group">
+                  <label for="">Enviado para:
+                  </label>
+                  {{ cobranca.UltimoBoleto.Destinatario }}
+                  <span *ngIf="!cobranca.UltimoBoleto.Destinatario">-</span>
+                </div>
+                <div class="form-group">
+                  <label for="">Data de Emissão:
+                  </label>
+                  {{cobranca.UltimoBoleto.DataEmissao | date:'shortDate'}}
+                  <span *ngIf="!cobranca.UltimoBoleto.DataEmissao">-</span>
+                </div>
+                <div class="form-group">
+                  <label for="">Data de Vencimento:
+                  </label>
+                  {{cobranca.UltimoBoleto.DataVencimento | date:'shortDate'}}
+                </div>
+                <div class="box-lancamentos" *ngIf="cobranca.UltimoBoleto.Lancamentos">
+                  <h5>Lançamentos</h5>
+                  <div class="lancamentos" *ngFor="let lancamento of cobranca.UltimoBoleto.Lancamentos; let indexLancamento=index">
+                    <p>
+
+                      <label>{{lancamento.DescricaoLancamento}}:</label>
+                      <span *ngIf="lancamento.TipoLancamento === 1">{{lancamento.ValorLancamento
+                        |
+                        currency : 'R$' : '3.2'}}</span>
+                      <span *ngIf="lancamento.TipoLancamento === 2">{{lancamento.ValorLancamento
+                        |
+                        currency : 'R$ -' : '3.2'}}</span>
+                    </p>
+                  </div>
+
+                </div>
+
+                <div class="form-group valor-total">
+                  <label for="">Valor Total:
+                  </label>
+                  {{cobranca.UltimoBoleto.ValorTotal|
+                  currency : 'R$' : '3.2'}}
+                </div>
+              </div>
+
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6  box-boleto box-novo-boleto" *ngIf="!cobranca.Paga">
+              <div class="titulo">
+                Para emitir um novo boleto:
+              </div>
+
+              <div class="descricao col-height">
+
+                <div class="form-group">
+                  <label for="">Enviar para:
+                  </label>
+                  <input type="mail" class="form-control input-sm" #emailDestinatario="ngModel" [(ngModel)]="novoBoleto.Destinatario"
+                    pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" />
+                  <div *ngIf="emailDestinatario.errors && emailDestinatario.dirty" class="alert alert-danger">
+                    <div *ngIf="emailDestinatario.errors.required">
+                      Campo obrigatório.
+                    </div>
+                    <div *ngIf="emailDestinatario.errors.pattern && !emailDestinatario.errors.required">
+                      Formato de e-mail inválido.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div class="form-group">
+                  <label for="">Data de Vencimento:
+                  </label>
+                  {{novoBoleto.DataVencimento | date:'shortDate'}}
+                </div> -->
+
+                <div class="form-group">
+                  <label for="">Data de Vencimento:
+                  </label>
+                  <!-- <input type="text" autocomplete="off" name="dataVencimento" class="form-control" placeholder="selecione o período"
+                    bsDatepicker [(ngModel)]="novoBoleto.DataVencimentoFormatada" #drp="bsDatepicker" [bsConfig]="bsConfig" /> -->
+
+                  <input required type="text" [minDate]="minDate" [maxDate]="maxDate" [bsConfig]="bsConfig" class="form-control input-sm"
+                    bsDatepicker id="txtDataInicioVigencia" name="txtDataInicioVigencia" [(ngModel)]="novoBoleto.DataVencimento"
+                    #DataInicioVigencia="ngModel" autocomplete="off">
+                </div>
+
+
+                <div class="box-lancamentos">
+                  <h5>Lançamentos</h5>
+
+                  <p> <label for=""> Aluguel: </label> {{cobranca.NovoBoleto.ValorAluguelAtual|
+                    currency : 'R$' : '3.2'}}</p>
+
+                  <!-- Novo cobranca -->
+                  <div class="novos-lancamentos">
+                    <p *ngFor="let lancamento of cobranca.LancamentosBoleto; let indexLancamento=index">
+                      <button class="btn btn-sm btn-danger" (click)="excluirCobrancaDesconto(cobranca, lancamento)">
+                        <i class="glyphicons glyphicons-bin"></i>
+                      </button>
+
+                      <label>{{lancamento.DescricaoLancamento}}:</label>
+                      <span *ngIf="lancamento.TipoLancamento === 1">{{lancamento.ValorLancamento
+                        |
+                        currency : 'R$' : '3.2'}}</span>
+                      <span *ngIf="lancamento.TipoLancamento === 2">{{lancamento.ValorLancamento
+                        |
+                        currency : 'R$ -' : '3.2'}}</span>
+                    </p>
+                  </div>
+
+                  <button type="button" class="btn btn-default btn-sm" id="lancarCobrancaDesconto" (click)="exibirFormNovoLancamento(cobranca)"
+                    placement="bottom" [popover]="tooltipLancarCobrancaDesconto" [outsideClick]="true" containerClass="wider-popover-lancamento">
+                    <i class="glyphicons glyphicons-edit"></i> Lançar nova cobrança ou desconto
+                  </button>
+                </div>
+
+                <div class="form-group valor-total">
+                  <label for="">Valor total do novo boleto:
+                  </label>
+                  {{ obterValorTotalCobranca(cobranca) | currency : 'BRL' : '3.2' }}
+                </div>
+
+                <button type="button" id="abrirConfimarGerarNovoBoleto" class="btn btn-primary btn-block" (click)="abrirConfimarGerarNovoBoleto(cobranca)">Gerar
+                  novo
+                  boleto</button>
+                <!-- <pre>{{novaCobranca | json}}</pre> -->
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #tooltipLancarCobrancaDesconto>
+          <app-lancamento [cobranca]="cobranca"></app-lancamento>
+        </ng-template>
+
+        <div class="row">
+
+          <div class="col-md-12 panel-footer">
+            <!-- <a href="" class="btn btn-default btn-sm pull-right">Gerar novo boleto</a> -->
+            <h4>Histórico de Boletos</h4>
+            <table class="table table-striped">
+              <tr *ngFor="let boleto of cobranca.Boletos ; let x = index" class="list-row-group">
+
+                <td>
+                  <p><label for="">Data do vencimento:</label>
+                    {{boleto.DataVencimento | date:'shortDate'}}</p>
+
+
+
+                  <p *ngIf="boleto.Destinatario"><label for="">Enviado para:</label>
+                    {{ boleto.Destinatario }}
+                  </p>
+
+
+
+                  <div *ngIf="boleto.Lancamentos" class="box-lancamentos">
+                    <h5>Lançamentos</h5>
+
+                    <div class="new-items" *ngFor="let lancamento of boleto.Lancamentos; let indexLancamento=index">
+
+                      <ul>
+                        <li>
+                          <p>
+
+                            <label for="">{{lancamento.DescricaoLancamento}}:</label>
+                            <span *ngIf="lancamento.TipoLancamento === 1">{{lancamento.ValorLancamento
+                              |
+                              currency : 'R$' : '3.2'}}</span>
+                            <span *ngIf="lancamento.TipoLancamento === 2">{{lancamento.ValorLancamento
+                              |
+                              currency : 'R$ -' : '3.2'}}</span>
+                          </p>
+                        </li>
+                      </ul>
+
+                    </div>
+                  </div>
+
+                  <p><label for="">Valor total:</label>
+                    {{boleto.ValorTotal |
+                    currency : 'R$' : '3.2'}}</p>
+
+                  <p class="status-boleto verde" *ngIf="boleto.ValorPago"><label for="">Valor pago:</label>
+                    {{boleto.ValorPago |
+                    currency : 'R$' : '3.2'}}</p>
+
+                </td>
+                <td>
+
+
+
+                  <p><label for="">Status: </label> <span [class]="'status-boleto ' + (boleto.DescricaoStatusBoleto | statusBoleto)">{{boleto.DescricaoStatusBoleto}}</span></p>
+
+                  <p *ngIf="boleto.DescricaoStatusBoleto == 'Cancelado'"><label for="">Data de cancelamento: </label>
+                    {{boleto.DataCancelamento | date:'shortDate'}}</p>
+
+                  <p *ngIf="boleto.DescricaoStatusBoleto == 'Pago'"><label for="">Data do pagamento: </label>
+                    {{boleto.DataPagamento | date:'shortDate'}}</p>
+                </td>
+                <td> <a [href]="boleto.URL" class="link" target="_blank" *ngIf="boleto.URL">
+                    Visualizar boleto</a>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-link link" (click)="reenviarBoleto(boleto)" *ngIf="boleto.StatusBoleto != 0 && boleto.StatusBoleto != 2 && boleto.StatusBoleto != 3 && boleto.StatusBoleto != 4 && boleto.StatusBoleto != 11 && boleto.StatusBoleto != 12">Reenviar
+                    boleto por
+                    e-mail</button>
+                  <!-- <a href="" class="link" *ngIf="boleto.DescricaoStatusBoleto == 'Pendente'">Reenviar boleto
+                    por e-mail</a> -->
+                </td>
+              </tr>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div *ngIf="!carregando && (!cobranca || !cobranca.Imovel)">
+      <p class="text-center">Cobrança não encontrada!</p>
+    </div>
+
+  </section>
+
+  <app-modal #confimacaoGerarNovoBoleto>
+    <div class="modal-header modal-warning">
+      <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+        <span aria-hidden="true ">&times;</span>
+      </button>
+      <h4 class="modal-title text-center ">Confirmação</h4>
+    </div>
+    <div class="modal-body">
+      <h5>Deseja realmente gerar um novo boleto?</h5>
+
+
+      <!-- <pre>{{novaCobranca | json}}</pre> -->
+      <!--   <hr /><div class="resumo overflow">
+
+        <div class="descricao">
+          <div class="form-group" *ngIf="novaCobranca.NovoBoleto.DataVencimentoNovoBoleto">
+            <label for="">Data de Vencimento:
+            </label>
+            {{novaCobranca.NovoBoleto.DataVencimentoNovoBoleto | date:'shortDate'}}
+          </div>
+          <div class="box-lancamentos">
+            <h5>Lançamentos</h5>
+
+            <p> <label for=""> Aluguel: </label> {{novaCobranca.NovoBoleto.ValorAluguelAtual|
+              currency : 'R$' : '3.2'}}</p>
+
+            <div class="novos-lancamentos" *ngFor="let lancamento of novaCobranca.LancamentosBoleto; let indexLancamento=index">
+              <p>
+                <label>{{lancamento.DescricaoLancamento}}:</label>
+                <span *ngIf="lancamento.TipoLancamento === 1">{{lancamento.ValorLancamento
+                  |
+                  currency : 'R$' : '3.2'}}</span>
+                <span *ngIf="lancamento.TipoLancamento === 2">{{lancamento.ValorLancamento
+                  |
+                  currency : 'R$ -' : '3.2'}}</span>
+              </p>
+            </div>
+          </div>
+
+
+          <div class="form-group valor-total">
+            <label for="">Valor Total:
+            </label>
+            {{obterValorTotalCobranca(cobranca) | currency : 'BRL' : '3.2'}}
+          </div>
+        </div>
+
+
+      </div> -->
+
+    </div>
+    <div class="modal-footer ">
+      <button type="button " class="btn btn-link pull-left " data-dismiss="modal">Não</button>
+      <button type="button " class="btn btn-primary" (click)="gerarNovoBoleto()">Sim</button>
+    </div>
+  </app-modal>
+
+  <app-modal #modalGerandoNovoBoleto>
+    <div class="modal-header modal-success">
+      <button type="button " class="close " data-dismiss="modal" aria-label="Fechar">
+        <span aria-hidden="true ">&times;</span>
+      </button>
+      <h4 class="modal-title text-center ">Aguarde...</h4>
+    </div>
+    <div class="modal-body text-center">
+      <app-loading message="Gerando o novo boleto..."></app-loading>
+    </div>
+  </app-modal>
+
+  <app-modal #modalResultadoGeracaoNovoBoleto>
+    <div *ngIf="!messagensErroGeracaoNovoBoleto">
+      <div class="modal-header modal-success">
+        <button type="button " class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true ">&times;</span>
+        </button>
+        <h4 class="modal-title text-center">Boleto gerado com sucesso!</h4>
+      </div>
+      <div class="modal-body text-center">
+        <p>O novo boleto foi gerado com sucesso!</p>
+      </div>
+    </div>
+    <div *ngIf="messagensErroGeracaoNovoBoleto">
+      <div class="modal-header modal-danger">
+        <button type="button " class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true ">&times;</span>
+        </button>
+        <h4 class="modal-title text-center text-danger">Ops, o boleto não foi gerado!</h4>
+      </div>
+      <div class="modal-body text-center">
+        <h5>Motivos:</h5>
+        <div *ngFor="let msg of messagensErroGeracaoNovoBoleto">
+          <app-alert [close]="true" color="danger">{{msg}}</app-alert>
+        </div>
+      </div>
+    </div>
+  </app-modal>
+
+
+  <app-modal #sucessoGerarNovoBoleto>
+    <div *ngIf="gerandoNovoBoleto">
+      <div class="modal-header modal-success">
+        <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+          <span aria-hidden="true ">&times;</span>
+        </button>
+        <h4 class="modal-title text-center ">Aguarde...</h4>
+      </div>
+      <div class="modal-body text-center">
+        <app-loading [message]="messageStatus"></app-loading>
+
+      </div>
+    </div>
+    <div *ngIf="!gerandoNovoBoleto">
+      <div class="modal-header modal-success">
+        <button type="button " class="close " data-dismiss="modal" aria-label="Fechar ">
+          <span aria-hidden="true ">&times;</span>
+        </button>
+        <h4 class="modal-title text-center ">Novo boleto gerado com sucesso!</h4>
+      </div>
+      <div class="modal-body text-center">
+
+        <p>Você pode acessar a(s) cobrança(s) gerada(s) na página de histórico de cobrança</p>
+      </div>
+      <div class="modal-footer ">
+        <button type="button" class=" btn btn-primary btn-block" title="Acessar histórico" (click)="acessarHistorico()">
+          Acessar histórico
+        </button>
+      </div>
+    </div>
+  </app-modal>
+
+
+  <app-modal #reenviandoBoleto>
+    <div class="modal-header modal-success">
+      <button type="button " class="close " data-dismiss="modal" aria-label="Fechar">
+        <span aria-hidden="true ">&times;</span>
+      </button>
+      <h4 class="modal-title text-center ">Aguarde...</h4>
+    </div>
+    <div class="modal-body text-center">
+      <app-loading message="Reenviando o boleto..."></app-loading>
+    </div>
+  </app-modal>
+
+  <app-modal #resultadoReenvioBoleto>
+    <div *ngIf="!messagensErroReenvioBoleto">
+      <div class="modal-header modal-success">
+        <button type="button " class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true ">&times;</span>
+        </button>
+        <h4 class="modal-title text-center">Boleto reenviado com sucesso!</h4>
+      </div>
+      <div class="modal-body text-center">
+        <p>O boleto foi reenviado com sucesso!</p>
+      </div>
+    </div>
+    <div *ngIf="messagensErroReenvioBoleto">
+      <div class="modal-header modal-danger">
+        <button type="button " class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true ">&times;</span>
+        </button>
+        <h4 class="modal-title text-center text-danger">Ops, o boleto não foi enviado!</h4>
+      </div>
+      <div class="modal-body text-center">
+        <h5>Motivos:</h5>
+        <div *ngFor="let msg of messagensErroReenvioBoleto">
+          <app-alert [close]="true" color="danger">{{msg}}</app-alert>
+        </div>
+      </div>
+    </div>
+  </app-modal>
+
+</div>

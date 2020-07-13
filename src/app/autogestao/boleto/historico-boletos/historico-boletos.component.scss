@@ -1,0 +1,19 @@
+@import "~assets/bootstrap-sass/bootstrap/variables";
+.btn-group-actions {
+  //float: left;
+  position: relative;
+  z-index: 2;
+  margin-top: -65px;
+  margin-bottom: 30px;
+  @media (max-width: $screen-md-min) {
+    margin-top: 0 !important; //float: right;
+  }
+  @media (min-width: $screen-xs-max) {
+    margin-top: -65px; //float: right;
+  }
+  div:last-child {
+    .btn {
+      margin-left: 5px;
+    }
+  }
+}

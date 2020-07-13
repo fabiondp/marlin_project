@@ -1,0 +1,27 @@
+.indice{
+    margin-top: 0;
+}
+
+.col-aplicar-reajuste{
+    margin-top: 30px;
+    text-align: center;
+}
+
+.confirmacao-reajuste{
+    text-align: center;
+
+    .indice{
+        margin-top: 30px;
+    }
+
+    .dados-imovel{
+        // display: list-item;         
+        // list-style-type: disc;      
+        // list-style-position: inside;
+        span{
+            display: list-item;         
+            list-style-type: disc;      
+            list-style-position: inside;
+        }
+    }
+}
