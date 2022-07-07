@@ -37,7 +37,7 @@
     "bootstrap-sass": "^3.3.7",
     "core-js": "^2.4.1",
     "jquery": "^3.3.1",
-    "moment": "^2.21.0",
+    "moment": "^2.29.4",
     "ng2-currency-mask": "^5.3.1",
     "ng2-input-mask": "0.0.7",
     "ng2-order-pipe": "^0.1.5",
